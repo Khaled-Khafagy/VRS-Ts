@@ -1,4 +1,5 @@
 import { Page, Locator, expect } from "@playwright/test";   
+import { beforeEach } from "node:test";
 export abstract class BasePage {
   protected page: Page;
   protected readonly commonCookieButton: Locator;
@@ -11,6 +12,7 @@ export abstract class BasePage {
   async navigateTo(url: string){
     await this.page.goto(url);
   }
+  
 async acceptCookies(customLocator?: Locator) {
         const button = customLocator || this.commonCookieButton;
         try {

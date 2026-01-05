@@ -1,6 +1,9 @@
-import { Page, expect, test } from "@playwright/test";
-import { HomePage } from "../../../Pages/home.page";
-test("Guest Checkout", async ({ page }) => {
-    const homePage = new HomePage(page);
+import { test, expect } from '../../../fixtures/page-manager';
+
+test('Guest checkout', async ({ homePage }) => {
+    // homePage is already initialized and ready to go!
     await homePage.goto();
+    await homePage.assertVisibiltyOfHeroBannerHeading();
+  
+
 });
