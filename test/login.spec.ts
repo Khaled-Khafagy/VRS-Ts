@@ -12,11 +12,11 @@ test.describe ('VodafoneLogin - Full Suite', ()=> {
       if (scenario.isPositive) {
         await expect(page).toHaveURL ('https://vrs.preprod.travel.vodafone.com/')
       }else{
-        const error = await loginPage.getErrorMessage();
+        const error = await loginPage.getErrorMessaege();
         expect (error). toContain(scenario.expectedError);
       }
-    });
+    })
   
   }
 
-});
+})

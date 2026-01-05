@@ -1,6 +1,7 @@
+
 export const baseLoginDto ={
-    username: 'khaled.khafagy@vodafone.com',
-    password: 'Trabajo50@@'
+    username: "khaled.khafagy@vodafone.com",
+    password: "Trabajo50@@"
 };
 
 export const loginScenarios = [
@@ -14,7 +15,7 @@ export const loginScenarios = [
     {
         name: 'Login with wrong password',
         isPositive : false,
-        data : {baseLoginDto, password: 'Trabajo50@'},
+        data : {baseLoginDto, password: "Trabajo50"},
         expectedError: 'Invalid Credentials'
 
 
