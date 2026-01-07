@@ -1,0 +1,9 @@
+{
+    "validUser": {
+        "firstName": "John",
+        "lastName": "Doe",
+        "email": "john.doe@example.com",
+        "country": "eg",
+        "state": "florida"
+    }
+}
