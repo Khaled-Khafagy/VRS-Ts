@@ -27,10 +27,10 @@ export default defineConfig({
   reporter: 'html',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
-    headless: false, // Maximizing only works in headed mode
-    launchOptions: {
-      args: ["--start-maximized"],
-    },
+    // headless: false, // Maximizing only works in headed mode
+    // launchOptions: {
+    //   args: ["--start-maximized"],
+    // },
     /* Maximum time each action such as `click()` can take. Defaults to 0 (no limit). */
     actionTimeout: 0,
     /* Base URL to use in actions like `await page.goto('/')`. */
@@ -46,11 +46,9 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium',
-      use: { 
-        // 1. DELETE this line: ...devices['Desktop Chrome']
-        // 2. USE THESE instead:
-        viewport: null, 
-      },
+      use: { ...devices['Desktop Chrome'] },
+  
+  
   
     
     },
