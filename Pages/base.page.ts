@@ -9,8 +9,9 @@ export abstract class BasePage {
     this.commonCookieButton = this.page.getByRole('button', { name: 'Accept All Cookies' });
   }
 
-  async navigateTo(url: string){
+  async navigateToHomePage(url: string){
     await this.page.goto(url);
+    console.log("Navigated to home page.");
   }
   
 async acceptCookies(customLocator?: Locator) {

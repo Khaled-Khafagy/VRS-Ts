@@ -25,15 +25,19 @@ europeRegionExploreButton :this.page.locator("a[href='/our-destinations/europe']
 constructor(page: Page) {
     super(page);
   }
-  async goto() {
-    await this.navigateTo('https://r10-test.digitalretail.vodafone.com/vrs-portal/');
+  async gotoHomepage() {
+    await this.navigateToHomePage('https://r10-test.digitalretail.vodafone.com/vrs-portal/');
     await this.acceptCookies();
+    await this.assertVisibiltyOfHeroBannerHeading();
 
   }
   async assertVisibiltyOfHeroBannerHeading(){
     await expect(this.homePageLocators.heroBannerHeading).toBeVisible();
  console.log("Hero banner heading is visible.");
 }
+async navigateToEuropeRegionPlansPage(){
+    await this.homePageLocators.europeRegionExploreButton.click();
+    console.log("Navigated to Europe region plans page.");  }
 
 
 
