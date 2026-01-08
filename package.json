@@ -3,14 +3,22 @@
   "version": "1.0.0",
   "description": "End-to-end automation testing framework built with Playwright and TypeScript, focusing on scalable UI and API testing.",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "test:allure": "npx playwright test && npx allure serve allure-results"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YOUR_GITHUB_USERNAME/VRS-Ts.git"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "devDependencies": {
+    "@faker-js/faker": "^10.2.0",
     "@playwright/test": "^1.57.0",
-    "@types/node": "^25.0.3"
+    "@types/node": "^25.0.3",
+    "allure-playwright": "^3.4.4"
   },
   "dependencies": {
     "playwright": "^1.57.0"

@@ -1,0 +1,15 @@
+{
+    "billingDetails": {
+        "country": "eg",
+        "state": "florida"
+    },
+    "alreadyRegisteredUser": {
+        "firstName": "khaledkhafagy",
+        "lastName": "khafagy",
+        "email": "khaled.khafagy@vodafone.com",
+        "country": "eg",
+        "state": "florida"
+    }
+    
+    
+}

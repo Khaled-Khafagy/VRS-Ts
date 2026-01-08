@@ -1,4 +1,4 @@
-import { expect,Page } from "@playwright/test";
+import { expect,Page,test } from "@playwright/test";
 import { BasePage } from "./base.page"; 
 
 export class RegionPlansPage extends BasePage {
@@ -17,13 +17,12 @@ export class RegionPlansPage extends BasePage {
     }
 
 async selectplanInEuropeRegion(){
+    await test.step('Select a plan in Europe Region and Go to Checkout', async () => {  
     await expect (this.regionPlansPageLocators.EuropeHeading).toBeVisible();
-    console.log("Europe region plans page is visible.");
     await this.regionPlansPageLocators.firstEuropePlanCard.click();
-    console.log("First plan in Europe region added to cart.");
     await this.regionPlansPageLocators.goToCheckoutButton.click();
-    console.log("Proceeded to checkout from Europe region plans page.");
-}
+  
+});}
 
 
 
