@@ -1,0 +1,2 @@
+Navigated to home page.
+Cookie banner not found or already dismissed.

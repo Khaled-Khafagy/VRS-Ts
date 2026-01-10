@@ -1,0 +1,4 @@
+Navigated to home page.
+Cookies accepted.
+Hero banner heading is visible.
+Navigated to Europe region plans page.

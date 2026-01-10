@@ -1,15 +1,25 @@
 {
     "billingDetails": {
-        "country": "eg",
+        "country": "us",
         "state": "florida"
     },
-    "alreadyRegisteredUser": {
+    "GuestDetailsForalreadyRegisteredUser": {
         "firstName": "khaledkhafagy",
         "lastName": "khafagy",
         "email": "khaled.khafagy@vodafone.com",
         "country": "eg",
         "state": "florida"
-    }
+    },
+    "paymentDetails": {
+        "number": "4151500000000008",
+        "expiry": "03/30",
+        "cvc": "737",
+        "name": "test card"
+    },
+    "ValidLoginDetails": {
+        "email": "khafagyk8@gmail.com",        
+        "password": "Abcdef12@"
+    }   
     
     
 }

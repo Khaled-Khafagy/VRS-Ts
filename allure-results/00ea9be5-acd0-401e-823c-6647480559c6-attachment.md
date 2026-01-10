@@ -1,0 +1,119 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - navigation "Main navigation" [ref=e6]:
+      - generic [ref=e7]:
+        - link "Top Navigation Logo" [ref=e8] [cursor=pointer]:
+          - /url: /
+          - img "Top Navigation Logo" [ref=e9]
+        - button "Menu" [ref=e12]:
+          - img [ref=e13]
+          - text: Menu
+        - list [ref=e16]:
+          - listitem [ref=e17]:
+            - generic [ref=e19]:
+              - img "Shopping Cart" [ref=e20] [cursor=pointer]
+              - status [ref=e23]: "1"
+          - listitem [ref=e24]:
+            - generic [ref=e25] [cursor=pointer]: Login
+    - generic [ref=e26]:
+      - generic [ref=e29]:
+        - button "Back button" [ref=e31] [cursor=pointer]:
+          - img [ref=e35]
+        - heading "Payment" [level=2] [ref=e37]
+      - generic [ref=e40]:
+        - generic [ref=e44]:
+          - text: Checkout
+          - generic [ref=e45]: Checkout
+        - generic [ref=e49]:
+          - text: Email Verification
+          - generic [ref=e50]: Email Verification
+        - generic [ref=e54]:
+          - text: Payment
+          - generic [ref=e55]: Payment
+        - generic [ref=e59]:
+          - text: Order Completed
+          - generic [ref=e60]: Order Completed
+      - separator [ref=e64]
+      - generic [ref=e67]:
+        - generic [ref=e68]:
+          - generic [ref=e71]:
+            - generic [ref=e74]: Total to pay
+            - generic [ref=e75]: VAT included
+          - generic [ref=e78]:
+            - generic [ref=e81]: USD 4.00
+            - generic [ref=e82]: One-off payment
+        - separator [ref=e83]
+        - iframe [ref=e85]:
+          - generic [active] [ref=f3e1]:
+            - generic [ref=f3e3]:
+              - generic [ref=f3e5]:
+                - generic [ref=f3e6]: Make a payment
+                - generic [ref=f3e7]: This is a secure SSL encrypted payment
+              - generic [ref=f3e8]:
+                - generic [ref=f3e10]:
+                  - generic [ref=f3e11]: Payment methods
+                  - article [ref=f3e13] [cursor=pointer]:
+                    - generic [ref=f3e14]:
+                      - generic [ref=f3e16]: Google Pay
+                      - img "google pay icon" [ref=f3e20]
+                  - button "plus icon Add new card" [ref=f3e29] [cursor=pointer]:
+                    - generic [ref=f3e30]:
+                      - img "plus icon" [ref=f3e32]
+                      - generic [ref=f3e35]: Add new card
+                - generic [ref=f3e36]:
+                  - button "Cancel" [ref=f3e38] [cursor=pointer]
+                  - button "Pay" [disabled] [ref=f3e40] [cursor=pointer]
+            - generic:
+              - generic:
+                - generic:
+                  - iframe
+            - generic:
+              - generic:
+                - generic:
+                  - iframe
+            - generic:
+              - generic:
+                - generic:
+                  - iframe
+            - log [ref=f3e41]
+    - generic [ref=e91]:
+      - list [ref=e92]:
+        - listitem [ref=e93]:
+          - list [ref=e94]:
+            - listitem [ref=e95]:
+              - button "Terms & Conditions" [ref=e96] [cursor=pointer]
+              - separator [ref=e97]
+            - listitem [ref=e98]:
+              - button "Privacy Policy" [ref=e99] [cursor=pointer]
+              - separator [ref=e100]
+            - listitem [ref=e101]:
+              - button "Cookie Policy" [ref=e102] [cursor=pointer]
+        - listitem [ref=e103]:
+          - list [ref=e104]:
+            - listitem [ref=e105]:
+              - button "Charges Guide" [ref=e106] [cursor=pointer]
+              - separator [ref=e107]
+            - listitem [ref=e108]:
+              - button "Acceptable Usage Policy" [ref=e109] [cursor=pointer]
+              - separator [ref=e110]
+            - listitem [ref=e111]:
+              - button "Ad Choices" [ref=e112] [cursor=pointer]
+        - listitem [ref=e113]:
+          - list [ref=e114]:
+            - listitem [ref=e115]:
+              - button "eSIM Installation Guide" [ref=e116] [cursor=pointer]
+              - separator [ref=e117]
+            - listitem [ref=e118]:
+              - button "Help" [ref=e119] [cursor=pointer]
+              - separator [ref=e120]
+            - listitem [ref=e121]:
+              - button "Contact us or Leave us" [ref=e122] [cursor=pointer]
+      - paragraph [ref=e123]: "Vodafone Global Connect S.à r.l. is registered in the Grand Duchy of Luxembourg. R.C.S Luxembourg No. B144677. Registered Office: 15 rue Edward Steichen, L-2540 Luxembourg, Grand Duchy of Luxembourg. VAT LU29846245"
+  - button "Click here to talk to tobi" [ref=e124] [cursor=pointer]
+  - generic "Manage Cookies" [ref=e125] [cursor=pointer]:
+    - button "Open Preferences" [ref=e127]
+    - text: Manage Cookies
+```

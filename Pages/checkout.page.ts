@@ -18,6 +18,11 @@ export class CheckoutPage extends BasePage {
     private readonly checkoutPageLocators = {
         
         // Define locators for checkout page here
+        avatarAsloggedin: this.page.locator('div.avatar_overlay__bto13x9:visible'),
+        checoutPageHeading: this.page.getByRole('heading', { name: 'Checkout' }),
+        welcomeHeadingForLoggedinUser: this.page.getByRole('heading', { name: 'Welcome' }),
+
+        loginLink: this.page.getByText('here', { exact: true }),
         firstNameInput: this.page.getByLabel('First name'),
         lastNameInput: this.page.getByLabel('Last name'),
         emailinput: this.page.getByRole('textbox', { name: 'Email' }),
@@ -55,20 +60,28 @@ console.log('guest data used :', {  firstName: userdata.firstName}, {lastName: u
     
 });}
 
-async fillBillingDetailsForUserAndProceedToPayment(info: billingAdressInfo) {
+
+async GuestCheckoutLoginWithExistingAccount(){
+    await test.step('Login with existing account during Guest Checkout', async () => {
+    await this.checkoutPageLocators.loginLink.click();
+    console.log("Clicked on login link during guest checkout.");
+});}
+
+async fillBillingAddressDetailsForUserAndProceedToPayment(info: billingAdressInfo) {
     await test.step('Fill Billing Details for user', async () => {
 await this.checkoutPageLocators.billingCountryDropdown.selectOption({ value:info.country });
     const stateField = this.checkoutPageLocators.billingStateDropdown;
 if (await stateField.isVisible()) {
-    await stateField.selectOption({ label: info.state });
+    await stateField.selectOption({ value: info.state });
 }
-await this.checkoutPageLocators.agreementConsentBox.check();
+
     await this.proceedToPayment();
 
 
 });}
 
 async proceedToPayment(){
+    await this.checkoutPageLocators.agreementConsentBox.check();
     await test.step('Proceed to Payment from Checkout Page', async () => {
     await this.assertContinueToPaymentButtonIsEnabled();
     await this.checkoutPageLocators.continueToPaymentButton.click();
@@ -117,7 +130,28 @@ async enterMagicOTP() {
         await box.fill(digits[i]); 
     }
 }
+
+
+async assertRedirectionToChecoutPageWithUserLoggedinAndFieldsArefilled() {
+    await test.step('Assert Redirection to Checkout Page with User Logged-in and Fields are pre-filled', async () => {
+    await expect(this.checkoutPageLocators.checoutPageHeading).toBeVisible();
+    console.log("Redirected to Checkout page.");
+    await expect(this.checkoutPageLocators.avatarAsloggedin).toBeVisible();
+    console.log("User is logged in, avatar is visible.");
+    await expect(this.checkoutPageLocators.welcomeHeadingForLoggedinUser).toBeVisible();
+    console.log("Welcome heading for logged in user is visible.");
+});}
+
+
+
+
+
+
+
+
+
 }
+
 
 
 

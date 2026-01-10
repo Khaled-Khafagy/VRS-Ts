@@ -13,53 +13,62 @@ import {defineConfig,devices } from '@playwright/test';
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
-export default defineConfig({
+export default defineConfig({ 
+
   testDir: './tests',
+  
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
+  timeout: 120000,
   /* Retry on CI only */
-  retries: process.env.CI ? 2 : 0,
+  retries: 2,
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter:[['allure-playwright']],
+  
+
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
-    // Take a screenshot after every test failure
-    screenshot: 'only-on-failure', 
-    
-    // Record video for tests (options: 'on', 'retain-on-failure', 'off')
-    video: 'on', 
-    
-    
-  
-    // headless: false, // Maximizing only works in headed mode
-    // launchOptions: {
-    //   args: ["--start-maximized"],
-    // },
-    /* Maximum time each action such as `click()` can take. Defaults to 0 (no limit). */
-    actionTimeout: 0,
-    /* Base URL to use in actions like `await page.goto('/')`. */
-    // baseURL: 'http://localhost:3000',
-    /* Base URL to use in actions like `await page.goto('')`. */
-    // baseURL: 'http://localhost:3000',
+    // Standard actions get 15 seconds
+    actionTimeout: 20000,
+       // Global timeout for page.goto()
+    navigationTimeout: 30000,
 
-    // Trace gives you a "GIF-like" timeline where you can hover over steps 
+    // Base URL to use in actions like `await page.goto('/')`.
+    // baseURL: 'http://localhost:3000',  
+
+    // The "Proof" settings for Allure
+    screenshot: 'only-on-failure',
+    video: 'retain-on-failure',
     trace: 'on-first-retry',
-    
+    viewport: null, 
+
+   
+  // The maximum time one entire test can run
   },
 
   /* Configure projects for major browsers */
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: {
+        viewport: null, // Ensure this is null here too!
+        launchOptions: {
+          args: ['--start-maximized'],
+        },
+         // Standard actions get 15 seconds
+    actionTimeout: 20000,
+       // Global timeout for page.goto()
+    navigationTimeout: 60000,
+      },  
+      expect: {
+    // Give assertions (like toBeVisible) 20 seconds instead of 5
+    timeout: 20000, 
+  }
   
-  
-  
-    
     },
 
     // {

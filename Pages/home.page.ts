@@ -12,7 +12,7 @@ private readonly homePageLocators = {
  heroBannerHeading : this.page.getByRole('heading', { name: 'Save 20% on travel internet' }),
 // cartHeaderlink : this.page.getByRole('link', { name: 'Cart' }), needs to be modified by Ahmed alamelden
 //  languageAndCurrencyHeaderlink : this.page.getByRole('button', { name: 'Language and Currency' }),needs to be modified by Ahmed alamelden
-
+userProfileIconAsLoggeedin: this.page.locator('div.avatar_overlay__bto13x9:visible'),
 
  
 
@@ -36,6 +36,12 @@ constructor(page: Page) {
     await expect(this.homePageLocators.heroBannerHeading).toBeVisible();
  console.log("Hero banner heading is visible.");
 }
+
+async assertUserIsLoggedIn(){
+    await test.step('Assert User is logged in by checking user profile icon', async () => {
+    await expect(this.homePageLocators.userProfileIconAsLoggeedin).toBeVisible();
+    console.log("User is logged in, profile icon is visible.");
+});}  
 async navigateToEuropeRegionPlansPage(){
     await test.step('Navigate to Europe Region Plans Page', async () => {   
     await this.homePageLocators.europeRegionExploreButton.click();

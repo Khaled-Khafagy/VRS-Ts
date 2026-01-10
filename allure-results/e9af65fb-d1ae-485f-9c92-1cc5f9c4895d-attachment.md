@@ -1,0 +1,242 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - navigation "Main navigation" [ref=e7]:
+      - link "Top Navigation Logo" [ref=e8] [cursor=pointer]:
+        - /url: /
+        - img "Top Navigation Logo" [ref=e9]
+      - list [ref=e12]:
+        - listitem [ref=e13]:
+          - link "Homepage" [ref=e14] [cursor=pointer]:
+            - /url: /?i_code=CS-B-11-LOGO
+            - text: Homepage
+        - listitem [ref=e15]:
+          - link "Our Destinations" [ref=e16] [cursor=pointer]:
+            - /url: /our-destinations
+            - text: Our Destinations
+        - listitem [ref=e17]:
+          - link "UEFA Champions League" [ref=e18] [cursor=pointer]:
+            - /url: /our-destinations/uefachampionsleague
+            - text: UEFA Champions League
+        - listitem [ref=e19]:
+          - link "About eSIM" [ref=e20] [cursor=pointer]:
+            - /url: /#how-it-works
+            - text: About eSIM
+        - listitem [ref=e21]:
+          - link "Help" [ref=e22] [cursor=pointer]:
+            - /url: /help-support
+            - text: Help
+      - list [ref=e23]:
+        - listitem [ref=e24]:
+          - generic [ref=e26]:
+            - img "Shopping Cart" [ref=e27] [cursor=pointer]
+            - status [ref=e30]: "1"
+        - listitem [ref=e31]:
+          - generic [ref=e34] [cursor=pointer]:
+            - img [ref=e35]
+            - link "English | US Dollar" [ref=e52]
+        - listitem [ref=e53]:
+          - generic [ref=e54] [cursor=pointer]: Login
+    - generic [ref=e55]:
+      - generic [ref=e58]:
+        - button "Back button" [ref=e60] [cursor=pointer]:
+          - img [ref=e64]
+        - heading "Checkout" [level=2] [ref=e66]
+      - generic [ref=e69]:
+        - generic [ref=e73]:
+          - text: Checkout
+          - generic [ref=e74]: Checkout
+        - generic [ref=e78]:
+          - text: Email Verification
+          - generic [ref=e79]: Email Verification
+        - generic [ref=e83]:
+          - text: Payment
+          - generic [ref=e84]: Payment
+        - generic [ref=e88]:
+          - text: Order Completed
+          - generic [ref=e89]: Order Completed
+      - separator [ref=e93]
+      - generic [ref=e95]:
+        - generic [ref=e96]:
+          - generic [ref=e98]:
+            - heading "Welcome" [level=2] [ref=e99]
+            - paragraph [ref=e100]:
+              - text: To sign in using your Vodafone or Social accounts click
+              - button "here" [ref=e101] [cursor=pointer]
+            - generic [ref=e103]:
+              - generic [ref=e104]:
+                - generic [ref=e107]: First name
+                - textbox "First name" [ref=e110]: khaledkhafagy
+              - generic [ref=e111]:
+                - generic [ref=e114]: Last name
+                - textbox "Last name" [ref=e117]: khafagy
+              - generic [ref=e118]:
+                - generic [ref=e121]: Email
+                - textbox "Email" [ref=e124]: khaled.khafagy@vodafone.com
+          - generic [ref=e127]:
+            - heading "Billing details" [level=2] [ref=e132]
+            - generic [ref=e134]:
+              - generic [ref=e136]:
+                - generic [ref=e139]: Country
+                - generic [ref=e141]:
+                  - combobox "Country" [ref=e142]:
+                    - option "Select country" [disabled]
+                    - option "CANADA"
+                    - option "MEXICO"
+                    - option "UNITED KINGDOM"
+                    - option "UNITED STATES OF AMERICA" [selected]
+                    - option "AMERICAN SAMOA"
+                    - option "ARMENIA"
+                    - option "AUSTRIA"
+                    - option "BOSNIA AND HERZEGOVINA"
+                    - option "CHINA"
+                    - option "EGYPT"
+                    - option "FINLAND"
+                    - option "KOSOVO"
+                    - option "PALESTINE, STATE OF"
+                    - option "SPAIN"
+                    - option "TUNISIA"
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - img
+              - generic [ref=e143]:
+                - generic [ref=e145]: Address line 1
+                - textbox "Address line 1" [ref=e148]
+              - generic [ref=e149]:
+                - generic [ref=e151]: Address line 2
+                - textbox "Address line 2" [ref=e154]
+              - generic [ref=e155]:
+                - generic [ref=e157]: City
+                - textbox "City" [ref=e160]
+              - generic [ref=e162]:
+                - generic [ref=e165]: State
+                - generic [ref=e167]:
+                  - combobox "State" [ref=e168]:
+                    - option "Select state" [disabled]
+                    - option "ALABAMA"
+                    - option "IOWA"
+                    - option "CONNECTICUT"
+                    - option "FLORIDA" [selected]
+                    - option "OHIO"
+                    - option "TENNESSEE"
+                    - option "COLORANDO"
+                    - option "MARYLAND"
+                    - option "NEBRASKA"
+                    - option "MICHIGAN"
+                    - option "NEW YORK"
+                    - option "TEXAS"
+                    - option "WASHINGTON"
+                    - option "WYOMING"
+                    - option "MISSOURI"
+                    - option "NEVADA"
+                    - option "PENNSYLVANIA"
+                    - option "GEORGIA"
+                    - option "MINNESOTA"
+                    - option "LOUISIANA"
+                    - option "MONTANA"
+                    - option "OKLAHOMA"
+                    - option "NEW JERSEY"
+                    - option "WASHINGTON DC"
+                    - option "ARIZONA"
+                    - option "DELAWARE"
+                    - option "MAINE"
+                    - option "OREGON"
+                    - option "SOUTH CAROLINA"
+                    - option "INDIANA"
+                    - option "SOUTH DAKOTA"
+                    - option "UTAH"
+                    - option "WISCONSIN"
+                    - option "NEW MEXICO"
+                    - option "ARKANSAS"
+                    - option "CALIFORNIA"
+                    - option "IDAHO"
+                    - option "KANSAS"
+                    - option "KENTUCKY"
+                    - option "WEST VIRGINIA"
+                    - option "MASSACHUSETTS"
+                    - option "HAWAII"
+                    - option "VERMONT"
+                    - option "VIRGINIA"
+                    - option "ILLINOIS"
+                    - option "NORTH DAKOTA"
+                    - option "RHODE ISLAND"
+                    - option "MISSISSIPPI"
+                    - option "NEW HAMPSHIRE"
+                    - option "NORTH CAROLINA"
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - img
+              - generic [ref=e169]:
+                - generic [ref=e171]: ZIP / Postal
+                - textbox "ZIP / Postal" [ref=e174]
+          - generic [ref=e176]:
+            - group [ref=e184]:
+              - list [ref=e186]:
+                - listitem [ref=e187]:
+                  - generic [ref=e188]:
+                    - checkbox "I have read, understood and accepted the Agreement and the Privacy Policy & Cookie Policy"
+                    - paragraph [ref=e190]:
+                      - text: I have read, understood and accepted the
+                      - link "Agreement" [ref=e191] [cursor=pointer]:
+                        - /url: ./agreement/
+                      - text: and the
+                      - link "Privacy Policy & Cookie Policy" [ref=e192] [cursor=pointer]:
+                        - /url: ../help-support/privacy-and-cookie-policy?i_code=CS-B-3-TNC
+                - listitem [ref=e193]:
+                  - generic [ref=e194]:
+                    - checkbox "I would like to receive emails with offers, updates and personalised recommendations."
+                    - paragraph [ref=e196]: I would like to receive emails with offers, updates and personalised recommendations.
+            - button "Continue to payment" [disabled] [ref=e197]
+        - generic [ref=e200]:
+          - heading "Summary" [level=2] [ref=e201]
+          - generic [ref=e204]:
+            - generic [ref=e205]:
+              - paragraph [ref=e208]: Subtotal
+              - paragraph [ref=e211]: USD 4.00
+            - separator [ref=e212]
+            - generic [ref=e213]:
+              - paragraph [ref=e216]: Total Price
+              - paragraph [ref=e219]: USD 4.00
+    - generic [ref=e225]:
+      - list [ref=e226]:
+        - listitem [ref=e227]:
+          - list [ref=e228]:
+            - listitem [ref=e229]:
+              - button "Terms & Conditions" [ref=e230] [cursor=pointer]
+              - separator [ref=e231]
+            - listitem [ref=e232]:
+              - button "Privacy Policy" [ref=e233] [cursor=pointer]
+              - separator [ref=e234]
+            - listitem [ref=e235]:
+              - button "Cookie Policy" [ref=e236] [cursor=pointer]
+              - separator [ref=e237]
+            - listitem [ref=e238]:
+              - button "Charges Guide" [ref=e239] [cursor=pointer]
+              - separator [ref=e240]
+            - listitem [ref=e241]:
+              - button "Acceptable Usage Policy" [ref=e242] [cursor=pointer]
+              - separator [ref=e243]
+            - listitem [ref=e244]:
+              - button "Ad Choices" [ref=e245] [cursor=pointer]
+        - listitem [ref=e246]:
+          - list [ref=e247]:
+            - listitem [ref=e248]:
+              - button "eSIM Installation Guide" [ref=e249] [cursor=pointer]
+              - separator [ref=e250]
+            - listitem [ref=e251]:
+              - button "Help" [ref=e252] [cursor=pointer]
+              - separator [ref=e253]
+            - listitem [ref=e254]:
+              - button "Contact us or Leave us" [ref=e255] [cursor=pointer]
+      - paragraph [ref=e256]: "Vodafone Global Connect S.à r.l. is registered in the Grand Duchy of Luxembourg. R.C.S Luxembourg No. B144677. Registered Office: 15 rue Edward Steichen, L-2540 Luxembourg, Grand Duchy of Luxembourg. VAT LU29846245"
+  - button "Click here to talk to tobi" [ref=e257] [cursor=pointer]
+  - generic "Manage Cookies" [ref=e258] [cursor=pointer]:
+    - button "Open Preferences" [ref=e260]
+    - text: Manage Cookies
+```
