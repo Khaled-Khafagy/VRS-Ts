@@ -55,10 +55,10 @@ export default defineConfig({
     {
       name: 'chromium',
       use: {
-        viewport: null, // Ensure this is null here too!
-        launchOptions: {
-          args: ['--start-maximized'],
-        },
+        // viewport: null, // Ensure this is null here too!
+        // launchOptions: {
+        //   args: ['--start-maximized'],
+        // },
          // Standard actions get 15 seconds
     actionTimeout: 20000,
        // Global timeout for page.goto()
