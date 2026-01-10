@@ -44,7 +44,7 @@ export default defineConfig({
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
     trace: 'on-first-retry',
-    viewport: null, 
+    // viewport: null, 
 
    
   // The maximum time one entire test can run
