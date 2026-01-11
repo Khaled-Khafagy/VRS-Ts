@@ -88,7 +88,7 @@ async selectSavedCardAndPay(){
 
   async clickPayButton(){
     await this.payButton.scrollIntoViewIfNeeded();
-    await this.payButton.click();
+    await this.payButton.click({ force: true });
   }
 
 

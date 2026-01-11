@@ -23,7 +23,7 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   timeout: 120000,
   /* Retry on CI only */
-  retries: 2,
+  retries: 0,
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
@@ -56,10 +56,12 @@ export default defineConfig({
     {
       name: 'chromium',
       use: {
-        viewport: null, // Ensure this is null here too!
+        viewport: { width: 1920, height: 1080 }, // Ensure this is null here too!
         launchOptions: {
           args: ['--start-maximized'],
+          headless: false
         },
+        
          // Standard actions get 15 seconds
     actionTimeout: 20000,
        // Global timeout for page.goto()
