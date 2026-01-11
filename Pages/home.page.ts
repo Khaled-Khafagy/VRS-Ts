@@ -27,7 +27,7 @@ constructor(page: Page) {
   }
   async gotoHomepage() {
     await test.step('Navigate to Home Page and Accept cookies', async () => {
-    await this.navigateToHomePage('https://r10-test.digitalretail.vodafone.com/vrs-portal/');
+    await this.navigateToHomePage('https://r10-test.digitalretail.vodafone.com/vrs-taas-portal/');
     await this.acceptCookies();
     await this.assertVisibiltyOfHeroBannerHeading();
 

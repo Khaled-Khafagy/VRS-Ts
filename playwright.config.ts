@@ -36,6 +36,7 @@ export default defineConfig({
     actionTimeout: 20000,
        // Global timeout for page.goto()
     navigationTimeout: 30000,
+    viewport: { width: 1920, height: 1080 },
 
     // Base URL to use in actions like `await page.goto('/')`.
     // baseURL: 'http://localhost:3000',  
@@ -55,10 +56,10 @@ export default defineConfig({
     {
       name: 'chromium',
       use: {
-        // viewport: null, // Ensure this is null here too!
-        // launchOptions: {
-        //   args: ['--start-maximized'],
-        // },
+        viewport: null, // Ensure this is null here too!
+        launchOptions: {
+          args: ['--start-maximized'],
+        },
          // Standard actions get 15 seconds
     actionTimeout: 20000,
        // Global timeout for page.goto()

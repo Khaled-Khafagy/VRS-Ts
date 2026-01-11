@@ -31,7 +31,7 @@ test.skip('Guest Checkout inserting Existing Account in E-mail field', async ({ 
     await loginPage.fillLoginDetailsAndSubmit(testData.ValidLoginDetails);
     await checkoutPage.assertRedirectionToChecoutPageWithUserLoggedinAndFieldsArefilled();
     await checkoutPage.proceedToPayment();
-    await paymentPage.selectSaveCardAndPay();
+    await paymentPage.selectSavedCardAndPay();
     await orderSuccessfulPage.verifyOrderSuccessfulPageDisplayed();
   
 }); 
@@ -46,7 +46,7 @@ test.skip(' Guest Checkout ( login with existing account)',  async ({ homePage, 
     await loginPage.fillLoginDetailsAndSubmit(testData.ValidLoginDetails);
     await checkoutPage.assertRedirectionToChecoutPageWithUserLoggedinAndFieldsArefilled(); 
     await checkoutPage.proceedToPayment();
-    await paymentPage.selectSaveCardAndPay();
+    await paymentPage.selectSavedCardAndPay();
     await orderSuccessfulPage.verifyOrderSuccessfulPageDisplayed(); 
 
 

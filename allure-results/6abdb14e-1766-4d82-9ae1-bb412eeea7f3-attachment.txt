@@ -1,0 +1,11 @@
+Navigated to home page.
+Cookies accepted.
+Hero banner heading is visible.
+Navigated to Europe region plans page.
+Continue to checkout button is enabled in cart page.
+Proceeded to checkout from cart page.
+guest data used : { firstName: 'uYRinmtg' } { lastName: 'oQawMnrP' } { email: 'Everette.Erdman82@gmail.com' }
+OTP popup is visible.
+OTP entered.
+Card details filled and Pay button clicked.
+Order Successful page is displayed with all relevant information.

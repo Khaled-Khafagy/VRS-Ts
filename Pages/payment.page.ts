@@ -62,7 +62,8 @@ async fillCardDetailsAndPay(cardDetails : CreditCardDetails) {
     await this.cardExpiryInput.pressSequentially(cardDetails.expiry, { delay: 100 });
     await this.cardCVCInput.pressSequentially(cardDetails.cvc, { delay: 100 });
     await this.cardHolderNameInput.fill(cardDetails.name);
-    await this.payButton.click();
+    await this.clickPayButton();
+    console.log("Card details filled and Pay button clicked.");
 });}
 
 
@@ -77,13 +78,18 @@ async fillCardDetailsAndPay(cardDetails : CreditCardDetails) {
 });}
 
 
-async selectSaveCardAndPay(){   
+async selectSavedCardAndPay(){   
     await test.step('Select Saved Visa Card and Pay', async () => {
     await this.savedVisaCard.waitFor({state:'visible',timeout:15000});
-    await this.payButton.click();
+    await this.clickPayButton();
     console.log("Saved Visa Card selected and Pay button clicked.");
-    await this.payButton.click();
 }); }
+
+
+  async clickPayButton(){
+    await this.payButton.scrollIntoViewIfNeeded();
+    await this.payButton.click();
+  }
 
 
 
