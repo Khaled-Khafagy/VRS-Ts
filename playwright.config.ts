@@ -59,7 +59,6 @@ export default defineConfig({
         viewport: { width: 1920, height: 1080 }, // Ensure this is null here too!
         launchOptions: {
           args: ['--start-maximized'],
-          headless: false
         },
         
          // Standard actions get 15 seconds
