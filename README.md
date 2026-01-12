@@ -1,5 +1,7 @@
 # VRS-Ts: Professional Playwright Automation Framework
+[![Playwright Tests](https://github.com/Khaled-Khafagy/VRS-Ts/actions/workflows/playwright.yml/badge.svg)](https://github.com/Khaled-Khafagy/VRS-Ts/actions/workflows/playwright.yml)
 
+---
 [![Playwright Tests](https://github.com/YOUR_GITHUB_USERNAME/VRS-Ts/actions/workflows/playwright.yml/badge.svg)](https://github.com/YOUR_GITHUB_USERNAME/VRS-Ts/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
