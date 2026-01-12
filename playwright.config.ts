@@ -22,8 +22,14 @@ export default defineConfig({
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
   timeout: 120000,
-  /* Retry on CI only */
-  retries: 1,
+
+  // Number of times to retry a failed test. 
+  // 'process.env.CI' detects if you are running in GitHub Actions.
+  retries: process.env.CI ? 2 : 0, 
+  
+  // Set a limit for total failures to stop the suite early if everything is broken
+  maxFailures: process.env.CI ? 10 : undefined,
+  
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */

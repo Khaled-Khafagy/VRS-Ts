@@ -27,7 +27,9 @@ jobs:
     - name: Run Playwright tests
       run: npx playwright test
       
-    # 1. Load History from the gh-pages branch
+    - name: Run Playwright tests
+      run: npx playwright test
+      
     - name: Load Allure history
       uses: actions/checkout@v4
       if: always()
@@ -36,7 +38,11 @@ jobs:
         ref: gh-pages
         path: gh-pages-dir
 
-    
+    # NEW STEP: Install Allure CLI manually to fix "Command not found"
+    - name: Install Allure CLI
+      if: always()
+      run: npm install -g allure-commandline --save-dev
+
     - name: Generate Allure Report
       if: always()
       run: |
@@ -44,7 +50,7 @@ jobs:
         if [ -d "gh-pages-dir/history" ]; then
           cp -r gh-pages-dir/history/* allure-results/history/
         fi
-        npx allure generate allure-results --clean -o allure-report
+        allure generate allure-results --clean -o allure-report
 
     - name: Deploy to GitHub Pages
       if: always()
