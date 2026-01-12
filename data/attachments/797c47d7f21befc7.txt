@@ -1,0 +1,9 @@
+Navigated to home page.
+Cookies accepted.
+Hero banner heading is visible.
+Navigated to Europe region plans page.
+Continue to checkout button is enabled in cart page.
+Proceeded to checkout from cart page.
+guest data used : { firstName: 'TZqtjWtX' } { lastName: 'VBBYDPmY' } { email: 'Colton24@hotmail.com' }
+OTP popup is visible.
+OTP entered.

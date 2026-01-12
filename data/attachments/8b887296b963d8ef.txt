@@ -1,0 +1,10 @@
+Navigated to home page.
+Cookies accepted.
+Hero banner heading is visible.
+Navigated to Europe region plans page.
+Continue to checkout button is enabled in cart page.
+Proceeded to checkout from cart page.
+guest data used : { firstName: 'sfLgrcxn' } { lastName: 'iofXhTEK' } { email: 'Lela.Streich@yahoo.com' }
+OTP popup is visible.
+OTP entered.
+Order Successful page is displayed with all relevant information.

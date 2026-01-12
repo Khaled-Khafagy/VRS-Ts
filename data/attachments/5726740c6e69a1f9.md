@@ -1,0 +1,105 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - navigation "Main navigation" [ref=e7]:
+      - link "Top Navigation Logo" [ref=e8] [cursor=pointer]:
+        - /url: /
+        - img "Top Navigation Logo" [ref=e9]
+      - list [ref=e12]:
+        - listitem [ref=e13]:
+          - link "Homepage" [ref=e14] [cursor=pointer]:
+            - /url: /?i_code=CS-P-11-LOGO
+            - text: Homepage
+        - listitem [ref=e15]:
+          - link "Our Destinations" [ref=e16] [cursor=pointer]:
+            - /url: /our-destinations
+            - text: Our Destinations
+        - listitem [ref=e17]:
+          - link "UEFA Champions League" [ref=e18] [cursor=pointer]:
+            - /url: /our-destinations/uefachampionsleague
+            - text: UEFA Champions League
+        - listitem [ref=e19]:
+          - link "About eSIM" [ref=e20] [cursor=pointer]:
+            - /url: /#how-it-works
+            - text: About eSIM
+        - listitem [ref=e21]:
+          - link "Help" [ref=e22] [cursor=pointer]:
+            - /url: /help-support
+            - text: Help
+      - list [ref=e23]:
+        - listitem [ref=e24]:
+          - generic [ref=e26]:
+            - img "Shopping Cart" [ref=e27] [cursor=pointer]
+            - status [ref=e30]: "1"
+        - listitem [ref=e31]:
+          - generic [ref=e32] [cursor=pointer]: Login
+    - generic [ref=e35]:
+      - generic [ref=e37]:
+        - img [ref=e38]
+        - heading "Something went wrong" [level=3] [ref=e43]
+        - paragraph [ref=e44]: Unfortunately we are unable to process your payment request. Please try again
+        - button "Try again" [ref=e46] [cursor=pointer]
+      - generic [ref=e49]:
+        - generic [ref=e51]:
+          - heading "Frequently Asked Questions" [level=2] [ref=e54]
+          - generic:
+            - generic:
+              - paragraph
+        - generic [ref=e56]:
+          - button "When will I receive my eSIM?" [ref=e61] [cursor=pointer]:
+            - generic [ref=e62]: When will I receive my eSIM?
+            - img [ref=e67]
+          - button "What do I do if I ordered an eSIM, but I didn’t get the confirmation email?" [ref=e73] [cursor=pointer]:
+            - generic [ref=e74]: What do I do if I ordered an eSIM, but I didn’t get the confirmation email?
+            - img [ref=e79]
+          - button "How much time do I have to activate my eSIM after purchase?" [ref=e85] [cursor=pointer]:
+            - generic [ref=e86]: How much time do I have to activate my eSIM after purchase?
+            - img [ref=e91]
+          - button "When should I install my eSIM?" [ref=e97] [cursor=pointer]:
+            - generic [ref=e98]: When should I install my eSIM?
+            - img [ref=e103]
+          - button "When should I activate my eSIM?" [ref=e109] [cursor=pointer]:
+            - generic [ref=e110]: When should I activate my eSIM?
+            - img [ref=e115]
+          - button "Can an eSIM be installed without a QR code?" [ref=e121] [cursor=pointer]:
+            - generic [ref=e122]: Can an eSIM be installed without a QR code?
+            - img [ref=e127]
+    - generic [ref=e134]:
+      - list [ref=e135]:
+        - listitem [ref=e136]:
+          - list [ref=e137]:
+            - listitem [ref=e138]:
+              - button "Terms & Conditions" [ref=e139] [cursor=pointer]
+              - separator [ref=e140]
+            - listitem [ref=e141]:
+              - button "Privacy Policy" [ref=e142] [cursor=pointer]
+              - separator [ref=e143]
+            - listitem [ref=e144]:
+              - button "Cookie Policy" [ref=e145] [cursor=pointer]
+              - separator [ref=e146]
+            - listitem [ref=e147]:
+              - button "Charges Guide" [ref=e148] [cursor=pointer]
+              - separator [ref=e149]
+            - listitem [ref=e150]:
+              - button "Acceptable Usage Policy" [ref=e151] [cursor=pointer]
+              - separator [ref=e152]
+            - listitem [ref=e153]:
+              - button "Ad Choices" [ref=e154] [cursor=pointer]
+        - listitem [ref=e155]:
+          - list [ref=e156]:
+            - listitem [ref=e157]:
+              - button "eSIM Installation Guide" [ref=e158] [cursor=pointer]
+              - separator [ref=e159]
+            - listitem [ref=e160]:
+              - button "Help" [ref=e161] [cursor=pointer]
+              - separator [ref=e162]
+            - listitem [ref=e163]:
+              - button "Contact us or Leave us" [ref=e164] [cursor=pointer]
+      - paragraph [ref=e165]: "Vodafone Global Connect S.à r.l. is registered in the Grand Duchy of Luxembourg. R.C.S Luxembourg No. B144677. Registered Office: 15 rue Edward Steichen, L-2540 Luxembourg, Grand Duchy of Luxembourg. VAT LU29846245"
+  - button "Click here to talk to tobi" [ref=e166] [cursor=pointer]
+  - generic "Manage Cookies" [ref=e167] [cursor=pointer]:
+    - button "Open Preferences" [ref=e169]
+    - text: Manage Cookies
+```
