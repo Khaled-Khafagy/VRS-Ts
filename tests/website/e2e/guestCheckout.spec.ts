@@ -5,7 +5,7 @@ import {generateGuestUserData} from '../../../utils/testDataGenerator';
 
 test('Guest checkout for Non Existing User', async ({ homePage, regionPlansPage,cartPage,checkoutPage,paymentPage,orderSuccessfulPage }) => {
     
-    await homePage.gotoHomepage(testData.PreprodEnvironment.url);
+    await homePage.gotoHomepage(testData.Environment.url);
     await homePage.navigateToEuropeRegionPlansPage();
     await regionPlansPage.selectplanInEuropeRegion();
     await cartPage.proceedToCheckoutFromCart();
@@ -20,7 +20,7 @@ test('Guest checkout for Non Existing User', async ({ homePage, regionPlansPage,
 });
 test('Guest Checkout inserting Existing Account in E-mail field', async ({ homePage, regionPlansPage,cartPage,checkoutPage,loginPage,paymentPage,orderSuccessfulPage }) => {
    
-    await homePage.gotoHomepage(testData.TestEnvironment.url);
+    await homePage.gotoHomepage(testData.Environment.url);
     await homePage.navigateToEuropeRegionPlansPage();
     await regionPlansPage.selectplanInEuropeRegion();
     await cartPage.proceedToCheckoutFromCart();
@@ -37,7 +37,7 @@ test('Guest Checkout inserting Existing Account in E-mail field', async ({ homeP
 }); 
 test(' Guest Checkout ( login with existing account)',  async ({ homePage, regionPlansPage,cartPage,checkoutPage,loginPage,paymentPage, orderSuccessfulPage}) => {     
    
-    await homePage.gotoHomepage(testData.TestEnvironment.url);
+    await homePage.gotoHomepage(testData.Environment.url);
     await homePage.navigateToEuropeRegionPlansPage();
     await regionPlansPage.selectplanInEuropeRegion();
     await cartPage.proceedToCheckoutFromCart();
@@ -48,7 +48,5 @@ test(' Guest Checkout ( login with existing account)',  async ({ homePage, regio
     await checkoutPage.proceedToPayment();
     await paymentPage.selectSavedCardAndPay();
     await orderSuccessfulPage.verifyOrderSuccessfulPageDisplayed(); 
-
-
 
 });     
