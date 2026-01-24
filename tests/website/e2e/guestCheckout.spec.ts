@@ -5,7 +5,7 @@ import {generateGuestUserData} from '../../../utils/testDataGenerator';
 
 test('Guest checkout for Non Existing User', async ({ homePage, regionPlansPage,cartPage,checkoutPage,paymentPage,orderSuccessfulPage }) => {
     
-    await homePage.gotoHomepage();
+    await homePage.gotoHomepage(testData.PreprodEnvironment.url);
     await homePage.navigateToEuropeRegionPlansPage();
     await regionPlansPage.selectplanInEuropeRegion();
     await cartPage.proceedToCheckoutFromCart();
@@ -18,9 +18,9 @@ test('Guest checkout for Non Existing User', async ({ homePage, regionPlansPage,
     
 
 });
-test.skip('Guest Checkout inserting Existing Account in E-mail field', async ({ homePage, regionPlansPage,cartPage,checkoutPage,loginPage,paymentPage,orderSuccessfulPage }) => {
+test('Guest Checkout inserting Existing Account in E-mail field', async ({ homePage, regionPlansPage,cartPage,checkoutPage,loginPage,paymentPage,orderSuccessfulPage }) => {
    
-    await homePage.gotoHomepage();
+    await homePage.gotoHomepage(testData.TestEnvironment.url);
     await homePage.navigateToEuropeRegionPlansPage();
     await regionPlansPage.selectplanInEuropeRegion();
     await cartPage.proceedToCheckoutFromCart();
@@ -35,9 +35,9 @@ test.skip('Guest Checkout inserting Existing Account in E-mail field', async ({ 
     await orderSuccessfulPage.verifyOrderSuccessfulPageDisplayed();
   
 }); 
-test.skip(' Guest Checkout ( login with existing account)',  async ({ homePage, regionPlansPage,cartPage,checkoutPage,loginPage,paymentPage, orderSuccessfulPage}) => {     
+test(' Guest Checkout ( login with existing account)',  async ({ homePage, regionPlansPage,cartPage,checkoutPage,loginPage,paymentPage, orderSuccessfulPage}) => {     
    
-    await homePage.gotoHomepage();
+    await homePage.gotoHomepage(testData.TestEnvironment.url);
     await homePage.navigateToEuropeRegionPlansPage();
     await regionPlansPage.selectplanInEuropeRegion();
     await cartPage.proceedToCheckoutFromCart();

@@ -1,119 +1,68 @@
-import {defineConfig,devices } from '@playwright/test';
-
-    
-
-/**
- * Read environment variables from file.
- * https://github.com/motdotla/dotenv
- */
-// import dotenv from 'dotenv';
-// import path from 'path';
-// dotenv.config({ path: path.resolve(__dirname, '.env') });
+import { defineConfig, devices } from '@playwright/test';
+import * as dotenv from 'dotenv';
+import path from 'path';
 
 /**
- * See https://playwright.dev/docs/test-configuration.
+ * 1. FIX: Load .env file
+ * Ensure you have run: npm install dotenv
  */
-export default defineConfig({ 
+dotenv.config({ path: path.resolve(__dirname, '.env') });
 
+export default defineConfig({
   testDir: './tests',
-  
-  /* Run tests in files in parallel */
   fullyParallel: true,
-  /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
   timeout: 120000,
-
-  // Number of times to retry a failed test. 
-  // 'process.env.CI' detects if you are running in GitHub Actions.
-  retries: process.env.CI ? 2 : 0, 
-  
-  // Set a limit for total failures to stop the suite early if everything is broken
-  maxFailures: process.env.CI ? 10 : undefined,
-  
-  /* Opt out of parallel tests on CI. */
+  retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
-  /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter:[['allure-playwright']],
   
+  /* */
+  reporter: [['allure-playwright']],
 
-  /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
+  /**
+   * 2. SHARED SETTINGS (The "Stealth" & "Bypass" layer)
+   */
   use: {
-    // Standard actions get 15 seconds
+    // /* FIX: The whitelisted header */
+    // extraHTTPHeaders: {
+    //   'x_vrs_automation': process.env.BYPASS_SECRET || 'guq1dtu2tfx@CXY2dpt'.trim(),
+    // },
+
+    /* FIX: Blank screen issues */
+    ignoreHTTPSErrors: true,
+    
+    /* FIX: Window Resize/Minimize */
+    headless: false, 
+    viewport: null, // Required for --start-maximized to work correctly
+    
+    launchOptions: {
+      args: [
+        '--start-maximized', 
+        '--disable-blink-features=AutomationControlled'
+      ],
+    },
+
+    /* */
     actionTimeout: 20000,
-       // Global timeout for page.goto()
-    navigationTimeout: 30000,
-    viewport: { width: 1920, height: 1080 },
-
-    // Base URL to use in actions like `await page.goto('/')`.
-    // baseURL: 'http://localhost:3000',  
-
-    // The "Proof" settings for Allure
+    navigationTimeout: 60000,
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
     trace: 'on-first-retry',
-    // viewport: null, 
-
-   
-  // The maximum time one entire test can run
   },
 
-  /* Configure projects for major browsers */
+  /**
+   * 3. PROJECTS
+   */
   projects: [
     {
-      name: 'chromium',
+     name: 'chromium',
       use: {
-        viewport: { width: 1920, height: 1080 }, // Ensure this is null here too!
-        launchOptions: {
-          args: ['--start-maximized'],
-        },
-        
-         // Standard actions get 15 seconds
-    actionTimeout: 20000,
-       // Global timeout for page.goto()
-    navigationTimeout: 60000,
-      },  
-      expect: {
-    // Give assertions (like toBeVisible) 20 seconds instead of 5
-    timeout: 20000, 
-  }
-  
-    },
-
-    // {
-    //   name: 'firefox',
-    //   use: { ...devices['Desktop Firefox'] },
-    // },
-
-    // {
-    //   name: 'webkit',
-    //   use: { ...devices['Desktop Safari'] },
-    // },
-
-    /* Test against mobile viewports. */
-    // {
-    //   name: 'Mobile Chrome',
-    //   use: { ...devices['Pixel 5'] },
-    // },
-    // {
-    //   name: 'Mobile Safari',
-    //   use: { ...devices['iPhone 12'] },
-    // },
-
-    /* Test against branded browsers. */
-    // {
-    //   name: 'Microsoft Edge',
-    //   use: { ...devices['Desktop Edge'], channel: 'msedge' },
-    // },
-    // {
-    //   name: 'Google Chrome',
-    //   use: { ...devices['Desktop Chrome'], channel: 'chrome' },
-    // },
+        ...devices['Desktop Chrome'],
+        // This is the missing piece: it cancels the default 1280x720 
+        // that comes hidden inside the 'devices' object.
+        viewport: null,
+        deviceScaleFactor: undefined,
+      },
+    }
   ],
-
-  /* Run your local dev server before starting the tests */
-  // webServer: {
-  //   command: 'npm run start',
-  //   url: 'http://localhost:3000',
-  //   reuseExistingServer: !process.env.CI,
-  // },
 });

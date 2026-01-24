@@ -19,7 +19,16 @@
     "ValidLoginDetails": {
         "email": "khafagyk8@gmail.com",        
         "password": "Abcdef12@"
-    }   
+    },
+    "TestEnvironment": {
+        "url": "https://r10-test.digitalretail.vodafone.com/vrs-taas-portal/"
+    },
+    "PreprodEnvironment": {
+        "url": "https://vrs.preprod.travel.vodafone.com/taas/"
+    },
+    "LoginProdEnvironment": {
+        "url": "https://vrs.preprod.travel.vodafone.com/taas/login"
+    }
     
     
 }

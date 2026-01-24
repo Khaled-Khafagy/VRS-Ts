@@ -10,7 +10,7 @@ export abstract class BasePage {
   }
 
   async navigateToHomePage(url: string){
-    await this.page.goto(url);
+    await this.page.goto(url,{waitUntil: 'networkidle'});
     console.log("Navigated to home page.");
   }
   

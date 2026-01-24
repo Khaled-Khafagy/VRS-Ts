@@ -18,7 +18,8 @@
     "@faker-js/faker": "^10.2.0",
     "@playwright/test": "^1.57.0",
     "@types/node": "^25.0.3",
-    "allure-playwright": "^3.4.4"
+    "allure-playwright": "^3.4.4",
+    "dotenv": "^17.2.3"
   },
   "dependencies": {
     "playwright": "^1.57.0"

@@ -12,7 +12,7 @@ export class LoginPage extends BasePage {
         // Login page locators
         loginFormHeading: this.page.getByRole('heading', { name: 'Log in to your account' }),
         emailInputField: this.page.getByLabel('Email'),
-        passwordInputField: this.page.getByLabel('Password'),
+        passwordInputField: this.page.getByRole('textbox', { name: 'Password' }),
         forgetYourPasswordLink: this.page.getByTestId('link-resetPassword'),
         continueButton: this.page.getByRole('button', { name: 'Continue' }),
         loginWithGoogleButton: this.page.getByRole('button', { name: 'Login with Google' }),
@@ -60,7 +60,7 @@ export class LoginPage extends BasePage {
 
     async verifyRedirectionAndCompleteLoadToLoginPage() {
         await test.step('Verify redirect to login page', async () => {
-        await expect(this.page).toHaveTitle(/Log in to your account/);
+        await expect(this.page).toHaveTitle('Vodafone ID');
         await expect (this.page).toHaveURL(/.*idp.vodafone.com/);
         await expect(this.loginPageLocators.loginFormHeading).toBeVisible();
         console.log("Redirected to Login page as expected.");

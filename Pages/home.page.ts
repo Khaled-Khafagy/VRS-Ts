@@ -25,13 +25,14 @@ europeRegionExploreButton :this.page.locator("a[href='/our-destinations/europe']
 constructor(page: Page) {
     super(page);
   }
-  async gotoHomepage() {
+  async gotoHomepage(URL: string){ {
     await test.step('Navigate to Home Page and Accept cookies', async () => {
-    await this.navigateToHomePage('https://r10-test.digitalretail.vodafone.com/vrs-taas-portal/');
+    await this.navigateToHomePage(URL);
     await this.acceptCookies();
     await this.assertVisibiltyOfHeroBannerHeading();
 
     });}
+  }
   async assertVisibiltyOfHeroBannerHeading(){
     await expect(this.homePageLocators.heroBannerHeading).toBeVisible();
  console.log("Hero banner heading is visible.");
