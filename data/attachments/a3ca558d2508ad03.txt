@@ -1,8 +1,0 @@
-Navigated to home page.
-Cookie banner not found or already dismissed.
-Hero banner heading is visible.
-Navigated to Europe region plans page.
-Continue to checkout button is enabled in cart page.
-Proceeded to checkout from cart page.
-OTP popup for existing user is visible.
-Login button clicked on existing user OTP popup.

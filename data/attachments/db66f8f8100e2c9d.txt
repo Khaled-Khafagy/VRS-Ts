@@ -1,4 +1,0 @@
-Navigated to home page.
-Cookie banner not found or already dismissed.
-Hero banner heading is visible.
-Navigated to Europe region plans page.
