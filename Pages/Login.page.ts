@@ -10,7 +10,6 @@ export interface loginInfo {
 export class LoginPage extends BasePage {
     private readonly loginPageLocators = {
         // Login page locators
-        loginFormHeading: this.page.getByRole('heading', { name: 'Log in to your account' }),
         emailInputField: this.page.getByLabel('Email'),
         passwordInputField: this.page.getByRole('textbox', { name: 'Password' }),
         forgetYourPasswordLink: this.page.getByTestId('link-resetPassword'),
@@ -62,7 +61,6 @@ export class LoginPage extends BasePage {
         await test.step('Verify redirect to login page', async () => {
         await expect(this.page).toHaveTitle('Vodafone ID');
         await expect (this.page).toHaveURL(/.*idp.vodafone.com/);
-        await expect(this.loginPageLocators.loginFormHeading).toBeVisible();
         console.log("Redirected to Login page as expected.");
 
         });

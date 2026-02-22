@@ -6,6 +6,7 @@ import { CheckoutPage } from '../Pages/checkout.page';
 import { PaymentPage } from '../Pages/payment.page';   
 import { OrderSuccessfulPage } from '../Pages/orderSuccessful.page'; 
 import { LoginPage } from '../Pages/Login.page';
+import { MyAccountPage } from '../Pages/myAccount.page';
 // Import other pages as you create them
 
 // 1. Define a type for your fixtures
@@ -17,6 +18,7 @@ type MyFixtures = {
     paymentPage: PaymentPage;   
     orderSuccessfulPage: OrderSuccessfulPage;
     loginPage: LoginPage;
+    myAccountPage: MyAccountPage; 
     // Add other pages here
 };
    
@@ -54,7 +56,12 @@ export const test = base.extend<MyFixtures>({
     loginPage: async ({ page }, use) => {
         const loginPage = new LoginPage(page);
         await use(loginPage);
-    }   
+    }    
+    ,    myAccountPage: async ({ page }, use) => {
+        const myAccountPage = new MyAccountPage(page);
+        await use(myAccountPage);
+    }         
+
     // Add other pages here
 });
 

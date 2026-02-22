@@ -19,7 +19,7 @@ export class CheckoutPage extends BasePage {
         
         // Define locators for checkout page here
         avatarAsloggedin: this.page.locator('div.avatar_overlay__bto13x9:visible'),
-        checoutPageHeading: this.page.getByRole('heading', { name: 'Checkout' }),
+        checkoutPageHeading: this.page.getByRole('heading', { name: 'Checkout' }),
         welcomeHeadingForLoggedinUser: this.page.getByRole('heading', { name: 'Welcome' }),
 
         loginLink: this.page.getByText('here', { exact: true }),
@@ -85,6 +85,7 @@ async proceedToPayment(){
     await test.step('Proceed to Payment from Checkout Page', async () => {
     await this.assertContinueToPaymentButtonIsEnabled();
     await this.checkoutPageLocators.continueToPaymentButton.click();
+    console.log("Proceeded to payment from checkout page.");
     
 });}
 
@@ -134,7 +135,7 @@ async enterMagicOTP() {
 
 async assertRedirectionToChecoutPageWithUserLoggedinAndFieldsArefilled() {
     await test.step('Assert Redirection to Checkout Page with User Logged-in and Fields are pre-filled', async () => {
-    await expect(this.checkoutPageLocators.checoutPageHeading).toBeVisible();
+    await expect(this.checkoutPageLocators.checkoutPageHeading).toHaveValue('Checkout');  
     console.log("Redirected to Checkout page.");
     await expect(this.checkoutPageLocators.avatarAsloggedin).toBeVisible();
     console.log("User is logged in, avatar is visible.");

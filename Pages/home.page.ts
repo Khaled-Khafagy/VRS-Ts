@@ -9,7 +9,7 @@ private readonly homePageLocators = {
  uefaHeaderlink : this.page.getByRole('link', { name: 'UEFA Champions League' }),
  abouteSIMHeaderlink : this.page.getByRole('link', { name: 'About eSIM' }),
  helpHeaderlink : this.page.getByRole('link', { name: 'Help' }),
- heroBannerHeading : this.page.getByRole('heading', { name: 'Save 20% on travel internet' }),
+ heroBannerHeading : this.page.getByRole('heading', { name: 'Two Travel eSIMs. One price.' }),
 // cartHeaderlink : this.page.getByRole('link', { name: 'Cart' }), needs to be modified by Ahmed alamelden
 //  languageAndCurrencyHeaderlink : this.page.getByRole('button', { name: 'Language and Currency' }),needs to be modified by Ahmed alamelden
 userProfileIconAsLoggeedin: this.page.locator('div.avatar_overlay__bto13x9:visible'),
@@ -47,23 +47,14 @@ async navigateToEuropeRegionPlansPage(){
     await test.step('Navigate to Europe Region Plans Page', async () => {   
     await this.homePageLocators.europeRegionExploreButton.click();
     console.log("Navigated to Europe region plans page.");  });}
+  
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    async NavigateToMyAccountTab(){
+        await test.step('Navigate to My Account Tab', async () => {   
+        await this.homePageLocators.userProfileIconAsLoggeedin.click();
+        console.log("Clicked on user profile icon to navigate to My Account tab.");  });}
 
 
   };

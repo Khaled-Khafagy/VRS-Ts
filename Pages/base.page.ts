@@ -17,7 +17,7 @@ export abstract class BasePage {
 async acceptCookies(customLocator?: Locator) {
         const button = customLocator || this.commonCookieButton;
         try {
-            await button.waitFor({ state: 'visible', timeout: 10000 });
+            await button.waitFor({ state: 'visible', timeout: 4000 });
             await button.click({ force: true });
             console.log("Cookies accepted.");
         } catch (e) {

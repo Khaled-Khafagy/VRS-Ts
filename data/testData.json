@@ -17,11 +17,12 @@
         "name": "test card"
     },
     "ValidLoginDetails": {
-        "email": "khafagyk8@gmail.com",        
+        "email": "reg_taas@daouse.com",        
         "password": "Abcdef12@"
     },
+    
     "Environment": {
-        "url": "https://vrs.preprod.travel.vodafone.com/taas/"
+        "url": "https://vrs.preprod.travel.vodafone.com/"
     },
     "LoginProdEnvironment": {
         "url": "https://vrs.preprod.travel.vodafone.com/taas/login"

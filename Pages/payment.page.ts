@@ -13,20 +13,21 @@ export interface CreditCardDetails {
 
 export class PaymentPage extends BasePage {
   readonly paymentFrame: FrameLocator;
-    readonly savedVisaCard: Locator;
+  readonly savedVisaCard: Locator;
   readonly addNewCardButton: Locator;
   readonly cardNumberInput: Locator;
   readonly cardExpiryInput: Locator;
   readonly cardCVCInput: Locator;
   readonly cardHolderNameInput: Locator;
-  readonly payButton: Locator;
+  readonly payButtonLoggedin: Locator;
+  readonly payButtonLoggedOut: Locator;
 
 
 
 constructor(page : Page) {
     super(page);
     // 1. Locate the iframe containing the payment gateway
-    this.paymentFrame = page.frameLocator('iframe[src*="pay.vodafone.com"]');
+    this.paymentFrame = page.frameLocator('iframe[src*="pre.pay.vodafone.com"]');
 
     
     // 2. The button is directly in the main payment frame
@@ -46,50 +47,42 @@ constructor(page : Page) {
         .locator('input[aria-label="Security code"]');
         
 
-    this.savedVisaCard = this.paymentFrame.locator('text=**** 0007');
-
+    this.savedVisaCard = this.paymentFrame.getByTestId('payment-card-item-ctob');
 
     this.cardHolderNameInput = this.paymentFrame.getByLabel('Name on card');
-    this.payButton = this.paymentFrame.getByTestId('pay');
+    this.payButtonLoggedin = this.paymentFrame.getByRole('button', { name: 'Pay' });
+
+    this.payButtonLoggedOut = this.paymentFrame.getByTestId('pay');
 
   }
 
 async fillCardDetailsAndPay(cardDetails : CreditCardDetails) {
     await test.step('Fill Card Details and Pay', async () => {
+    await this.assertVisibilityOfPaymentGateway();
     await this.addNewCardButton.click();
     // Use .pressSequentially with a small delay if .fill() is ignored by the secure frame
     await this.cardNumberInput.pressSequentially(cardDetails.number, { delay: 100 });
     await this.cardExpiryInput.pressSequentially(cardDetails.expiry, { delay: 100 });
     await this.cardCVCInput.pressSequentially(cardDetails.cvc, { delay: 100 });
     await this.cardHolderNameInput.fill(cardDetails.name);
-    await this.clickPayButton();
+    await this.payButtonLoggedOut.click();
     console.log("Card details filled and Pay button clicked.");
 });}
 
 
+  async performPaymentWithCardForLoggedInUsers(){
+    await test.step('Perform Payment with Card for Logged-in Users', async () => {
+    await this.savedVisaCard.click();
+    await this.payButtonLoggedin.click();
+        console.log("Payment performed with card for logged-in user.");
 
+});}
 
-
-
-  async assertVisibilityOfPaymentGateway(){
+  private async assertVisibilityOfPaymentGateway(){
     await test.step('Assert visibility of Payment Gateway Heading', async () => {
     await expect (this.addNewCardButton).toBeVisible({timeout:30000});
     console.log("Payment Gateway Heading is visible.");
 });}
-
-
-async selectSavedCardAndPay(){   
-    await test.step('Select Saved Visa Card and Pay', async () => {
-    await this.savedVisaCard.waitFor({state:'visible',timeout:15000});
-    await this.clickPayButton();
-    console.log("Saved Visa Card selected and Pay button clicked.");
-}); }
-
-
-  async clickPayButton(){
-    await this.payButton.scrollIntoViewIfNeeded();
-    await this.payButton.click({ force: true });
-  }
 
 
 
