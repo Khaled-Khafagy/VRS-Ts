@@ -1,4 +1,5 @@
 "DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
-"","3","Guest Checkout ( login with existing account)","chromium","2026-02-22","failed","2026-02-22","","website/Regression/guestCheckout.spec.ts","",""
-"","3","Guest Checkout inserting Existing Account in E-mail field","chromium","2026-02-22","failed","2026-02-22","","website/Regression/guestCheckout.spec.ts","",""
-"","3","Guest checkout for Non Existing User","chromium","2026-02-22","failed","2026-02-22","","website/Regression/guestCheckout.spec.ts","",""
+"","2","Guest Checkout ( login with existing account)","chromium","2026-03-01","failed","2026-03-01","","website/Regression/guestCheckout.spec.ts","",""
+"","3","Guest Checkout inserting Existing Account in E-mail field","chromium","2026-03-01","failed","2026-03-01","","website/Regression/guestCheckout.spec.ts","",""
+"","2","Guest checkout for Non Existing User","chromium","2026-03-01","failed","2026-03-01","","website/Regression/guestCheckout.spec.ts","",""
+"","3","login using Valid Credentials","chromium","2026-03-01","failed","2026-03-01","","website/Regression/login.spec.ts","",""
