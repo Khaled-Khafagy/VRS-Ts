@@ -24,8 +24,8 @@
     "Environment": {
         "url": "https://vrs.preprod.travel.vodafone.com/"
     },
-    "LoginProdEnvironment": {
-        "url": "https://vrs.preprod.travel.vodafone.com/taas/login"
+    "LoginOrSignUpLink": {
+        "url": "https://vrs.preprod.travel.vodafone.com/login"
     }
     
     
