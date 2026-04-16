@@ -1,0 +1,42 @@
+
+Running 1 test using 1 worker
+
+[1A[2K[1/1] [chromium] › tests/website/Regression/guestCheckout.spec.ts:23:5 › Guest Checkout inserting Existing Account in E-mail field
+[1A[2K[chromium] › tests/website/Regression/guestCheckout.spec.ts:23:5 › Guest Checkout inserting Existing Account in E-mail field
+Cookie banner not found or already dismissed.
+
+[1A[2K  1) [chromium] › tests/website/Regression/guestCheckout.spec.ts:23:5 › Guest Checkout inserting Existing Account in E-mail field › Proceed to Payment from Checkout Page 
+
+    TimeoutError: locator.click: Timeout 20000ms exceeded.
+    Call log:
+    [2m  - waiting for locator('.sc-ilvUFQ').first()[22m
+    [2m    - waiting for" https://vrs.preprod.travel.vodafone.com/vrs-middleware/api/auth/vodafoneId/code?code=44fa48dd-ef10-4d7d-8c61-bbcb2bc7bb16&state=93bde69f-ca54-4954-be67-005c6f0a168a" navigation to finish...[22m
+    [2m    - navigated to "https://vrs.preprod.travel.vodafone.com/login/confirmation"[22m
+
+
+       at ../Pages/CheckoutPage.ts:147
+
+      145 |     await test.step('Proceed to Payment from Checkout Page', async () => {
+      146 |         // Check agreement consent checkbox
+    > 147 |         await this.checkoutPageLocators.chkAgreementConsent.click();
+          |                                                             ^
+      148 |         
+      149 |         // Click continue to payment button
+      150 |         await this.checkoutPageLocators.btnContinueToPayment.click();
+        at /Users/khafagy/Desktop/VRS-new/VRS-Ts/Pages/CheckoutPage.ts:147:61
+        at CheckoutPage.proceedToPayment (/Users/khafagy/Desktop/VRS-new/VRS-Ts/Pages/CheckoutPage.ts:145:5)
+        at /Users/khafagy/Desktop/VRS-new/VRS-Ts/tests/website/Regression/guestCheckout.spec.ts:35:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/website-Regression-guestCh-a98ba-ing-Account-in-E-mail-field-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/website-Regression-guestCh-a98ba-ing-Account-in-E-mail-field-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/website-Regression-guestCh-a98ba-ing-Account-in-E-mail-field-chromium/error-context.md
+
+
+[1A[2K  1 failed
+    [chromium] › tests/website/Regression/guestCheckout.spec.ts:23:5 › Guest Checkout inserting Existing Account in E-mail field 

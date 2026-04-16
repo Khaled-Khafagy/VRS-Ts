@@ -6,15 +6,15 @@ import path from 'path';
  * 1. FIX: Load .env file
  * Ensure you have run: npm install dotenv
  */
-dotenv.config({ path: path.resolve(__dirname, '.env') });
+//dotenv.config({ path: path.resolve(__dirname, '.env') });
 
 export default defineConfig({
   testDir: './tests',
   fullyParallel: false,
   forbidOnly: !!process.env.CI,
-  timeout: 120000,
+  timeout: 60000,
   retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
+  workers: process.env.CI ? 1 : 1,
   
   /* */
   reporter: [['allure-playwright']],
@@ -23,10 +23,6 @@ export default defineConfig({
    * 2. SHARED SETTINGS (The "Stealth" & "Bypass" layer)
    */
   use: {
-    // /* FIX: The whitelisted header */
-    // extraHTTPHeaders: {
-    //   'x_vrs_automation': process.env.BYPASS_SECRET || 'guq1dtu2tfx@CXY2dpt'.trim(),
-    // },
 
     /* FIX: Blank screen issues */
     ignoreHTTPSErrors: true,
