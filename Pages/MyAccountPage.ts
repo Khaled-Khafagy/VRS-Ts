@@ -1,6 +1,5 @@
-import {test, expect, Page, } from '@playwright/test';  
+import { test, Page } from '@playwright/test';
 import { BasePage } from './BasePage';
-import { sign } from 'node:crypto';
 export class MyAccountPage extends BasePage {
     private readonly myAccountPageLocators = {
         // My Account page locators

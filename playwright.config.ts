@@ -6,7 +6,7 @@ import path from 'path';
  * 1. FIX: Load .env file
  * Ensure you have run: npm install dotenv
  */
-//dotenv.config({ path: path.resolve(__dirname, '.env') });
+dotenv.config({ path: path.resolve(__dirname, '.env') });
 
 export default defineConfig({
   testDir: './tests',

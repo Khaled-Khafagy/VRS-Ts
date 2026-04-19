@@ -17,7 +17,6 @@ export class LoginOrSignupPage extends BasePage {
     async navigateToLoginOrSignUpPage(URL: string) {
         await test.step('Navigate to Login or Sign Up Page', async () => {
             await this.navigateToUrl(URL);
-            await this.acceptCookies();
         });
     }   
     async proceedWithLogin(){
@@ -25,7 +24,7 @@ export class LoginOrSignupPage extends BasePage {
     await this.loginPageLocators.loginBtn.click();
 });}
 
-async ProceedWithSignUp(){
+async proceedWithSignUp(){
     await test.step('Proceed with Sign Up', async () => {
     await this.loginPageLocators.signUpBtn.click();
 });}

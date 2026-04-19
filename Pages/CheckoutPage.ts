@@ -1,4 +1,4 @@
-import {expect, Page,test} from '@playwright/test';
+import { Page, test } from '@playwright/test';
 import { BasePage } from './BasePage';
 import { GuestInfo, BillingAddressInfo, NonExistingUser } from './index';
 
@@ -25,12 +25,13 @@ export class CheckoutPage extends BasePage {
         txtBillingZipCode: this.page.getByRole('textbox', { name: '02340' }),
 
         
-        // Checkboxes and consent
-        chkAgreementConsent: this.page.locator('.sc-ilvUFQ').first(),
-        chkPersonalizedOffers: this.page.locator('#undefined-1 > .sc-ilvUFQ'),
+        // Target the hidden <input> by stable value attribute — works for both guest and logged-in states.
+        // The label wraps hyperlinks so clicking the label navigates; force:true on the input checks the box directly.
+        chkAgreementConsentBox: this.page.locator('input[value="consolidated"]'),
+        chkPersonalizedOffersBox: this.page.locator('input[value="offers"]'),
 
         // Action buttons
-        btnContinueToPayment: this.page.getByRole('button', { name: 'Continue to payment' }),
+        btnContinueToPayment: this.page.locator("//button[@id='checkout_payment_btn']"),
     
     
     };
@@ -54,7 +55,7 @@ export class CheckoutPage extends BasePage {
 });}
 
 
-async GuestCheckoutLoginWithExistingAccount(){
+async guestCheckoutLoginWithExistingAccount(){
     await test.step('Login with existing account during Guest Checkout', async () => {
     await this.checkoutPageLocators.lnkLogin.click();
 });}
@@ -88,30 +89,43 @@ async fillBillingAddressDetailsForUserAndProceedToPayment(info: BillingAddressIn
             await this.checkoutPageLocators.txtBillingZipCode.click();
             await this.checkoutPageLocators.txtBillingZipCode.fill(info.zipCode);
         }
+        await this.proceedToPaymentAsGuest();
 
-        await this.proceedToPayment();
+        
 
     });
 }
 
 
-async proceedToPayment(){
-    await test.step('Proceed to Payment from Checkout Page', async () => {
-        
-        // Check agreement consent checkbox
+async proceedToPaymentAsGuest(){
+    await test.step('Proceed to Payment as Guest', async () => {
+        await this.page.evaluate(() => {
+            const checkbox = document.querySelector('input[value="consolidated"]') as HTMLInputElement;
+            if (checkbox && !checkbox.checked) {
+                checkbox.checked = true;
+                checkbox.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+                checkbox.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+        });
+        await this.checkoutPageLocators.btnContinueToPayment.click();
+    });
+}
 
-        await this.checkoutPageLocators.chkAgreementConsent.click();
-        
-        // Click continue to payment button
+async proceedToPaymentAsLoggedInUser(){
+    await test.step('Proceed to Payment as Logged-In User', async () => {
+        await this.page.waitForURL(/.*vrs\.preprod\.travel\.vodafone\.com.*/, { timeout: 30000 });
+        await this.page.waitForLoadState('networkidle');
+        await this.page.evaluate(() => {
+            (document.querySelector('input[value="consolidated"]') as HTMLElement).click();
+        });
+        await this.checkoutPageLocators.btnContinueToPayment.waitFor({ state: 'visible', timeout: 10000 });
         await this.checkoutPageLocators.btnContinueToPayment.click();
     });
 }
 
 
 
+
+
 }
-
-
-
-
 

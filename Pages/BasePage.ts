@@ -1,4 +1,5 @@
-import { Page, Locator,test } from "@playwright/test";   
+import { Page, Locator, test } from "@playwright/test";
+
 export abstract class BasePage {
   protected page: Page;
   protected readonly btnAcceptCookies: Locator;
@@ -6,23 +7,25 @@ export abstract class BasePage {
   constructor(page: Page) {
     this.page = page;
     this.btnAcceptCookies = this.page.getByRole('button', { name: 'Accept All Cookies' });
-    
   }
 
-  async navigateToUrl(url: string){
+  async navigateToUrl(url: string) {
+    await this.page.addLocatorHandler(
+      this.btnAcceptCookies,
+      async () => { await this.btnAcceptCookies.click(); }
+    );
     await this.page.goto(url, { waitUntil: 'domcontentloaded' });
-
   }
-  
-async acceptCookies(customLocator?: Locator) {
-  await test.step('Navigate to URL and Accept cookies', async () => {
-        const button = customLocator || this.btnAcceptCookies;
-        try {
-            await button.waitFor({ state: 'visible', timeout: 4000 });
-            await button.click();
-            console.log("Cookies accepted.");
-        } catch (e) {
-            console.log("Cookie banner not found or already dismissed.");
-        }
-})}      
-};      
+
+  async acceptCookies(customLocator?: Locator) {
+    await test.step('Accept cookies', async () => {
+      const button = customLocator || this.btnAcceptCookies;
+      try {
+        await button.waitFor({ state: 'visible', timeout: 4000 });
+        await button.click();
+      } catch {
+        // Banner not present or already dismissed
+      }
+    });
+  }
+}      

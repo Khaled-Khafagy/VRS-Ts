@@ -8,7 +8,7 @@ private readonly homePageLocators = {
     lnkOurDestinations: this.page.getByRole('link', { name: 'Our Destinations' }),
     lnkUefa: this.page.getByRole('link', { name: 'UEFA Champions League' }),
     lnkAboutEsIM: this.page.getByRole('link', { name: 'About eSIM' }),
-    lnkHelp: this.page.getByRole('link', { name: 'Help' }),
+    lnkHelp: this.page.getByTestId('TopNavigation:desktop').getByRole('link', { name: 'Help' }),
     btnMenu: this.page.getByRole('button', { name: 'Menu' }),
     imgCart: this.page.getByAltText('Shopping Cart'),
     btnLogin: this.page.getByRole('button').filter({ has: this.page.locator('img') }).last(),
@@ -39,6 +39,17 @@ private readonly homePageLocators = {
     btnExploreAsia: this.page.locator('a[href="/our-destinations/asia"]'),
     btnExploreCaribbean: this.page.locator('a[href="/our-destinations/caribbean"]'),
     btnExploreSouthAmerica: this.page.locator('a[href="/our-destinations/south-america"]'),
+
+    // Country cards (Countries tab)
+    btnExploreItaly: this.page.locator('a[href="/our-destinations/italy"]'),
+    btnExploreUK: this.page.locator('a[href="/our-destinations/uk"]'),
+    btnExploreSouthAfrica: this.page.locator('a[href="/our-destinations/south-africa"]'),
+    btnExploreFrance: this.page.locator('a[href="/our-destinations/france"]'),
+    btnExploreSpain: this.page.locator('a[href="/our-destinations/spain"]'),
+    btnExploreUSA: this.page.locator('a[href="/our-destinations/usa"]'),
+    btnExploreEgypt: this.page.locator('a[href="/our-destinations/egypt"]'),
+    btnExploreGermany: this.page.locator('a[href="/our-destinations/germany"]'),
+    btnExploreGreece: this.page.locator('a[href="/our-destinations/greece"]'),
     
     // Generic region selectors - Using text-based locators
     regionCard: (regionName: string) => this.page.getByRole('heading', { level: 3, name: regionName }),
@@ -50,14 +61,13 @@ private readonly homePageLocators = {
     super(page);
   }
   async gotoHomepage(URL: string) {
-    await test.step('Navigate to Home Page and Accept cookies', async () => {
-      await this.navigateToHomePage(URL);
-      await this.acceptCookies();
+    await test.step('Navigate to Home Page', async () => {
+      await this.navigateToUrl(URL);
     });
   }
 
   async navigateToHomePage(url: string) {
-    await this.page.goto(url, { waitUntil: 'domcontentloaded' });
+    await this.navigateToUrl(url);
   }
 
   async assertUserIsLoggedIn() {
@@ -88,8 +98,7 @@ private readonly homePageLocators = {
       await this.homePageLocators.tabCountries.scrollIntoViewIfNeeded();
       await this.homePageLocators.tabCountries.hover();
       await this.homePageLocators.tabCountries.click();
-      // Wait for tab content to update
-      await this.page.waitForTimeout(500);
+      await expect(this.homePageLocators.tabCountries).toHaveAttribute('aria-selected', 'true');
     });
   }
 
@@ -98,8 +107,7 @@ private readonly homePageLocators = {
       await this.homePageLocators.tabRegions.scrollIntoViewIfNeeded();
       await this.homePageLocators.tabRegions.hover();
       await this.homePageLocators.tabRegions.click();
-      // Wait for tab content to update
-      await this.page.waitForTimeout(500);
+      await expect(this.homePageLocators.tabRegions).toHaveAttribute('aria-selected', 'true');
     });
   }
 
@@ -121,8 +129,6 @@ private readonly homePageLocators = {
       await this.homePageLocators.inputSearchCountry.hover();
       await this.homePageLocators.inputSearchCountry.click();
       await this.homePageLocators.inputSearchCountry.fill(countryName);
-      // Wait for autocomplete/dropdown to appear
-      await this.page.waitForTimeout(300);
     });
   }
 
@@ -180,6 +186,77 @@ private readonly homePageLocators = {
       await this.homePageLocators.lnkSeeOfferTerms.scrollIntoViewIfNeeded();
       await this.homePageLocators.lnkSeeOfferTerms.hover();
       await this.homePageLocators.lnkSeeOfferTerms.click();
+    });
+  }
+
+  async verifySeeOfferTermsLinkVisible() {
+    await test.step('Verify See Offer Terms link is visible', async () => {
+      await expect(this.homePageLocators.lnkSeeOfferTerms).toBeVisible();
+    });
+  }
+
+  async verifyHeaderNavigationLinksVisible() {
+    await test.step('Verify header navigation links are visible', async () => {
+      await expect(this.homePageLocators.lnkOurDestinations).toBeVisible();
+      await expect(this.homePageLocators.lnkAboutEsIM).toBeVisible();
+      await expect(this.homePageLocators.lnkHelp).toBeVisible();
+      await expect(this.homePageLocators.lnkUefa).toBeVisible();
+    });
+  }
+
+  async verifyNavigationToRegionPage(regionName: string) {
+    await test.step(`Verify navigation to ${regionName} region page`, async () => {
+      await expect(this.page).toHaveURL(new RegExp(`.*${regionName.toLowerCase().replace(/ /g, '-')}.*`));
+    });
+  }
+
+  async verifySearchInputVisible() {
+    await test.step('Verify search input is visible', async () => {
+      await expect(this.homePageLocators.inputSearchCountry).toBeVisible();
+    });
+  }
+
+  async verifySearchInputPlaceholder() {
+    await test.step('Verify search input placeholder text', async () => {
+      await expect(this.homePageLocators.inputSearchCountry).toHaveAttribute('placeholder', 'Country or Region');
+    });
+  }
+
+  async verifySearchButtonDisabled() {
+    await test.step('Verify search button is disabled initially', async () => {
+      await expect(this.homePageLocators.btnSearch).toBeDisabled();
+    });
+  }
+
+  async verifySearchButtonEnabled() {
+    await test.step('Verify search button is enabled', async () => {
+      await expect(this.homePageLocators.btnSearch).toBeEnabled();
+    });
+  }
+
+  async verifySearchInputIsEmpty() {
+    await test.step('Verify search input is empty', async () => {
+      await expect(this.homePageLocators.inputSearchCountry).toHaveValue('');
+    });
+  }
+
+  async verifySearchDropdownVisible() {
+    await test.step('Verify search autocomplete dropdown is visible', async () => {
+      await expect(this.page.getByRole('listbox')).toBeVisible();
+    });
+  }
+
+  async verifyAllCountryCardsVisible() {
+    await test.step('Verify all country cards are visible in Countries tab', async () => {
+      await expect(this.homePageLocators.btnExploreItaly).toBeVisible();
+      await expect(this.homePageLocators.btnExploreUK).toBeVisible();
+      await expect(this.homePageLocators.btnExploreSouthAfrica).toBeVisible();
+      await expect(this.homePageLocators.btnExploreFrance).toBeVisible();
+      await expect(this.homePageLocators.btnExploreSpain).toBeVisible();
+      await expect(this.homePageLocators.btnExploreUSA).toBeVisible();
+      await expect(this.homePageLocators.btnExploreEgypt).toBeVisible();
+      await expect(this.homePageLocators.btnExploreGermany).toBeVisible();
+      await expect(this.homePageLocators.btnExploreGreece).toBeVisible();
     });
   }
 }
