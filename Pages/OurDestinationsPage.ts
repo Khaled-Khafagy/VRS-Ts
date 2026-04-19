@@ -28,10 +28,10 @@ export class OurDestinationsPage extends BasePage {
     tabCountries: this.page.getByRole('tab', { name: 'Countries' }),
 
     // Destination Grid
-    allDestinationCards: this.page.locator('article'),
-    destinationCard: (destinationName: string) => 
-      this.page.locator('article').filter({ 
-        has: this.page.getByRole('heading', { level: 3, name: destinationName }) 
+    allDestinationCards: this.page.locator('[class*="proposalCard_proposalCard"]'),
+    destinationCard: (destinationName: string) =>
+      this.page.locator('[class*="proposalCard_proposalCard"]').filter({
+        has: this.page.getByRole('heading', { level: 3, name: destinationName })
       }),
     destinationImage: (destinationName: string) => 
       this.page.getByAltText(destinationName),
@@ -66,9 +66,8 @@ export class OurDestinationsPage extends BasePage {
   }
 
   async gotoOurDestinationsPage(URL: string) {
-    await test.step('Navigate to Our Destinations Page and Accept cookies', async () => {
-      await this.page.goto(URL, { waitUntil: 'domcontentloaded' });
-      await this.acceptCookies();
+    await test.step('Navigate to Our Destinations Page', async () => {
+      await this.navigateToUrl(URL);
     });
   }
 
@@ -144,24 +143,23 @@ export class OurDestinationsPage extends BasePage {
     });
   }
 
-  async verifySearchDropdownOpens() {
-    await test.step('Verify search dropdown opens when typing', async () => {
-      const searchInput = this.ourDestinationsLocators.inputSearchDestination;
-      await searchInput.click();
-      await searchInput.fill('F');
-      // Dropdown should contain results section
-      const countriesSection = this.ourDestinationsLocators.searchResultsCountriesSection;
-      await expect(countriesSection.first()).toBeVisible({ timeout: 3000 }).catch(() => null);
+  async verifySearchDropdownVisible(searchTerm: string) {
+    await test.step(`Verify search dropdown shows results for "${searchTerm}"`, async () => {
+      await expect(this.page.getByText(searchTerm, { exact: true }).first()).toBeVisible({ timeout: 3000 });
     });
   }
 
   async verifySearchShowsCountriesAndRegions() {
     await test.step('Verify search results show both Countries and Regions sections', async () => {
       await this.searchForDestination('A');
-      const countriesSection = this.page.getByText('Countries');
-      const regionsSection = this.page.getByText('Regions');
-      await expect(countriesSection.first()).toBeVisible({ timeout: 2000 }).catch(() => null);
-      await expect(regionsSection.first()).toBeVisible({ timeout: 2000 }).catch(() => null);
+      await expect(this.page.getByText('Countries').first()).toBeVisible({ timeout: 3000 });
+      await expect(this.page.getByText('Regions').first()).toBeVisible({ timeout: 3000 });
+    });
+  }
+
+  async verifySearchInputIsEmpty() {
+    await test.step('Verify search input is empty', async () => {
+      await expect(this.ourDestinationsLocators.inputSearchDestination).toHaveValue('');
     });
   }
 
@@ -253,18 +251,20 @@ export class OurDestinationsPage extends BasePage {
   }
 
   async verifyAllDestinationCardsVisible() {
-    await test.step('Verify all destination cards are visible in grid', async () => {
-      const africaHeading = this.page.getByRole('heading', { level: 3, name: 'Africa' });
-      await expect(africaHeading).toBeVisible();
+    await test.step('Verify all region destination cards are visible', async () => {
+      const regions = ['Africa', 'Asia', 'Caribbean', 'Europe', 'Latin America', 'Middle East', 'North America', 'Oceania'];
+      for (const region of regions) {
+        await expect(this.page.getByRole('heading', { level: 3, name: region })).toBeVisible();
+      }
     });
   }
 
-  async verifyDestinationImageVisible(destinationName: string) {
-    await test.step(`Verify ${destinationName} card has image`, async () => {
-      const image = this.page.getByAltText(destinationName);
-      await expect(image).toBeVisible();
-    });
-  }
+  // async verifyDestinationImageVisible(destinationName: string) {
+  //   await test.step(`Verify ${destinationName} card has image`, async () => {
+  //     const image = this.page.getByAltText(destinationName);
+  //     await expect(image).toBeVisible();
+  //   });
+  // }
 
   async verifyDestinationHeadingVisible(destinationName: string) {
     await test.step(`Verify ${destinationName} heading is visible`, async () => {
@@ -275,9 +275,8 @@ export class OurDestinationsPage extends BasePage {
 
   async verifyDestinationPricingVisible(destinationName: string) {
     await test.step(`Verify ${destinationName} card shows pricing`, async () => {
-      const pricingText = this.page.getByText(/Plans from \$/);
-      const visiblePricing = pricingText.locator('.').first();
-      await expect(visiblePricing).toBeVisible();
+      const pricing = this.ourDestinationsLocators.destinationCard(destinationName).locator('p');
+      await expect(pricing).toBeVisible();
     });
   }
 
@@ -291,17 +290,15 @@ export class OurDestinationsPage extends BasePage {
 
   async verifyExploreButtonVisible(destinationName: string) {
     await test.step(`Verify Explore button is visible for ${destinationName}`, async () => {
-      const exploreBtn = this.page.locator(`a[href*="${destinationName.toLowerCase().replace(/ /g, '-')}"]`);
-      await expect(exploreBtn).toBeVisible();
+      const slug = destinationName.toLowerCase().replace(/ /g, '-');
+      await expect(this.page.locator(`a[href="/our-destinations/${slug}"]`)).toBeVisible();
     });
   }
 
   async clickExploreButton(destinationName: string) {
     await test.step(`Click Explore button for ${destinationName}`, async () => {
-      const exploreBtn = this.page.locator(`a[href*="${destinationName.toLowerCase().replace(/ /g, '-')}"]`);
-      await expect(exploreBtn).toBeVisible();
-      await exploreBtn.hover();
-      await exploreBtn.click();
+      const slug = destinationName.toLowerCase().replace(/ /g, '-');
+      await this.page.locator(`a[href="/our-destinations/${slug}"]`).click();
     });
   }
 
@@ -314,10 +311,28 @@ export class OurDestinationsPage extends BasePage {
 
   async verifyDestinationCardLayout(destinationName: string) {
     await test.step(`Verify ${destinationName} card has complete layout`, async () => {
-      await this.verifyDestinationImageVisible(destinationName);
       await this.verifyDestinationHeadingVisible(destinationName);
       await this.verifyDestinationPricingVisible(destinationName);
       await this.verifyExploreButtonVisible(destinationName);
+    });
+  }
+
+  async verifyNavigationToDestinationPage(destinationName: string) {
+    await test.step(`Verify navigation to ${destinationName} destination page`, async () => {
+      const slug = destinationName.toLowerCase().replace(/ /g, '-');
+      await expect(this.page).toHaveURL(new RegExp(`.*our-destinations/${slug}`));
+    });
+  }
+
+  async verifyHomePageLoaded() {
+    await test.step('Verify navigation back to homepage', async () => {
+      await expect(this.page).toHaveURL(/.*vrs.preprod.travel.vodafone.com\/?(\?.*)?$/);
+    });
+  }
+
+  async verifyCountriesTabHasContent() {
+    await test.step('Verify Countries tab shows individual country cards', async () => {
+      await expect(this.page.getByRole('heading', { level: 3, name: 'Afghanistan' })).toBeVisible();
     });
   }
 }

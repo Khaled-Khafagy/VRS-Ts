@@ -26,10 +26,26 @@ jobs:
       run: npx playwright install --with-deps
     - name: Run Playwright tests
       run: npx playwright test
-      
-    - name: Run Playwright tests
-      run: npx playwright test
-      
+      env:
+        TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+        TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+        INVALID_LOGIN_EMAIL: ${{ secrets.INVALID_LOGIN_EMAIL }}
+        INVALID_LOGIN_PASSWORD: ${{ secrets.INVALID_LOGIN_PASSWORD }}
+        BASE_URL: ${{ secrets.BASE_URL }}
+        LOGIN_URL: ${{ secrets.LOGIN_URL }}
+        OUR_DESTINATIONS_URL: ${{ secrets.OUR_DESTINATIONS_URL }}
+        PAYMENT_CARD_NUMBER: ${{ secrets.PAYMENT_CARD_NUMBER }}
+        PAYMENT_EXPIRY: ${{ secrets.PAYMENT_EXPIRY }}
+        PAYMENT_CVC: ${{ secrets.PAYMENT_CVC }}
+        PAYMENT_NAME: ${{ secrets.PAYMENT_NAME }}
+        BILLING_COUNTRY: ${{ secrets.BILLING_COUNTRY }}
+        BILLING_STATE: ${{ secrets.BILLING_STATE }}
+        BILLING_CITY: ${{ secrets.BILLING_CITY }}
+        BILLING_ADDRESS_LINE1: ${{ secrets.BILLING_ADDRESS_LINE1 }}
+        BILLING_ADDRESS_LINE2: ${{ secrets.BILLING_ADDRESS_LINE2 }}
+        BILLING_ZIP_CODE: ${{ secrets.BILLING_ZIP_CODE }}
+        Exiting_Guest_User_Firt_Name: ${{ secrets.Exiting_Guest_User_Firt_Name }}
+        Exiting_Guest_User_Last_Name: ${{ secrets.Exiting_Guest_User_Last_Name }}
     - name: Load Allure history
       uses: actions/checkout@v4
       if: always()

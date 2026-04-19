@@ -79,7 +79,17 @@ export const test = customPage.extend<MyFixtures>({
     ,    myAccountPage: async ({ page }, use) => {
         const myAccountPage = new MyAccountPage(page);
         await use(myAccountPage);
-    }         
+        // Force sign-out after every test (pass or fail) to free the limited session
+        try {
+            const avatar = page.locator('div.avatar_overlay__bto13x9:visible');
+            if (await avatar.isVisible({ timeout: 3000 })) {
+                await avatar.click();
+                await page.getByRole('button', { name: 'Sign Out' }).click({ timeout: 5000 });
+            }
+        } catch {
+            // Session already closed or user not logged in — nothing to do
+        }
+    }
     , 
     loginOrSignupPage: async ({ page }, use) => {
         const loginOrSignupPage = new LoginOrSignupPage(page);

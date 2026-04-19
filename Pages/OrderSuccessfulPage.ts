@@ -10,7 +10,7 @@ export class OrderSuccessfulPage extends BasePage {
         hdgOrderNumber: this.page.getByRole('heading', { name: 'Need help? Contact support with your order number', exact: false }),
         orderNumberText: this.page.getByText(/Need help\? Contact support with your order number/, { exact: false }),
         btnCreatePasswordGuest: this.page.getByRole('button', { name: 'Create Password' }),
-        createPasswordBtnForGuest: this.page.getByRole('button', { name: /Create Password/i }),
+        createPasswordBtnForGuest: this.page.getByText('Set your Password'),
     };    
     constructor(page: Page) {
         super(page);

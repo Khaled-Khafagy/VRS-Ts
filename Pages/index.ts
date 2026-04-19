@@ -25,7 +25,7 @@
     cvc: string;
     name: string;
     }
-    export interface loginInfo {
+    export interface LoginInfo {
     email: string;
     password: string;
     }
