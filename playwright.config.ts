@@ -14,7 +14,7 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   timeout: 60000,
   retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : 1,
+  workers: process.env.CI ? 1 : undefined,
   
   /* */
   reporter: [['allure-playwright']],
@@ -27,14 +27,13 @@ export default defineConfig({
     /* FIX: Blank screen issues */
     ignoreHTTPSErrors: true,
     
-    /* FIX: Window Resize/Minimize */
-    headless: false, 
-    viewport: null, // Required for --start-maximized to work correctly
-    
+    headless: !!process.env.CI,
+    viewport: process.env.CI ? { width: 1920, height: 1080 } : null,
+
     launchOptions: {
       args: [
-        '--start-maximized', 
-        '--disable-blink-features=AutomationControlled'
+        ...(!process.env.CI ? ['--start-maximized'] : []),
+        '--disable-blink-features=AutomationControlled',
       ],
     },
 
@@ -54,9 +53,7 @@ export default defineConfig({
      name: 'chromium',
       use: {
         ...devices['Desktop Chrome'],
-        // This is the missing piece: it cancels the default 1280x720 
-        // that comes hidden inside the 'devices' object.
-        viewport: null,
+        viewport: process.env.CI ? { width: 1920, height: 1080 } : null,
         deviceScaleFactor: undefined,
       },
     }
