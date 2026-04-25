@@ -46,6 +46,17 @@ jobs:
         BILLING_ZIP_CODE: ${{ secrets.BILLING_ZIP_CODE }}
         Exiting_Guest_User_Firt_Name: ${{ secrets.Exiting_Guest_User_Firt_Name }}
         Exiting_Guest_User_Last_Name: ${{ secrets.Exiting_Guest_User_Last_Name }}
+        REGISTRATION_TEST_FIRST_NAME: ${{ secrets.REGISTRATION_TEST_FIRST_NAME }}
+        REGISTRATION_TEST_LAST_NAME: ${{ secrets.REGISTRATION_TEST_LAST_NAME }}
+        REGISTRATION_TEST_EMAIL: ${{ secrets.REGISTRATION_TEST_EMAIL }}
+        REGISTRATION_INVALID_EMAIL_FORMAT: ${{ secrets.REGISTRATION_INVALID_EMAIL_FORMAT }}
+        REGISTRATION_TEST_PASSWORD: ${{ secrets.REGISTRATION_TEST_PASSWORD }}
+        REGISTRATION_MISMATCHED_PASSWORD: ${{ secrets.REGISTRATION_MISMATCHED_PASSWORD }}
+        REGISTRATION_OTP: ${{ secrets.REGISTRATION_OTP }}
+        REGISTRATION_COUNTRY: ${{ secrets.REGISTRATION_COUNTRY }}
+        REGISTRATION_COUNTRY_WITH_STATE: ${{ secrets.REGISTRATION_COUNTRY_WITH_STATE }}
+        REGISTRATION_COUNTRY_WITHOUT_STATE: ${{ secrets.REGISTRATION_COUNTRY_WITHOUT_STATE }}
+        REGISTRATION_STATE_PROVINCE: ${{ secrets.REGISTRATION_STATE_PROVINCE }}
     - name: Load Allure history
       uses: actions/checkout@v4
       if: always()
