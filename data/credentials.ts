@@ -47,7 +47,7 @@ export const BillingDetails: BillingAddressInfo = {
     zipCode: process.env.BILLING_ZIP_CODE ?? '',
 };
 
-export const ErrorMessages = {
+export const LoginErrorMessages = {
     invalidCredentials: 'Invalid Credentials',
     emailRequired: 'Email or phone number is required',
     passwordRequired: 'Password is required',
@@ -58,3 +58,32 @@ export const AppUrls = {
     login: process.env.LOGIN_URL ?? '',
     ourDestinations: process.env.OUR_DESTINATIONS_URL ?? '',
 };
+
+export const RegistrationTestData = {
+    email:                  process.env.REGISTRATION_TEST_EMAIL ?? '',
+    validPassword:          process.env.REGISTRATION_TEST_PASSWORD ?? '',
+    mismatchedPassword:     process.env.REGISTRATION_MISMATCHED_PASSWORD ?? '',
+    otp:                    process.env.REGISTRATION_OTP ?? '',
+    invalidEmailFormat:     process.env.REGISTRATION_INVALID_EMAIL_FORMAT ?? '',
+    existingEmail:          process.env.TEST_EMAIL ?? '',
+    firstName:              process.env.REGISTRATION_TEST_FIRST_NAME ?? '',
+    lastName:               process.env.REGISTRATION_TEST_LAST_NAME ?? '',
+    country:                process.env.REGISTRATION_COUNTRY ?? '',
+    stateProvince:          process.env.REGISTRATION_STATE_PROVINCE ?? '',
+    countryWithState:       process.env.REGISTRATION_COUNTRY_WITH_STATE ?? '',
+    countryWithoutState:    process.env.REGISTRATION_COUNTRY_WITHOUT_STATE ?? '',
+};
+
+export const RegistrationErrorMessages = {
+    emailAlreadyExists: 'Your e-mail address already exists',
+    invalidEmailFormat: 'Format is invalid. Please, enter a valid one.',
+    passwordMismatch: 'Password does not match',
+    firstNameRequired: 'First name is required',
+    lastNameRequired: 'Family name is required',
+    emailRequired: 'Email is required',
+    passwordRequired: 'Password is required',
+    confirmPasswordRequired : 'Confirmed password is required'
+};
+
+
+

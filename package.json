@@ -4,7 +4,8 @@
   "description": "End-to-end automation testing framework built with Playwright and TypeScript, focusing on scalable UI and API testing.",
   "main": "index.js",
   "scripts": {
-    "test:allure": "npx playwright test && npx allure serve allure-results"
+    "test:allure": "rm -rf allure-results && npx playwright test && npx allure serve allure-results",
+    "test:headless": "rm -rf allure-results && CI=true npx playwright test && npx allure generate allure-results --clean -o allure-report && npx allure open allure-report"
   },
   "repository": {
     "type": "git",
@@ -26,7 +27,7 @@
     "joi": "^18.1.2",
     "pino": "^10.3.1",
     "typescript": "^6.0.2",
-    "uuid": "^13.0.0",
+    "uuid": "^14.0.0",
     "yargs": "^18.0.0"
   },
   "dependencies": {
