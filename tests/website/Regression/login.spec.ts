@@ -1,5 +1,5 @@
 import { test } from '../../../fixtures/page-manager';
-import { ValidLoginDetails, InvalidLoginDetails, emptyLoginDetails, emptyEmailLoginDetails, emptyPasswordLoginDetails, AppUrls, ErrorMessages } from '../../../data/credentials';
+import { ValidLoginDetails, InvalidLoginDetails, emptyLoginDetails, emptyEmailLoginDetails, emptyPasswordLoginDetails, AppUrls, LoginErrorMessages } from '../../../data/credentials';
 
 test('Login with valid credentials', async ({ loginOrSignupPage, loginPage, homePage, myAccountPage }) => {
     await loginOrSignupPage.navigateToLoginOrSignUpPage(AppUrls.login);
@@ -15,7 +15,7 @@ test('Login with invalid credentials', async ({ loginOrSignupPage, loginPage }) 
     await loginOrSignupPage.proceedWithLogin();
     await loginPage.verifyRedirectionAndCompleteLoadToLoginPage();
     await loginPage.fillLoginDetailsAndSubmit(InvalidLoginDetails);
-    await loginPage.verifyErrorMessageForInvalidUsername(ErrorMessages.invalidCredentials);
+    await loginPage.verifyErrorMessageForInvalidUsername(LoginErrorMessages.invalidCredentials);
 });
 
 test('Login with empty credentials', async ({ loginOrSignupPage, loginPage }) => {
@@ -23,7 +23,7 @@ test('Login with empty credentials', async ({ loginOrSignupPage, loginPage }) =>
     await loginOrSignupPage.proceedWithLogin();
     await loginPage.verifyRedirectionAndCompleteLoadToLoginPage();
     await loginPage.fillLoginDetailsAndSubmit(emptyLoginDetails);
-    await loginPage.verifyErrorMessageForEmptyEmail(ErrorMessages.emailRequired);
+    await loginPage.verifyErrorMessageForEmptyEmail(LoginErrorMessages.emailRequired);
 });
 
 test('Login with empty email', async ({ loginOrSignupPage, loginPage }) => {
@@ -31,7 +31,7 @@ test('Login with empty email', async ({ loginOrSignupPage, loginPage }) => {
     await loginOrSignupPage.proceedWithLogin();
     await loginPage.verifyRedirectionAndCompleteLoadToLoginPage();
     await loginPage.fillLoginDetailsAndSubmit(emptyEmailLoginDetails);
-    await loginPage.verifyErrorMessageForEmptyEmail(ErrorMessages.emailRequired);
+    await loginPage.verifyErrorMessageForEmptyEmail(LoginErrorMessages.emailRequired);
 });
 
 test('Login with empty password', async ({ loginOrSignupPage, loginPage }) => {
@@ -39,7 +39,7 @@ test('Login with empty password', async ({ loginOrSignupPage, loginPage }) => {
     await loginOrSignupPage.proceedWithLogin();
     await loginPage.verifyRedirectionAndCompleteLoadToLoginPage();
     await loginPage.fillLoginDetailsAndSubmit(emptyPasswordLoginDetails);
-    await loginPage.verifyErrorMessageForEmptyPassword(ErrorMessages.passwordRequired);
+    await loginPage.verifyErrorMessageForEmptyPassword(LoginErrorMessages.passwordRequired);
 });
 
 test('Cancel login navigates back to VRS', async ({ loginOrSignupPage, loginPage }) => {

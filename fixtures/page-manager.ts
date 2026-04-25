@@ -10,6 +10,7 @@ import { MyAccountPage } from '../Pages/MyAccountPage';
 import { EmailVerificationPage } from '../Pages/EmailVerificationPage';
 import { LoginOrSignupPage } from '../Pages/LoginOrSignupPage';
 import { OurDestinationsPage } from '../Pages/OurDestinationsPage';
+import { RegistationPage } from '../Pages/RegistationPage';
 // Import other pages as you create them
 
 // 1. Define a type for your fixtures
@@ -25,6 +26,7 @@ type MyFixtures = {
     myAccountPage: MyAccountPage; 
     emailVerificationPage: EmailVerificationPage;
     ourDestinationsPage: OurDestinationsPage;
+    registrationPage: RegistationPage;
     // Add other pages here
 };
 
@@ -104,6 +106,11 @@ export const test = customPage.extend<MyFixtures>({
     ourDestinationsPage: async ({ page }, use) => {
         const ourDestinationsPage = new OurDestinationsPage(page);
         await use(ourDestinationsPage);
+    },
+
+    registrationPage: async ({ page }, use) => {
+        const registrationPage = new RegistationPage(page);
+        await use(registrationPage);
     }
 
     // Add other pages here
