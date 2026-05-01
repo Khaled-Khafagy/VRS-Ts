@@ -11,7 +11,7 @@ test('Guest checkout for non-existing user', async ({ homePage, regionPlansPage,
     await checkoutPage.fillBillingAddressDetailsForUserAndProceedToPayment(BillingDetails);
     await emailVerificationPage.handleOTPVerificationNonExistingUser();
     await paymentPage.fillCardDetailsAndPay(PaymentDetails);
-    await orderSuccessfulPage.verifyOrderSuccessfulPageDisplayedForGuestUsers();
+    await orderSuccessfulPage.verifyOrderSuccessfulPageDisplayedForGuestUsers(); 
 });
 
 test('Guest checkout with existing account email', async ({ homePage, regionPlansPage, cartPage, checkoutPage, emailVerificationPage, loginPage, paymentPage, orderSuccessfulPage, myAccountPage }) => {
@@ -27,8 +27,6 @@ test('Guest checkout with existing account email', async ({ homePage, regionPlan
     await checkoutPage.proceedToPaymentAsLoggedInUser();
     await paymentPage.performPaymentWithCardForLoggedInUsers();
     await orderSuccessfulPage.verifyOrderSuccessfulPageDisplayedForLoggedinUsers();
-    await homePage.navigateToMyAccountTab();
-    await myAccountPage.signOutFromAccount();
 });
 
 test('Guest checkout login with existing account', async ({ homePage, regionPlansPage, cartPage, checkoutPage, loginPage, paymentPage, orderSuccessfulPage, myAccountPage }) => {
@@ -42,6 +40,14 @@ test('Guest checkout login with existing account', async ({ homePage, regionPlan
     await checkoutPage.proceedToPaymentAsLoggedInUser();
     await paymentPage.performPaymentWithCardForLoggedInUsers();
     await orderSuccessfulPage.verifyOrderSuccessfulPageDisplayedForLoggedinUsers();
-    await homePage.navigateToMyAccountTab();
-    await myAccountPage.signOutFromAccount();
+});
+
+test('Asia region guest checkout for non-existing user', async ({ homePage, regionPlansPage, cartPage, checkoutPage, emailVerificationPage }) => {
+    await homePage.gotoHomepage(AppUrls.base);
+    await homePage.navigateToAsiaRegionPlansPage();
+    await regionPlansPage.selectPlanInAsiaRegion();
+    await cartPage.proceedToCheckoutFromCart();
+    await checkoutPage.fillPersonalDetailsForNonExistingUser(generateGuestUserData());
+    await checkoutPage.fillBillingAddressDetailsForUserAndProceedToPayment(BillingDetails);
+    await emailVerificationPage.handleOTPVerificationNonExistingUser();
 });

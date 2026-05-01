@@ -74,6 +74,10 @@ export const RegistrationTestData = {
     countryWithoutState:    process.env.REGISTRATION_COUNTRY_WITHOUT_STATE ?? '',
 };
 
+export const RefundReasons = {
+    noLongerNeeded: 'E-SIM is no longer needed: My travel plans have changed',
+};
+
 export const RegistrationErrorMessages = {
     emailAlreadyExists: 'Your e-mail address already exists',
     invalidEmailFormat: 'Format is invalid. Please, enter a valid one.',

@@ -8,7 +8,7 @@ export class OurDestinationsPage extends BasePage {
     lnkOurDestinations: this.page.getByRole('link', { name: 'Our Destinations' }),
     lnkUefaChampionsLeague: this.page.getByRole('link', { name: 'UEFA Champions League' }),
     lnkAboutEsim: this.page.getByRole('link', { name: 'About eSIM' }),
-    lnkHelp: this.page.getByRole('link', { name: 'Help' }),
+    lnkHelp: this.page.getByTestId('TopNavigation:desktop').getByRole('link', { name: 'Help' }),
     lnkBlog: this.page.getByRole('link', { name: 'Blog' }),
     imgShoppingCart: this.page.locator('img[alt="Shopping Cart"]'),
     lnkLanguage: this.page.getByRole('link', { name: 'English | US Dollar' }),

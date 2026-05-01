@@ -12,7 +12,7 @@ export default defineConfig({
   testDir: './tests',
   fullyParallel: false,
   forbidOnly: !!process.env.CI,
-  timeout: 60000,
+  timeout: 30000,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? undefined : undefined,
   
@@ -38,8 +38,8 @@ export default defineConfig({
     },
 
     /* */
-    actionTimeout: 20000,
-    navigationTimeout: 60000,
+    actionTimeout: 15000,
+    navigationTimeout: 30000,
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
     trace: 'on-first-retry',

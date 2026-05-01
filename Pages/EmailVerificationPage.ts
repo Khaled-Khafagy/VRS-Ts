@@ -6,7 +6,7 @@ export class EmailVerificationPage extends BasePage {
     private readonly emailVerificationPageLocators = {
         hdgOtpNonExisting: this.page.getByRole('heading', { name: 'Email Verification' }),
         hdgOtpExisting: this.page.getByRole('heading', { name: /Welcome back, you already have an account\./i }),
-        btnLoginExistingAccountInEmailVerification: this.page.locator('button.sc-ixkCMg.dNApgF.sc-gefZEv.dCaPCL'),
+        btnLoginExistingAccountInEmailVerification: this.page.getByRole('button', { name: 'Login' }).last(),
         verifyButton : this. page.locator('#checkout_email_continue_btn')
     };
 

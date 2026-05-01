@@ -85,6 +85,15 @@ private readonly homePageLocators = {
     });
   }
 
+  async navigateToAsiaRegionPlansPage() {
+    await test.step('Navigate to Asia Region Plans Page', async () => {
+      const asiaBtn = this.homePageLocators.btnExploreAsia;
+      await asiaBtn.scrollIntoViewIfNeeded();
+      await asiaBtn.hover();
+      await asiaBtn.click();
+    });
+  }
+
   async navigateToMyAccountTab() {
     await test.step('Navigate to My Account Tab', async () => {
       await this.homePageLocators.imgUserProfileLoggedIn.click();

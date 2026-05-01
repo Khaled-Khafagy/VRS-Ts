@@ -66,6 +66,21 @@ async fillCardDetailsAndPay(cardDetails : CreditCardDetails) {
   async performPaymentWithCardForLoggedInUsers(){
     await test.step('Perform Payment with Card for Logged-in Users', async () => {
     await this.lnkSavedVisaCard.click();
+    await this.btnPayLoggedIn.waitFor({ state: 'visible', timeout: 15000 });
+
+    // Scroll the Pay button into view inside the iframe's own document
+    const paymentFrame = this.page.frames().find(f => f.url().includes('pre.pay.vodafone.com'));
+    if (paymentFrame) {
+        await paymentFrame.evaluate(() => {
+            const btn = Array.from(document.querySelectorAll('button'))
+                .find(b => b.textContent?.trim() === 'Pay');
+            btn?.scrollIntoView({ behavior: 'instant', block: 'center' });
+        });
+    }
+
+    // Scroll the iframe element into the main page viewport
+    await this.page.locator('iframe[src*="pre.pay.vodafone.com"]').scrollIntoViewIfNeeded();
+    await this.page.waitForTimeout(300);
     await this.btnPayLoggedIn.click();
 
 });}

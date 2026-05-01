@@ -38,4 +38,13 @@ export class RegionPlansPage extends BasePage {
         });
     }
 
+    async selectPlanInAsiaRegion(): Promise<void> {
+        await test.step('Select a plan in Asia Region and Go to Checkout', async () => {
+            await expect(this.regionPlansPageLocators.regionHeading('Asia')).toBeVisible();
+            await this.regionPlansPageLocators.btnFirstEuropePlan.waitFor({ state: 'visible' });
+            await this.regionPlansPageLocators.btnFirstEuropePlan.click();
+            await this.proceedToCheckout();
+        });
+    }
+
 }
