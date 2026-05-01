@@ -1,0 +1,86 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: website/Regression/login.spec.ts >> Login with invalid credentials
+- Location: tests/website/Regression/login.spec.ts:13:5
+
+# Error details
+
+```
+TimeoutError: locator.click: Timeout 15000ms exceeded.
+Call log:
+  - waiting for locator('#login_btn')
+
+```
+
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - generic [ref=e4]:
+    - heading "Sorry, you have been blocked" [level=1] [ref=e5]
+    - heading "You are unable to access non-prod.vf-cit.engineering.vodafone.com" [level=2] [ref=e6]
+  - generic [ref=e12]:
+    - generic [ref=e13]:
+      - heading "Why have I been blocked?" [level=2] [ref=e14]
+      - paragraph [ref=e15]: This website is using a security service to protect itself from online attacks. The action you just performed triggered the security solution. There are several actions that could trigger this block including submitting a certain word or phrase, a SQL command or malformed data.
+    - generic [ref=e16]:
+      - heading "What can I do to resolve this?" [level=2] [ref=e17]
+      - paragraph [ref=e18]: You can email the site owner to let them know you were blocked. Please include what you were doing when this page came up and the Cloudflare Ray ID found at the bottom of this page.
+  - paragraph [ref=e20]:
+    - generic [ref=e21]:
+      - text: "Cloudflare Ray ID:"
+      - strong [ref=e22]: 9f4fab9efab561d6
+    - generic [ref=e23]: •
+    - generic [ref=e24]:
+      - text: "Your IP:"
+      - button "Click to reveal" [ref=e25] [cursor=pointer]
+      - generic [ref=e26]: •
+    - generic [ref=e27]:
+      - text: Performance & security by
+      - link "Cloudflare" [ref=e28] [cursor=pointer]:
+        - /url: https://www.cloudflare.com/5xx-error-landing
+```
+
+# Test source
+
+```ts
+  1  | import { Page, test } from "@playwright/test";
+  2  | import { BasePage } from "./BasePage";     
+  3  | export class LoginOrSignupPage extends BasePage {
+  4  |     private readonly loginPageLocators = {
+  5  |         // Login And SignUp page locators
+  6  |         signUpBtn: this.page.getByRole('button', { name: 'Sign up' }),
+  7  |         loginBtn: this.page.locator('#login_btn'),
+  8  | 
+  9  |         
+  10 |        
+  11 |     };
+  12 | 
+  13 |     constructor(page: Page) {
+  14 |         super(page);
+  15 |     }
+  16 | 
+  17 |     async navigateToLoginOrSignUpPage(URL: string) {
+  18 |         await test.step('Navigate to Login or Sign Up Page', async () => {
+  19 |             await this.navigateToUrl(URL);
+  20 |         });
+  21 |     }   
+  22 |     async proceedWithLogin(){
+  23 |         await test.step('Proceed with Login', async () => {
+> 24 |     await this.loginPageLocators.loginBtn.click();
+     |                                           ^ TimeoutError: locator.click: Timeout 15000ms exceeded.
+  25 | });}
+  26 | 
+  27 | async proceedWithSignUp(){
+  28 |     await test.step('Proceed with Sign Up', async () => {
+  29 |     await this.loginPageLocators.signUpBtn.click();
+  30 | });}
+  31 |     
+  32 |     }
+```
