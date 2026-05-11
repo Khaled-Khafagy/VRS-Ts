@@ -30,6 +30,11 @@
     password: string;
     }
 
+    export interface SSOInfo {
+    email: string;
+    pin: string;
+    }
+
     export interface RegistrationInfo {
     email: string;
     password: string;
