@@ -1,4 +1,4 @@
-import { GuestInfo, LoginInfo, BillingAddressInfo, CreditCardDetails } from '../Pages/index';
+import { GuestInfo, LoginInfo, BillingAddressInfo, CreditCardDetails, SSOInfo } from '../Pages/index';
 
 export const ValidLoginDetails: LoginInfo = {
     email: process.env.TEST_EMAIL ?? '',
@@ -51,6 +51,11 @@ export const LoginErrorMessages = {
     invalidCredentials: 'Invalid Credentials',
     emailRequired: 'Email or phone number is required',
     passwordRequired: 'Password is required',
+};
+
+export const SSOCredentials: SSOInfo = {
+    email: process.env.SSO_EMAIL ?? '',
+    pin:   process.env.SSO_PIN ?? '',
 };
 
 export const AppUrls = {
