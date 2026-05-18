@@ -13,6 +13,7 @@ import { OurDestinationsPage } from '../Pages/OurDestinationsPage';
 import { RegistationPage } from '../Pages/RegistationPage';
 import { MyEsimsPage } from '../Pages/MyEsimsPage';
 import { EsimDetailsPage } from '../Pages/EsimDetailsPage';
+import { SSOPage } from '../Pages/SSOPage';
 // Import other pages as you create them
 
 // 1. Define a type for your fixtures
@@ -31,6 +32,7 @@ type MyFixtures = {
     registrationPage: RegistationPage;
     myEsimsPage: MyEsimsPage;
     esimDetailsPage: EsimDetailsPage;
+    ssoPage: SSOPage;
     // Add other pages here
 };
 
@@ -125,6 +127,11 @@ export const test = customPage.extend<MyFixtures>({
     esimDetailsPage: async ({ page }, use) => {
         const esimDetailsPage = new EsimDetailsPage(page);
         await use(esimDetailsPage);
+    },
+
+    ssoPage: async ({ page }, use) => {
+        const ssoPage = new SSOPage(page);
+        await use(ssoPage);
     },
 
     // Add other pages here

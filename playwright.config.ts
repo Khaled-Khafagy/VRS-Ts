@@ -14,7 +14,7 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   timeout: 30000,
   retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? undefined : undefined,
+  workers: process.env.CI ? 4 : 4,
   
   /* */
   reporter: [['allure-playwright'], ['./allure-opener-reporter.ts']],
@@ -38,7 +38,7 @@ export default defineConfig({
     },
 
     /* */
-    actionTimeout: 15000,
+    actionTimeout: 30000,
     navigationTimeout: 30000,
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
@@ -50,12 +50,19 @@ export default defineConfig({
    */
   projects: [
     {
-     name: 'chromium',
+      name: 'setup',
+      testMatch: '**/auth.setup.ts',
+      use: { headless: false },
+    },
+    {
+      name: 'chromium',
       use: {
         ...devices['Desktop Chrome'],
+        storageState: 'playwright/.auth/user.json',
         viewport: process.env.CI ? { width: 1920, height: 1080 } : null,
         deviceScaleFactor: undefined,
       },
-    }
+      dependencies: ['setup'],
+    },
   ],
 });
