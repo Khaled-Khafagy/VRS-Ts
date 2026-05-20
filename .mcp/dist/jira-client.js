@@ -19,10 +19,10 @@ export class JiraClient {
         const data = await response.json();
         const fields = data.fields;
         const description = this.extractText(fields.description) || 'No description provided';
-        const acceptanceCriteria = this.extractText(fields.customfield_10100)
-            || this.extractText(fields.customfield_10016)
-            || this.extractCustomAC(description)
-            || 'No acceptance criteria found';
+        const acceptanceCriteria = this.extractText(fields.customfield_10100) ||
+            this.extractText(fields.customfield_10016) ||
+            this.extractCustomAC(description) ||
+            'No acceptance criteria found';
         return {
             key: data.key,
             summary: fields.summary,
@@ -33,7 +33,21 @@ export class JiraClient {
             assignee: fields.assignee?.displayName || null,
             reporter: fields.reporter?.displayName || 'Unknown',
             acceptanceCriteria,
+            projectKey: fields.project?.key || data.key.split('-')[0],
         };
+    }
+    async postComment(issueKey, commentText) {
+        const url = `${this.baseUrl}/rest/api/2/issue/${issueKey}/comment`;
+        const body = { body: commentText };
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: this.headers,
+            body: JSON.stringify(body),
+        });
+        if (!response.ok) {
+            const error = await response.text();
+            throw new Error(`Failed to post comment to ${issueKey}: ${response.status} ${error}`);
+        }
     }
     async addRemoteLink(issueKey, title, url, relationship) {
         const endpoint = `${this.baseUrl}/rest/api/2/issue/${issueKey}/remotelink`;
@@ -59,6 +73,18 @@ export class JiraClient {
             throw new Error(`Failed to add remote link to ${issueKey}: ${response.status} ${error}`);
         }
     }
+    /** Fetch just the project key from a Jira issue key (e.g. "PROJ-123" → "PROJ"). */
+    async fetchProjectKey(issueKey) {
+        const issue = await this.fetchIssue(issueKey);
+        return issue.projectKey;
+    }
+    /** Extract ticket key from a URL or plain key (e.g. "https://.../PROJ-123" or "PROJ-123"). */
+    static extractTicketKey(input) {
+        const match = input.match(/([A-Z]+-\d+)/);
+        if (!match)
+            throw new Error(`Could not extract ticket key from: ${input}`);
+        return match[1];
+    }
     extractText(field) {
         if (!field)
             return '';
@@ -83,7 +109,7 @@ export class JiraClient {
         return '';
     }
     extractCustomAC(description) {
-        const match = description.match(/acceptance criteria[:\s]+([\s\S]+?)(?:\n\n|\Z)/i);
+        const match = description.match(/acceptance criteria[:\s]+([\s\S]+?)(?:\n\n|$)/i);
         return match ? match[1].trim() : '';
     }
 }

@@ -1,8 +1,8 @@
 {
-  "name": "vrs-jira-zephyr-mcp",
-  "version": "1.0.0",
+  "name": "vrs-tc-generator-mcp",
+  "version": "2.0.0",
   "type": "module",
-  "description": "MCP server for Jira + Zephyr Scale integration",
+  "description": "MCP server for AI-powered test case generation with Jira + Zephyr Scale (Claude-powered)",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",

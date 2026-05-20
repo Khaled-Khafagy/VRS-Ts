@@ -26,10 +26,11 @@ export class JiraClient {
         const fields = data.fields;
 
         const description = this.extractText(fields.description) || 'No description provided';
-        const acceptanceCriteria = this.extractText(fields.customfield_10100)
-            || this.extractText(fields.customfield_10016)
-            || this.extractCustomAC(description)
-            || 'No acceptance criteria found';
+        const acceptanceCriteria =
+            this.extractText(fields.customfield_10100) ||
+            this.extractText(fields.customfield_10016) ||
+            this.extractCustomAC(description) ||
+            'No acceptance criteria found';
 
         return {
             key: data.key,
@@ -41,7 +42,24 @@ export class JiraClient {
             assignee: fields.assignee?.displayName || null,
             reporter: fields.reporter?.displayName || 'Unknown',
             acceptanceCriteria,
+            projectKey: fields.project?.key || data.key.split('-')[0],
         };
+    }
+
+    async postComment(issueKey: string, commentText: string): Promise<void> {
+        const url = `${this.baseUrl}/rest/api/2/issue/${issueKey}/comment`;
+        const body = { body: commentText };
+
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: this.headers,
+            body: JSON.stringify(body),
+        });
+
+        if (!response.ok) {
+            const error = await response.text();
+            throw new Error(`Failed to post comment to ${issueKey}: ${response.status} ${error}`);
+        }
     }
 
     async addRemoteLink(issueKey: string, title: string, url: string, relationship: string): Promise<void> {
@@ -71,6 +89,19 @@ export class JiraClient {
         }
     }
 
+    /** Fetch just the project key from a Jira issue key (e.g. "PROJ-123" → "PROJ"). */
+    async fetchProjectKey(issueKey: string): Promise<string> {
+        const issue = await this.fetchIssue(issueKey);
+        return issue.projectKey;
+    }
+
+    /** Extract ticket key from a URL or plain key (e.g. "https://.../PROJ-123" or "PROJ-123"). */
+    static extractTicketKey(input: string): string {
+        const match = input.match(/([A-Z]+-\d+)/);
+        if (!match) throw new Error(`Could not extract ticket key from: ${input}`);
+        return match[1];
+    }
+
     private extractText(field: any): string {
         if (!field) return '';
         if (typeof field === 'string') return field;
@@ -93,7 +124,7 @@ export class JiraClient {
     }
 
     private extractCustomAC(description: string): string {
-        const match = description.match(/acceptance criteria[:\s]+([\s\S]+?)(?:\n\n|\Z)/i);
+        const match = description.match(/acceptance criteria[:\s]+([\s\S]+?)(?:\n\n|$)/i);
         return match ? match[1].trim() : '';
     }
 }
