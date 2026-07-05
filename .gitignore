@@ -6,11 +6,11 @@ node_modules/
 /blob-report/
 /playwright/.cache/
 /playwright/.auth/
-.env
+# .env
 .mcp.json
 allure-results/
 allure-report/
 
 # Claude docs submodule content
-claude-docs/
-claude-docs
+# claude-docs/
+# claude-docs
