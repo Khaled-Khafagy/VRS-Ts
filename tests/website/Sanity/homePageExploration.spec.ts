@@ -2,28 +2,28 @@ import { test } from '../../../fixtures/page-manager';
 import { AppUrls } from '../../../data/credentials';
 
 test.describe('Homepage Exploration', () => {
-    test('Homepage hero banner is visible', async ({ homePage }) => {
+    test('Homepage hero banner is visible', { tag: ['@sanity', '@P2'] }, async ({ homePage }) => {
         await homePage.gotoHomepage(AppUrls.base);
         await homePage.verifyHeroBannerVisible();
     });
 
-    test('See offer terms link is visible on homepage', async ({ homePage }) => {
+    test('See offer terms link is visible on homepage', { tag: ['@sanity', '@P2'] }, async ({ homePage }) => {
         await homePage.gotoHomepage(AppUrls.base);
         await homePage.verifySeeOfferTermsLinkVisible();
     });
 
-    test('Header navigation links are visible', async ({ homePage }) => {
+    test('Header navigation links are visible', { tag: ['@sanity', '@P2'] }, async ({ homePage }) => {
         await homePage.gotoHomepage(AppUrls.base);
         await homePage.verifyHeaderNavigationLinksVisible();
     });
 
-    test('Regions tab is selected by default', async ({ homePage }) => {
+    test('Regions tab is selected by default', { tag: ['@sanity', '@P2'] }, async ({ homePage }) => {
         await homePage.gotoHomepage(AppUrls.base);
         await homePage.scrollToPopularDestinations();
         await homePage.verifyRegionsTabIsActive();
     });
 
-    test('Switch from Regions tab to Countries tab', async ({ homePage }) => {
+    test('Switch from Regions tab to Countries tab', { tag: ['@sanity', '@P2'] }, async ({ homePage }) => {
         await homePage.gotoHomepage(AppUrls.base);
         await homePage.scrollToPopularDestinations();
         await homePage.verifyRegionsTabIsActive();
@@ -31,7 +31,7 @@ test.describe('Homepage Exploration', () => {
         await homePage.verifyCountriesTabIsActive();
     });
 
-    test('Switch back from Countries tab to Regions tab', async ({ homePage }) => {
+    test('Switch back from Countries tab to Regions tab', { tag: ['@sanity', '@P3'] }, async ({ homePage }) => {
         await homePage.gotoHomepage(AppUrls.base);
         await homePage.scrollToPopularDestinations();
         await homePage.switchToCountriesTab();
@@ -39,7 +39,7 @@ test.describe('Homepage Exploration', () => {
         await homePage.verifyRegionsTabIsActive();
     });
 
-    test('All destination region cards are visible', async ({ homePage }) => {
+    test('All destination region cards are visible', { tag: ['@sanity', '@P2'] }, async ({ homePage }) => {
         await homePage.gotoHomepage(AppUrls.base);
         await homePage.scrollToPopularDestinations();
         await homePage.verifyRegionCardVisible('Europe');
@@ -50,74 +50,74 @@ test.describe('Homepage Exploration', () => {
         await homePage.verifyRegionCardVisible('Caribbean');
     });
 
-    test('All destination countries cards are visible', async ({ homePage }) => {
+    test('All destination countries cards are visible', { tag: ['@sanity', '@P2'] }, async ({ homePage }) => {
         await homePage.gotoHomepage(AppUrls.base);
         await homePage.scrollToPopularDestinations();
         await homePage.switchToCountriesTab();
         await homePage.verifyAllCountryCardsVisible();
     });
 
-    test('Navigate to Europe destination from homepage', async ({ homePage }) => {
+    test('Navigate to Europe destination from homepage', { tag: ['@sanity', '@P2'] }, async ({ homePage }) => {
         await homePage.gotoHomepage(AppUrls.base);
         await homePage.scrollToPopularDestinations();
         await homePage.exploreRegion('Europe');
         await homePage.verifyNavigationToRegionPage('Europe');
     });
 
-    test('Navigate to North America destination from homepage', async ({ homePage }) => {
+    test('Navigate to North America destination from homepage', { tag: ['@sanity', '@P2'] }, async ({ homePage }) => {
         await homePage.gotoHomepage(AppUrls.base);
         await homePage.scrollToPopularDestinations();
         await homePage.exploreRegion('North America');
         await homePage.verifyNavigationToRegionPage('North America');
     });
 
-    test('Navigate to Africa destination from homepage', async ({ homePage }) => {
+    test('Navigate to Africa destination from homepage', { tag: ['@sanity', '@P2'] }, async ({ homePage }) => {
         await homePage.gotoHomepage(AppUrls.base);
         await homePage.scrollToPopularDestinations();
         await homePage.exploreRegion('Africa');
         await homePage.verifyNavigationToRegionPage('Africa');
     });
 
-    test('Navigate to Asia destination from homepage', async ({ homePage }) => {
+    test('Navigate to Asia destination from homepage', { tag: ['@sanity', '@P2'] }, async ({ homePage }) => {
         await homePage.gotoHomepage(AppUrls.base);
         await homePage.scrollToPopularDestinations();
         await homePage.exploreRegion('Asia');
         await homePage.verifyNavigationToRegionPage('Asia');
     });
 
-    test('Navigate to Middle East destination from homepage', async ({ homePage }) => {
+    test('Navigate to Middle East destination from homepage', { tag: ['@sanity', '@P2'] }, async ({ homePage }) => {
         await homePage.gotoHomepage(AppUrls.base);
         await homePage.scrollToPopularDestinations();
         await homePage.exploreRegion('Middle East');
         await homePage.verifyNavigationToRegionPage('Middle East');
     });
 
-    test('Navigate to Caribbean destination from homepage', async ({ homePage }) => {
+    test('Navigate to Caribbean destination from homepage', { tag: ['@sanity', '@P2'] }, async ({ homePage }) => {
         await homePage.gotoHomepage(AppUrls.base);
         await homePage.scrollToPopularDestinations();
         await homePage.exploreRegion('Caribbean');
         await homePage.verifyNavigationToRegionPage('Caribbean');
     });
 
-    test('Search input is visible with correct placeholder', async ({ homePage }) => {
+    test('Search input is visible with correct placeholder', { tag: ['@sanity', '@P2'] }, async ({ homePage }) => {
         await homePage.gotoHomepage(AppUrls.base);
         await homePage.verifySearchInputVisible();
         await homePage.verifySearchInputPlaceholder();
     });
 
-    test('Search button is disabled initially', async ({ homePage }) => {
+    test('Search button is disabled initially', { tag: ['@sanity', '@P3'] }, async ({ homePage }) => {
         await homePage.gotoHomepage(AppUrls.base);
         await homePage.verifySearchButtonDisabled();
     });
 
-    test('Typing in search input enables the search button', async ({ homePage }) => {
+    test('Typing in search input enables the search button', { tag: ['@sanity', '@P3'] }, async ({ homePage }) => {
         await homePage.gotoHomepage(AppUrls.base);
         await homePage.verifySearchButtonDisabled();
         await homePage.searchForCountry('France');
         await homePage.verifySearchButtonEnabled();
     });
 
-    test('Clearing search input resets to empty state', async ({ homePage }) => {
+    test('Clearing search input resets to empty state', { tag: ['@sanity', '@P3'] }, async ({ homePage }) => {
         await homePage.gotoHomepage(AppUrls.base);
         await homePage.searchForCountry('Italy');
         await homePage.clearSearchInput();

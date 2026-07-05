@@ -13,52 +13,132 @@ pr:
 pool:
   vmImage: ubuntu-latest
 
+variables:
+  NODE_VERSION: '20.x'
+
 steps:
+
+  # ── 1. Setup ──────────────────────────────────────────────────────────────
+
   - task: NodeTool@0
+    displayName: 'Install Node.js $(NODE_VERSION)'
     inputs:
-      versionSpec: '20.x'
-    displayName: 'Install Node.js'
+      versionSpec: '$(NODE_VERSION)'
 
   - script: npm ci
-    displayName: 'Install dependencies'
+    displayName: 'Install npm dependencies'
 
   - script: npx playwright install --with-deps chromium
-    displayName: 'Install Playwright Browsers'
+    displayName: 'Install Playwright browsers'
+
+  # ── 2. Run Tests ──────────────────────────────────────────────────────────
 
   - script: npx playwright test
-    displayName: 'Run Playwright tests'
+    displayName: 'Run Playwright E2E tests'
+    continueOnError: true
     env:
-      TEST_EMAIL: $(TEST_EMAIL)
-      TEST_PASSWORD: $(TEST_PASSWORD)
-      INVALID_LOGIN_EMAIL: $(INVALID_LOGIN_EMAIL)
-      INVALID_LOGIN_PASSWORD: $(INVALID_LOGIN_PASSWORD)
-      BASE_URL: $(BASE_URL)
-      LOGIN_URL: $(LOGIN_URL)
-      OUR_DESTINATIONS_URL: $(OUR_DESTINATIONS_URL)
-      PAYMENT_CARD_NUMBER: $(PAYMENT_CARD_NUMBER)
-      PAYMENT_EXPIRY: $(PAYMENT_EXPIRY)
-      PAYMENT_CVC: $(PAYMENT_CVC)
-      PAYMENT_NAME: $(PAYMENT_NAME)
-      BILLING_COUNTRY: $(BILLING_COUNTRY)
-      BILLING_STATE: $(BILLING_STATE)
-      BILLING_CITY: $(BILLING_CITY)
-      BILLING_ADDRESS_LINE1: $(BILLING_ADDRESS_LINE1)
-      BILLING_ADDRESS_LINE2: $(BILLING_ADDRESS_LINE2)
-      BILLING_ZIP_CODE: $(BILLING_ZIP_CODE)
-      Exiting_Guest_User_Firt_Name: $(Exiting_Guest_User_Firt_Name)
-      Exiting_Guest_User_Last_Name: $(Exiting_Guest_User_Last_Name)
+      CI: 'true'
+      # Auth
+      TEST_EMAIL:                        $(TEST_EMAIL)
+      TEST_PASSWORD:                     $(TEST_PASSWORD)
+      INVALID_LOGIN_EMAIL:               $(INVALID_LOGIN_EMAIL)
+      INVALID_LOGIN_PASSWORD:            $(INVALID_LOGIN_PASSWORD)
+      SSO_EMAIL:                         $(SSO_EMAIL)
+      SSO_PIN:                           $(SSO_PIN)
+      # URLs
+      BASE_URL:                          $(BASE_URL)
+      LOGIN_URL:                         $(LOGIN_URL)
+      OUR_DESTINATIONS_URL:              $(OUR_DESTINATIONS_URL)
+      # Payment
+      PAYMENT_CARD_NUMBER:               $(PAYMENT_CARD_NUMBER)
+      PAYMENT_EXPIRY:                    $(PAYMENT_EXPIRY)
+      PAYMENT_CVC:                       $(PAYMENT_CVC)
+      PAYMENT_NAME:                      $(PAYMENT_NAME)
+      # Billing
+      BILLING_COUNTRY:                   $(BILLING_COUNTRY)
+      BILLING_STATE:                     $(BILLING_STATE)
+      BILLING_CITY:                      $(BILLING_CITY)
+      BILLING_ADDRESS_LINE1:             $(BILLING_ADDRESS_LINE1)
+      BILLING_ADDRESS_LINE2:             $(BILLING_ADDRESS_LINE2)
+      BILLING_ZIP_CODE:                  $(BILLING_ZIP_CODE)
+      # Guest user
+      Exiting_Guest_User_Firt_Name:      $(Exiting_Guest_User_Firt_Name)
+      Exiting_Guest_User_Last_Name:      $(Exiting_Guest_User_Last_Name)
+      # Registration
+      REGISTRATION_TEST_PASSWORD:        $(REGISTRATION_TEST_PASSWORD)
+      REGISTRATION_MISMATCHED_PASSWORD:  $(REGISTRATION_MISMATCHED_PASSWORD)
+      REGISTRATION_OTP:                  $(REGISTRATION_OTP)
+      REGISTRATION_INVALID_EMAIL_FORMAT: $(REGISTRATION_INVALID_EMAIL_FORMAT)
+      REGISTRATION_TEST_FIRST_NAME:      $(REGISTRATION_TEST_FIRST_NAME)
+      REGISTRATION_TEST_LAST_NAME:       $(REGISTRATION_TEST_LAST_NAME)
+      REGISTRATION_COUNTRY:              $(REGISTRATION_COUNTRY)
+      REGISTRATION_STATE_PROVINCE:       $(REGISTRATION_STATE_PROVINCE)
+      REGISTRATION_COUNTRY_WITH_STATE:   $(REGISTRATION_COUNTRY_WITH_STATE)
+      REGISTRATION_COUNTRY_WITHOUT_STATE: $(REGISTRATION_COUNTRY_WITHOUT_STATE)
+      # Gmail (for email verification tests)
+      GMAIL_CLIENT_ID:                   $(GMAIL_CLIENT_ID)
+      GMAIL_CLIENT_SECRET:               $(GMAIL_CLIENT_SECRET)
+      GMAIL_REFRESH_TOKEN:               $(GMAIL_REFRESH_TOKEN)
+      EMAIL_TEST_TIMEOUT:                $(EMAIL_TEST_TIMEOUT)
+
+  # ── 3. Reports ────────────────────────────────────────────────────────────
+
+  - script: npx allure generate allure-results --clean -o allure-report
+    displayName: 'Generate Allure report'
+    condition: always()
+
+  - script: npm run report:exit
+    displayName: 'Generate Test Exit Report (HTML + Markdown)'
+    condition: always()
+
+  # ── 4. Publish Test Results to Azure DevOps Test Plans ────────────────────
 
   - task: PublishTestResults@2
-    displayName: 'Publish Test Results'
+    displayName: 'Publish JUnit results to Azure DevOps'
     condition: always()
     inputs:
       testResultsFormat: 'JUnit'
-      testResultsFiles: '**/test-results/*.xml'
+      testResultsFiles: 'test-results/junit.xml'
+      mergeTestResults: true
+      testRunTitle: 'VRS E2E — $(Build.SourceBranchName) — $(Build.BuildNumber)'
       failTaskOnFailedTests: false
 
+  # ── 5. Publish Artifacts ──────────────────────────────────────────────────
+
   - task: PublishPipelineArtifact@1
-    displayName: 'Publish Allure Results'
+    displayName: 'Publish Allure results'
     condition: always()
     inputs:
       targetPath: allure-results
       artifact: allure-results
+
+  - task: PublishPipelineArtifact@1
+    displayName: 'Publish Allure HTML report'
+    condition: always()
+    inputs:
+      targetPath: allure-report
+      artifact: allure-report
+
+  - task: PublishPipelineArtifact@1
+    displayName: 'Publish Test Exit Report'
+    condition: always()
+    inputs:
+      targetPath: test-results
+      artifact: test-exit-report
+
+  # ── 6. Pass / Fail Gate ───────────────────────────────────────────────────
+  # Fails the build if any test failed (after all artifacts are published).
+  # Remove or adjust this step if you prefer to never fail the pipeline.
+
+  - script: |
+      FAILED=$(node -e "
+        const r = require('./test-results/results.json');
+        console.log(r.stats.unexpected);
+      " 2>/dev/null || echo 0)
+      echo "Failed tests: $FAILED"
+      if [ "$FAILED" -gt 0 ]; then
+        echo "##vso[task.logissue type=error]$FAILED test(s) failed. See the Test Exit Report artifact for details."
+        exit 1
+      fi
+    displayName: 'Fail build on test failures'
+    condition: always()

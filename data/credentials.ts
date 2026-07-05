@@ -65,7 +65,6 @@ export const AppUrls = {
 };
 
 export const RegistrationTestData = {
-    email:                  process.env.REGISTRATION_TEST_EMAIL ?? '',
     validPassword:          process.env.REGISTRATION_TEST_PASSWORD ?? '',
     mismatchedPassword:     process.env.REGISTRATION_MISMATCHED_PASSWORD ?? '',
     otp:                    process.env.REGISTRATION_OTP ?? '',
@@ -78,6 +77,8 @@ export const RegistrationTestData = {
     countryWithState:       process.env.REGISTRATION_COUNTRY_WITH_STATE ?? '',
     countryWithoutState:    process.env.REGISTRATION_COUNTRY_WITHOUT_STATE ?? '',
 };
+
+export const TravelTogetherPlanPromoCode = 'VF-EMPLOYEEDSC2025';
 
 export const RefundReasons = {
     noLongerNeeded: 'E-SIM is no longer needed: My travel plans have changed',

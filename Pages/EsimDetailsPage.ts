@@ -3,10 +3,9 @@ import { BasePage } from './BasePage';
 
 export class EsimDetailsPage extends BasePage {
     private readonly esimDetailsPageLocators = {
-        btnResendQrCode:         this.page.getByRole('button', { name: 'Resend QR code' }),
-        btnShareQr:              this.page.getByRole('button', { name: 'Share QR' }),
-        accordionEsimDetails:    this.page.getByRole('button', { name: 'eSIM details' }),
-        accordionHavingProblems: this.page.getByText('Having problems?'),
+        btnScanQrCode:           this.page.getByRole('button', { name: 'Scan QR Code' }),
+        btnEnterDetailsManually: this.page.getByRole('button', { name: 'Enter details manually' }),
+        btnViewActivationGuide:  this.page.getByRole('button', { name: 'View activation guide' }),
         btnRequestRefund:        this.page.getByRole('button', { name: 'Request a refund' }),
         ddlRefundReason:         this.page.getByRole('combobox'),
         btnSubmit:               this.page.getByRole('button', { name: 'Submit' }),
@@ -19,14 +18,7 @@ export class EsimDetailsPage extends BasePage {
 
     async verifyEsimDetailsPageLoaded() {
         await test.step('Verify eSIM Details page is loaded', async () => {
-            await expect(this.esimDetailsPageLocators.btnResendQrCode).toBeVisible({ timeout: 10000 });
-        });
-    }
-
-    async expandEsimDetailsAccordion() {
-        await test.step('Expand eSIM details accordion', async () => {
-            await this.esimDetailsPageLocators.accordionEsimDetails.click();
-            await expect(this.esimDetailsPageLocators.btnRequestRefund).toBeVisible();
+            await expect(this.esimDetailsPageLocators.btnScanQrCode).toBeVisible();
         });
     }
 
@@ -56,7 +48,7 @@ export class EsimDetailsPage extends BasePage {
 
     async verifyRefundRequestSubmitted() {
         await test.step('Verify refund request was submitted successfully', async () => {
-            await expect(this.esimDetailsPageLocators.msgRefundSuccess).toBeVisible({ timeout: 10000 });
+            await expect(this.esimDetailsPageLocators.msgRefundSuccess).toBeVisible();
         });
     }
 }

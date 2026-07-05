@@ -4,7 +4,11 @@
       "Bash(npm run *)",
       "Bash(gh --version)",
       "Bash(gh extension *)",
-      "Bash(node -e ' *)"
+      "Bash(node -e ' *)",
+      "Bash(find /Users/khafagy -name \"settings.json\" -path \"*claude*\" 2>/dev/null | head -5)",
+      "Read(//Users/khafagy/**)",
+      "Bash(curl -s -H 'Authorization: Bearer NzQ0MjYxNTEzODI2OoBFArI+iNhNUReoKJB7fGa8svUd' https://cps.jira.agile.vodafone.com/rest/api/2/project/TE/versions)",
+      "Bash(python3 -c ' *)"
     ]
   }
 }

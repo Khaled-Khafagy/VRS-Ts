@@ -14,10 +14,14 @@ class AllureOpenerReporter implements Reporter {
   onEnd() {
     if (process.env.CI) return;
 
+    const port = process.env.ALLURE_PORT ?? '4040';
     const root = path.resolve(__dirname);
     try {
+      // Kill any existing server on the port so the URL stays the same across runs
+      try { execSync(`lsof -ti:${port} | xargs kill -9`, { stdio: 'ignore' }); } catch {}
+
       execSync('npx allure generate allure-results --clean -o allure-report', { cwd: root, stdio: 'inherit' });
-      spawn('npx', ['allure', 'open', 'allure-report'], {
+      spawn('npx', ['allure', 'open', '--port', port, 'allure-report'], {
         cwd: root,
         detached: true,
         stdio: 'ignore',

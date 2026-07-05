@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Group Plan Test Execution Report — June 29, 2026</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f2f2f2; color: #222; font-size: 14px; }
+
+    header { background: #E60000; color: #fff; padding: 28px 48px; display: flex; align-items: center; justify-content: space-between; }
+    .header-left h1 { font-size: 22px; font-weight: 700; letter-spacing: .4px; }
+    .header-left .sub { font-size: 13px; opacity: .85; margin-top: 4px; }
+    .header-right { text-align: right; font-size: 13px; line-height: 1.8; opacity: .92; }
+    .header-right strong { font-weight: 600; }
+
+    main { max-width: 1200px; margin: 32px auto; padding: 0 32px 48px; }
+
+    h2 { font-size: 15px; font-weight: 700; color: #E60000; text-transform: uppercase; letter-spacing: .6px; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #E60000; }
+
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px; margin-bottom: 36px; }
+    .kpi { background: #fff; border-radius: 10px; padding: 20px 16px; text-align: center; box-shadow: 0 1px 6px rgba(0,0,0,.08); }
+    .kpi .num { font-size: 36px; font-weight: 700; line-height: 1; }
+    .kpi .lbl { font-size: 11px; color: #777; text-transform: uppercase; letter-spacing: .5px; margin-top: 6px; }
+    .kpi .delta { font-size: 11px; font-weight: 700; margin-top: 4px; }
+    .kpi.total .num { color: #333; }
+    .kpi.exec  .num { color: #22a854; }
+    .kpi.nexec .num { color: #E60000; }
+    .kpi.done  .num { color: #2980b9; }
+    .kpi.prog  .num { color: #f39c12; }
+    .kpi.bugs  .num { color: #8e44ad; }
+    .kpi.resolved .num { color: #22a854; }
+    .delta-up   { color: #22a854; }
+    .delta-down { color: #E60000; }
+
+    .card { background: #fff; border-radius: 10px; padding: 24px 28px; box-shadow: 0 1px 6px rgba(0,0,0,.08); margin-bottom: 28px; }
+
+    .chart-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; margin-bottom: 28px; }
+    .chart-row.two { grid-template-columns: 1fr 1fr; }
+    .chart-wrap { background: #fff; border-radius: 10px; padding: 20px 20px 16px; box-shadow: 0 1px 6px rgba(0,0,0,.08); }
+    .chart-wrap h3 { font-size: 13px; font-weight: 600; color: #555; text-align: center; margin-bottom: 12px; text-transform: uppercase; letter-spacing: .4px; }
+    .chart-wrap canvas { max-height: 240px; }
+
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    thead th { background: #f7f7f7; padding: 10px 12px; text-align: left; font-weight: 600; color: #444; border-bottom: 2px solid #e5e5e5; }
+    tbody td { padding: 9px 12px; border-bottom: 1px solid #f0f0f0; vertical-align: middle; }
+    tbody tr:last-child td { border-bottom: none; }
+    tbody tr:hover td { background: #fafafa; }
+    tfoot td { padding: 10px 12px; font-weight: 700; background: #f7f7f7; border-top: 2px solid #e5e5e5; }
+
+    .prog-bar-wrap { display: flex; align-items: center; gap: 8px; }
+    .prog-bar { flex: 1; background: #e9ecef; border-radius: 4px; height: 8px; overflow: hidden; }
+    .prog-bar-fill { height: 100%; border-radius: 4px; }
+    .prog-pct { font-size: 12px; font-weight: 600; min-width: 36px; text-align: right; }
+
+    .badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .3px; white-space: nowrap; }
+    .badge.done      { background: #d4efdf; color: #1e8449; }
+    .badge.progress  { background: #fef9e7; color: #d68910; }
+    .badge.notexec   { background: #fdecea; color: #c0392b; }
+    .badge.new       { background: #ebf5fb; color: #1a5276; }
+    .badge.review    { background: #f5eef8; color: #6c3483; }
+    .badge.readyqa   { background: #eafaf1; color: #1e8449; }
+    .badge.readydev  { background: #e8f8f5; color: #117a65; }
+    .badge.qainprog  { background: #fef9e7; color: #d68910; }
+    .badge.analysis  { background: #fdf2f8; color: #76448a; }
+    .badge.discarded { background: #f2f3f4; color: #717d7e; }
+    .badge.blocked   { background: #fdedec; color: #c0392b; border: 1px solid #e74c3c; }
+    .badge.underrev  { background: #f5eef8; color: #6c3483; }
+
+    .pri-high::before   { content: "▲"; color: #E60000; margin-right: 4px; }
+    .pri-medium::before { content: "●"; color: #f39c12; margin-right: 4px; }
+
+    .section-title { font-size: 16px; font-weight: 700; color: #333; margin: 36px 0 16px; display: flex; align-items: center; gap: 10px; }
+    .section-title::after { content: ""; flex: 1; height: 1px; background: #ddd; }
+
+    .alert-box { border: 2px solid #22a854; border-radius: 10px; padding: 20px 24px; background: #eafaf1; margin-bottom: 28px; }
+    .alert-box.resolved h3 { color: #1e8449; font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+    .alert-box.risk { border-color: #f39c12; background: #fef9e7; }
+    .alert-box.risk h3 { color: #d68910; font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+
+    .comparison-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 28px; }
+    .comparison-card { background: #fff; border-radius: 10px; padding: 20px 24px; box-shadow: 0 1px 6px rgba(0,0,0,.08); }
+    .comparison-card h3 { font-size: 13px; font-weight: 700; color: #555; text-transform: uppercase; letter-spacing: .4px; margin-bottom: 14px; }
+
+    .bug-note { font-size: 12px; color: #888; font-style: italic; margin-top: 10px; }
+
+    footer { text-align: center; font-size: 12px; color: #aaa; padding: 12px 0 32px; }
+
+    @media print {
+      body { background: #fff; }
+      header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .badge { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <h1>Group Plan — Test Execution Report</h1>
+    <div class="sub">Travel eSIM · Pre-Production · vrs.preprod.travel.vodafone.com</div>
+  </div>
+  <div class="header-right">
+    <strong>Report Date:</strong> June 29, 2026<br>
+    <strong>Sprint:</strong> PI08 / SP01 / TE_R_10.0.41<br>
+    <strong>Scope:</strong> 33 cycles · 555 test cases<br>
+    <em>Group Plan E2E folder excluded</em>
+  </div>
+</header>
+
+<main>
+
+  <!-- KPI CARDS -->
+  <div style="margin: 28px 0 8px;">
+    <h2>Key Performance Indicators</h2>
+  </div>
+  <div class="kpi-grid">
+    <div class="kpi total">
+      <div class="num">555</div>
+      <div class="lbl">Total Test Cases</div>
+    </div>
+    <div class="kpi exec">
+      <div class="num">~514</div>
+      <div class="lbl">Executed</div>
+      <div class="delta delta-up">93% ▲ +68%</div>
+    </div>
+    <div class="kpi nexec">
+      <div class="num">~41</div>
+      <div class="lbl">Not Executed</div>
+      <div class="delta delta-up">7% ▼ -68%</div>
+    </div>
+    <div class="kpi done">
+      <div class="num">20</div>
+      <div class="lbl">Cycles Done</div>
+      <div class="delta delta-up">▲ +14</div>
+    </div>
+    <div class="kpi prog">
+      <div class="num">13</div>
+      <div class="lbl">Cycles In Progress</div>
+    </div>
+    <div class="kpi nexec">
+      <div class="num">0</div>
+      <div class="lbl">Cycles Not Started</div>
+      <div class="delta delta-up">▼ -20</div>
+    </div>
+    <div class="kpi bugs">
+      <div class="num">47</div>
+      <div class="lbl">Web Bugs</div>
+      <div class="delta" style="color:#8e44ad">30 resolved</div>
+    </div>
+    <div class="kpi bugs">
+      <div class="num">43</div>
+      <div class="lbl">Mobile Bugs</div>
+      <div class="delta" style="color:#8e44ad">30 resolved</div>
+    </div>
+  </div>
+
+  <!-- RESOLVED BLOCKER ALERT -->
+  <div class="alert-box resolved">
+    <h3>✅ Infrastructure Blocker Resolved — TE-1475</h3>
+    <p style="font-size:13px; color:#1e8449;">[Backend] Cluster instability causing failures across multiple endpoints — <strong>Status: DONE</strong>. Previously blocking Admin User View and Secondary User View test execution. Execution has since surged from 25% to 92%.</p>
+  </div>
+
+  <!-- CHARTS ROW 1 -->
+  <div class="chart-row">
+    <div class="chart-wrap">
+      <h3>Overall Execution</h3>
+      <canvas id="chartExec"></canvas>
+    </div>
+    <div class="chart-wrap">
+      <h3>Cycle Status</h3>
+      <canvas id="chartCycle"></canvas>
+    </div>
+    <div class="chart-wrap">
+      <h3>Execution by Platform</h3>
+      <canvas id="chartPlatform"></canvas>
+    </div>
+  </div>
+
+  <!-- CHARTS ROW 2 -->
+  <div class="chart-row two">
+    <div class="chart-wrap">
+      <h3>Execution by Folder</h3>
+      <canvas id="chartFolder"></canvas>
+    </div>
+    <div class="chart-wrap">
+      <h3>Bug Status — Web vs Mobile</h3>
+      <canvas id="chartBugs"></canvas>
+    </div>
+  </div>
+
+  <!-- CHARTS ROW 3 -->
+  <div class="chart-row two">
+    <div class="chart-wrap">
+      <h3>Web Bugs by Status (47)</h3>
+      <canvas id="chartWebBugs"></canvas>
+    </div>
+    <div class="chart-wrap">
+      <h3>Mobile Bugs by Status (43)</h3>
+      <canvas id="chartMobileBugs"></canvas>
+    </div>
+  </div>
+
+  <!-- FOLDER SUMMARY TABLE -->
+  <div class="card">
+    <h2>Test Execution by Folder</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Folder</th>
+          <th>Cycles</th>
+          <th>Total Tests</th>
+          <th>Executed</th>
+          <th>Not Executed</th>
+          <th style="min-width:180px">Progress</th>
+          <th>Done</th>
+          <th>In Progress</th>
+          <th>Not Started</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Purchase Flow</strong></td>
+          <td>9</td>
+          <td>108</td>
+          <td>~106</td>
+          <td>~2</td>
+          <td>
+            <div class="prog-bar-wrap">
+              <div class="prog-bar"><div class="prog-bar-fill" style="width:98%;background:#22a854;"></div></div>
+              <span class="prog-pct">98%</span>
+            </div>
+          </td>
+          <td><span class="badge done">8</span></td>
+          <td><span class="badge progress">1</span></td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td><strong>Admin User View</strong></td>
+          <td>15</td>
+          <td>~242</td>
+          <td>~223</td>
+          <td>~19</td>
+          <td>
+            <div class="prog-bar-wrap">
+              <div class="prog-bar"><div class="prog-bar-fill" style="width:92%;background:#22a854;"></div></div>
+              <span class="prog-pct">92%</span>
+            </div>
+          </td>
+          <td><span class="badge done">10</span></td>
+          <td><span class="badge progress">5</span></td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td><strong>Secondary User View</strong></td>
+          <td>9</td>
+          <td>205</td>
+          <td>~185</td>
+          <td>~20</td>
+          <td>
+            <div class="prog-bar-wrap">
+              <div class="prog-bar"><div class="prog-bar-fill" style="width:90%;background:#22a854;"></div></div>
+              <span class="prog-pct">90%</span>
+            </div>
+          </td>
+          <td><span class="badge done">2</span></td>
+          <td><span class="badge progress">7</span></td>
+          <td>—</td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td><strong>TOTAL</strong></td>
+          <td><strong>33</strong></td>
+          <td><strong>555</strong></td>
+          <td><strong>~514</strong></td>
+          <td><strong>~41</strong></td>
+          <td>
+            <div class="prog-bar-wrap">
+              <div class="prog-bar"><div class="prog-bar-fill" style="width:93%;background:#22a854;"></div></div>
+              <span class="prog-pct"><strong>93%</strong></span>
+            </div>
+          </td>
+          <td><strong>20</strong></td>
+          <td><strong>13</strong></td>
+          <td><strong>0</strong></td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+  <!-- PURCHASE FLOW CYCLES -->
+  <div class="section-title">Purchase Flow — 9 Cycles</div>
+  <div class="card">
+    <table>
+      <thead>
+        <tr><th>Key</th><th>Cycle Name</th><th>Tests</th><th style="min-width:160px">Progress</th><th>Status</th><th>Issues</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>TE-C56</td><td>Group Plan | Cart &amp; Checkout Adjustments</td><td>18</td><td><div class="prog-bar-wrap"><div class="prog-bar"><div class="prog-bar-fill" style="width:100%;background:#22a854;"></div></div><span class="prog-pct">100%</span></div></td><td><span class="badge done">DONE</span></td><td>6</td></tr>
+        <tr><td>TE-C18</td><td>Group Plan | Destination Page (Web)</td><td>16</td><td><div class="prog-bar-wrap"><div class="prog-bar"><div class="prog-bar-fill" style="width:100%;background:#22a854;"></div></div><span class="prog-pct">100%</span></div></td><td><span class="badge done">DONE</span></td><td>—</td></tr>
+        <tr><td>TE-C8</td><td>Order Completion Page</td><td>8</td><td><div class="prog-bar-wrap"><div class="prog-bar"><div class="prog-bar-fill" style="width:100%;background:#22a854;"></div></div><span class="prog-pct">100%</span></div></td><td><span class="badge done">DONE</span></td><td>—</td></tr>
+        <tr><td>TE-C63</td><td>Group Plan | Order Confirmation Email</td><td>12</td><td><div class="prog-bar-wrap"><div class="prog-bar"><div class="prog-bar-fill" style="width:100%;background:#22a854;"></div></div><span class="prog-pct">100%</span></div></td><td><span class="badge done">DONE</span></td><td>3</td></tr>
+        <tr><td>TE-C83</td><td>Group Plan | Destination Page (iOS)</td><td>10</td><td><div class="prog-bar-wrap"><div class="prog-bar"><div class="prog-bar-fill" style="width:100%;background:#22a854;"></div></div><span class="prog-pct">100%</span></div></td><td><span class="badge done">DONE</span></td><td>—</td></tr>
+        <tr><td>TE-C114</td><td>Group Plan | Help &amp; Support Page Updates (WEB)</td><td>8</td><td><div class="prog-bar-wrap"><div class="prog-bar"><div class="prog-bar-fill" style="width:100%;background:#22a854;"></div></div><span class="prog-pct">100%</span></div></td><td><span class="badge done">DONE</span></td><td>—</td></tr>
+        <tr><td>TE-C115</td><td>Group Plan | Help &amp; Support Page Updates (iOS)</td><td>10</td><td><div class="prog-bar-wrap"><div class="prog-bar"><div class="prog-bar-fill" style="width:100%;background:#22a854;"></div></div><span class="prog-pct">100%</span></div></td><td><span class="badge done">DONE</span></td><td>—</td></tr>
+        <tr><td>TE-C116</td><td>Group Plan | Help &amp; Support Page Updates (Android)</td><td>10</td><td><div class="prog-bar-wrap"><div class="prog-bar"><div class="prog-bar-fill" style="width:100%;background:#22a854;"></div></div><span class="prog-pct">100%</span></div></td><td><span class="badge done">DONE</span></td><td>—</td></tr>
+        <tr><td>TE-C82</td><td>Group Plan | Destination Page (Android)</td><td>16</td><td><div class="prog-bar-wrap"><div class="prog-bar"><div class="prog-bar-fill" style="width:87%;background:#f39c12;"></div></div><span class="prog-pct">87%</span></div></td><td><span class="badge progress">IN PROGRESS</span></td><td>8</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ADMIN USER VIEW CYCLES -->
+  <div class="section-title">Admin User View — 15 Cycles</div>
+  <div class="card">
+    <table>
+      <thead>
+        <tr><th>Key</th><th>Cycle Name</th><th>Tests</th><th style="min-width:160px">Progress</th><th>Status</th><th>Issues</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>TE-C86</td><td>Group Plan | Add Another Device Modal</td><td>8</td><td><div class="prog-bar-wrap"><div class="prog-bar"><div class="prog-bar-fill" style="width:100%;background:#22a854;"></div></div><span class="prog-pct">100%</span></div></td><td><span class="badge done">DONE</span></td><td>—</td></tr>
+        <tr><td>TE-C62</td><td>Group Plan | Refund</td><td>10</td><td><div class="prog-bar-wrap"><div class="prog-bar"><div class="prog-bar-fill" style="width:100%;background:#22a854;"></div></div><span class="prog-pct">100%</span></div></td><td><span class="badge done">DONE</span></td><td>1</td></tr>
+        <tr><td>TE-C47</td><td>Group Plan | Invite Members Modal</td><td>17</td><td><div class="prog-bar-wrap"><div class="prog-bar"><div class="prog-bar-fill" style="width:100%;background:#22a854;"></div></div><span class="prog-pct">100%</span></div></td><td><span class="badge done">DONE</span></td><td>1</td></tr>
+        <tr><td>TE-C66</td><td>Group Plan | Primary User (admin) View</td><td>11</td><td><div class="prog-bar-wrap"><div class="prog-bar"><div class="prog-bar-fill" style="width:100%;background:#22a854;"></div></div><span class="prog-pct">100%</span></div></td><td><span class="badge done">DONE</span></td><td>—</td></tr>
+        <tr><td>TE-C87</td><td>Group Plan | Add Another Device Modal (iOS)</td><td>8</td><td><div class="prog-bar-wrap"><div class="prog-bar"><div class="prog-bar-fill" style="width:100%;background:#22a854;"></div></div><span class="prog-pct">100%</span></div></td><td><span class="badge done">DONE</span></td><td>—</td></tr>
+        <tr><td>TE-C88</td><td>Group Plan | Add Another Device Modal (Android)</td><td>8</td><td><div class="prog-bar-wrap"><div class="prog-bar"><div class="prog-bar-fill" style="width:100%;background:#22a854;"></div></div><span class="prog-pct">100%</span></div></td><td><span class="badge done">DONE</span></td><td>—</td></tr>
+        <tr><td>TE-C90</td><td>Group Plan | Invite Members Modal (Android)</td><td>18</td><td><div class="prog-bar-wrap"><div class="prog-bar"><div class="prog-bar-fill" style="width:100%;background:#22a854;"></div></div><span class="prog-pct">100%</span></div></td><td><span class="badge done">DONE</span></td><td>4</td></tr>
+        <tr><td>TE-C91</td><td>Group Plan | Refund (iOS)</td><td>10</td><td><div class="prog-bar-wrap"><div class="prog-bar"><div class="prog-bar-fill" style="width:100%;background:#22a854;"></div></div><span class="prog-pct">100%</span></div></td><td><span class="badge done">DONE</span></td><td>1</td></tr>
+        <tr><td>TE-C92</td><td>Group Plan | Refund (Android)</td><td>10</td><td><div class="prog-bar-wrap"><div class="prog-bar"><div class="prog-bar-fill" style="width:100%;background:#22a854;"></div></div><span class="prog-pct">100%</span></div></td><td><span class="badge done">DONE</span></td><td>1</td></tr>
+        <tr><td>TE-C89</td><td>Group Plan | Invite Members Modal (iOS)</td><td>18</td><td><div class="prog-bar-wrap"><div class="prog-bar"><div class="prog-bar-fill" style="width:100%;background:#22a854;"></div></div><span class="prog-pct">100%</span></div></td><td><span class="badge done">DONE</span></td><td>5</td></tr>
+        <tr><td>TE-C128</td><td>Group Plan | Primary User Landing Page (iOS)</td><td>37</td><td><div class="prog-bar-wrap"><div class="prog-bar"><div class="prog-bar-fill" style="width:86%;background:#f39c12;"></div></div><span class="prog-pct">86%</span></div></td><td><span class="badge progress">IN PROGRESS</span></td><td>9</td></tr>
+        <tr><td>TE-C80</td><td>Group Plan | Primary User Landing Page (Android)</td><td>37</td><td><div class="prog-bar-wrap"><div class="prog-bar"><div class="prog-bar-fill" style="width:86%;background:#f39c12;"></div></div><span class="prog-pct">86%</span></div></td><td><span class="badge progress">IN PROGRESS</span></td><td>10</td></tr>
+        <tr><td>TE-C45</td><td>Group Plan | Primary User Landing Page (Web)</td><td>28</td><td><div class="prog-bar-wrap"><div class="prog-bar"><div class="prog-bar-fill" style="width:82%;background:#f39c12;"></div></div><span class="prog-pct">82%</span></div></td><td><span class="badge progress">IN PROGRESS</span></td><td>2</td></tr>
+        <tr><td>TE-C85</td><td>Group Plan | Primary User (admin) View (Android)</td><td>11</td><td><div class="prog-bar-wrap"><div class="prog-bar"><div class="prog-bar-fill" style="width:81%;background:#f39c12;"></div></div><span class="prog-pct">81%</span></div></td><td><span class="badge progress">IN PROGRESS</span></td><td>2</td></tr>
+        <tr><td>TE-C84</td><td>Group Plan | Primary User (admin) View (iOS)</td><td>11</td><td><div class="prog-bar-wrap"><div class="prog-bar"><div class="prog-bar-fill" style="width:81%;background:#f39c12;"></div></div><span class="prog-pct">81%</span></div></td><td><span class="badge progress">IN PROGRESS</span></td><td>2</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- SECONDARY USER VIEW CYCLES -->
+  <div class="section-title">Secondary User View — 9 Cycles</div>
+  <div class="card">
+    <table>
+      <thead>
+        <tr><th>Key</th><th>Cycle Name</th><th>Tests</th><th style="min-width:160px">Progress</th><th>Status</th><th>Issues</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>TE-C74</td><td>Group Plan | My eSIMs Landing Page | Secondary User/Member</td><td>23</td><td><div class="prog-bar-wrap"><div class="prog-bar"><div class="prog-bar-fill" style="width:100%;background:#22a854;"></div></div><span class="prog-pct">100%</span></div></td><td><span class="badge done">DONE</span></td><td>7</td></tr>
+        <tr><td>TE-C77</td><td>Group Plan | Member Invitation Acceptance Email</td><td>21</td><td><div class="prog-bar-wrap"><div class="prog-bar"><div class="prog-bar-fill" style="width:100%;background:#22a854;"></div></div><span class="prog-pct">100%</span></div></td><td><span class="badge done">DONE</span></td><td>5</td></tr>
+        <tr><td>TE-C94</td><td>Group Plan | My eSIMs Landing Page | Secondary User/Member (Mobile)</td><td>22</td><td><div class="prog-bar-wrap"><div class="prog-bar"><div class="prog-bar-fill" style="width:95%;background:#f39c12;"></div></div><span class="prog-pct">95%</span></div></td><td><span class="badge progress">IN PROGRESS</span></td><td>4</td></tr>
+        <tr><td>TE-C98</td><td>Group Plan | My eSIMs Details Page | Secondary User (iOS)</td><td>22</td><td><div class="prog-bar-wrap"><div class="prog-bar"><div class="prog-bar-fill" style="width:95%;background:#f39c12;"></div></div><span class="prog-pct">95%</span></div></td><td><span class="badge progress">IN PROGRESS</span></td><td>7</td></tr>
+        <tr><td>TE-C99</td><td>Group Plan | My eSIMs Details Page | Secondary User (Android)</td><td>22</td><td><div class="prog-bar-wrap"><div class="prog-bar"><div class="prog-bar-fill" style="width:95%;background:#f39c12;"></div></div><span class="prog-pct">95%</span></div></td><td><span class="badge progress">IN PROGRESS</span></td><td>7</td></tr>
+        <tr><td>TE-C100</td><td>Group Plan | Secondary User (Member) Post-Removal View (Web)</td><td>28</td><td><div class="prog-bar-wrap"><div class="prog-bar"><div class="prog-bar-fill" style="width:92%;background:#f39c12;"></div></div><span class="prog-pct">92%</span></div></td><td><span class="badge progress">IN PROGRESS</span></td><td>—</td></tr>
+        <tr><td>TE-C101</td><td>Group Plan | Member Invitation Acceptance Email (Android)</td><td>22</td><td><div class="prog-bar-wrap"><div class="prog-bar"><div class="prog-bar-fill" style="width:77%;background:#f39c12;"></div></div><span class="prog-pct">77%</span></div></td><td><span class="badge progress">IN PROGRESS</span></td><td>9</td></tr>
+        <tr><td>TE-C76</td><td>Group Plan | My eSIMs Details Page | Secondary User (Web)</td><td>23</td><td><div class="prog-bar-wrap"><div class="prog-bar"><div class="prog-bar-fill" style="width:60%;background:#f39c12;"></div></div><span class="prog-pct">60%</span></div></td><td><span class="badge progress">IN PROGRESS</span></td><td>1</td></tr>
+        <tr><td>TE-C102</td><td>Group Plan | Member Invitation Acceptance Email (iOS)</td><td>22</td><td><div class="prog-bar-wrap"><div class="prog-bar"><div class="prog-bar-fill" style="width:95%;background:#f39c12;"></div></div><span class="prog-pct">95%</span></div></td><td><span class="badge progress">IN PROGRESS</span></td><td>2</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- SPRINT COMPARISON -->
+  <div style="margin-top: 36px;"><h2>Progress Since Last Report (June 23 → June 29)</h2></div>
+  <div class="comparison-grid">
+    <div class="comparison-card">
+      <h3>Test Execution</h3>
+      <table>
+        <thead><tr><th>Metric</th><th>Jun 23</th><th>Jun 29</th><th>Delta</th></tr></thead>
+        <tbody>
+          <tr><td>Total Test Cases</td><td>635</td><td>555</td><td style="color:#555">–80 (consolidation)</td></tr>
+          <tr><td>Executed</td><td>158 (25%)</td><td>~514 (93%)</td><td class="delta-up">▲ +68%</td></tr>
+          <tr><td>Not Executed</td><td>477 (75%)</td><td>~41 (7%)</td><td class="delta-up">▼ –68%</td></tr>
+          <tr><td>Cycles Done</td><td>6</td><td>20</td><td class="delta-up">▲ +14</td></tr>
+          <tr><td>Cycles In Progress</td><td>10</td><td>13</td><td class="delta-up">▲ +3</td></tr>
+          <tr><td>Cycles Not Started</td><td>20</td><td>0</td><td class="delta-up">▼ –20</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="comparison-card">
+      <h3>Bug Activity</h3>
+      <table>
+        <thead><tr><th>Metric</th><th>Jun 23</th><th>Jun 29</th><th>Delta</th></tr></thead>
+        <tbody>
+          <tr><td>Web Bugs (total)</td><td>13</td><td>47</td><td class="delta-down">+34 filed</td></tr>
+          <tr><td>Web Bugs Resolved</td><td>2</td><td>30</td><td class="delta-up">▲ +28 closed</td></tr>
+          <tr><td>Mobile Bugs (total)</td><td>20</td><td>43</td><td class="delta-down">+23 filed</td></tr>
+          <tr><td>Mobile Bugs Resolved</td><td>~5</td><td>30</td><td class="delta-up">▲ +25 closed</td></tr>
+          <tr><td>Infrastructure Blocker</td><td>🔴 TE-1475</td><td>✅ RESOLVED</td><td class="delta-up">Cleared</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- WEB BUGS TABLE -->
+  <div style="margin-top: 36px;"><h2>Web Bugs — TE_R_10.0.41 (47 Bugs)</h2></div>
+  <div class="card">
+    <table>
+      <thead>
+        <tr><th>Key</th><th>Summary</th><th>Status</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>TE-1475</td><td class="pri-high">[Backend] Cluster instability causing failures across multiple endpoints</td><td><span class="badge done">DONE</span></td></tr>
+        <tr><td>TE-1587</td><td class="pri-high">[WEB] Group Plan | Secondary User | eSIM remains inactive after activation triggered via Postman</td><td><span class="badge done">DONE</span></td></tr>
+        <tr><td>TE-1589</td><td class="pri-high">[WEB] Group Plan | Secondary User | eSIM status does not update to Active after primary user activates</td><td><span class="badge done">DONE</span></td></tr>
+        <tr><td>TE-1646</td><td class="pri-high">Group plan | Invitation acceptance redirects to blank white page</td><td><span class="badge done">DONE</span></td></tr>
+        <tr><td>TE-1447</td><td class="pri-high">[My eSIMs] Validity days show 0 instead of actual validity on eSIMs landing page</td><td><span class="badge done">DONE</span></td></tr>
+        <tr><td>TE-1505</td><td class="pri-high">Group plan — QR Code Not Displayed for Newly Added Device in "Your eSIMs"</td><td><span class="badge done">DONE</span></td></tr>
+        <tr><td>TE-1562</td><td class="pri-high">Group Plan Invite — No error message shown when invitation link is already accepted</td><td><span class="badge done">DONE</span></td></tr>
+        <tr><td>TE-1576</td><td class="pri-medium">Group Plan Invite — Invitation accepted page has broken layout on mobile browser</td><td><span class="badge done">DONE</span></td></tr>
+        <tr><td>TE-1582</td><td class="pri-medium">Group Plan Invite — Unregistered user gets blank page on Accept invite</td><td><span class="badge done">DONE</span></td></tr>
+        <tr><td>TE-1618</td><td class="pri-high">[WEB] Refund Button Incorrectly Exposed on eSIM Details Page via Install eSIM Flow</td><td><span class="badge done">DONE</span></td></tr>
+        <tr><td>TE-1451</td><td class="pri-high">[WEB][Mobile] Group Plan | Completion Page | CTA displays incorrect label</td><td><span class="badge done">DONE</span></td></tr>
+        <tr><td>TE-1463</td><td class="pri-high">[WEB] Group Plan | Cart &amp; Checkout Adjustments | label displays incorrect label</td><td><span class="badge done">DONE</span></td></tr>
+        <tr><td>TE-1469</td><td class="pri-medium">Group Plan | Missing/Improper components on secondary user's e-sim details page</td><td><span class="badge done">DONE</span></td></tr>
+        <tr><td>TE-1474</td><td class="pri-medium">Order Confirmation mail | "What happens next" section is ambiguous in mixed orders</td><td><span class="badge done">DONE</span></td></tr>
+        <tr><td>TE-1496</td><td class="pri-medium">My Account 2.0 | United Kingdom and Tanzania republic country flags not showing</td><td><span class="badge done">DONE</span></td></tr>
+        <tr><td>TE-1503</td><td class="pri-medium">Group Plan | Secondary user isn't being removed</td><td><span class="badge done">DONE</span></td></tr>
+        <tr><td>TE-1506</td><td class="pri-high">Secondary user View | Member redirected to login when accepting invitation via email</td><td><span class="badge done">DONE</span></td></tr>
+        <tr><td>TE-1565</td><td class="pri-medium">[WEB] Group Plan | Secondary User | Data bar shows 0 GB remaining on newly installed eSIM</td><td><span class="badge done">DONE</span></td></tr>
+        <tr><td>TE-1575</td><td class="pri-medium">Login from Test environment redirects to Preprod Vodafone ID endpoint</td><td><span class="badge done">DONE</span></td></tr>
+        <tr><td>TE-1627</td><td class="pri-high">[WEB][FE] Group Plan | Invite People Modal | Failed invitations not displayed in UI</td><td><span class="badge done">DONE</span></td></tr>
+        <tr><td>TE-1473</td><td class="pri-high">Order Confirmation Email | QR confirmation email: All CTAs have corrupted URLs</td><td><span class="badge done">DONE</span></td></tr>
+        <tr><td>TE-1643</td><td class="pri-medium">[CMS] Group Plan | Incomplete country list on accepted (but unregistered) email</td><td><span class="badge done">DONE</span></td></tr>
+        <tr><td>TE-1452</td><td class="pri-medium">Destination Page | Group Plan labels not added to eSIM plans despite Admin portal</td><td><span class="badge discarded">DISCARDED</span></td></tr>
+        <tr><td>TE-1502</td><td class="pri-medium">[WEB] Group Plan | Invitation acceptance | Skipped screen and Non functional CTA</td><td><span class="badge discarded">DISCARDED</span></td></tr>
+        <tr><td>TE-1504</td><td class="pri-high">Group Plan | Member not able to accept the invite through the email</td><td><span class="badge discarded">DISCARDED</span></td></tr>
+        <tr><td>TE-1567</td><td class="pri-medium">Group Plan | Secondary user (member) Data does not display the original total</td><td><span class="badge discarded">DISCARDED</span></td></tr>
+        <tr><td>TE-1635</td><td class="pri-medium">[Web &amp; Mobile] Group Plan | "Share Invite Link" Feature — "Create Link" CTA missing</td><td><span class="badge discarded">DISCARDED</span></td></tr>
+        <tr><td>TE-1563</td><td class="pri-high">Group Plan | eSIM Status Not Updating Correctly After Installation and Roaming Activation</td><td><span class="badge readyqa">READY FOR QA</span></td></tr>
+        <tr><td>TE-1566</td><td class="pri-high">Group Plan | Usage Data Mismatch Between Primary User and Member for Same Plan</td><td><span class="badge readyqa">READY FOR QA</span></td></tr>
+        <tr><td>TE-1580</td><td class="pri-medium">Group Plan | Secondary user still sees blue info banner after topping up removed eSIM</td><td><span class="badge readyqa">READY FOR QA</span></td></tr>
+        <tr><td>TE-1583</td><td class="pri-medium">[WEB] Group Plan | "You've joined [Name]'s group plan" banner does not appear consistently</td><td><span class="badge readyqa">READY FOR QA</span></td></tr>
+        <tr><td>TE-1584</td><td class="pri-medium">Group Plan | Set password for account that hasn't been set up yet</td><td><span class="badge readyqa">READY FOR QA</span></td></tr>
+        <tr><td>TE-1621</td><td class="pri-high">[WEB][BE] Group Plan | Refund | Secondary user refund request bypasses API authorization</td><td><span class="badge readydev">READY FOR DEVELOPER</span></td></tr>
+        <tr><td>TE-1647</td><td class="pri-medium">[CMS] Group Plan | Accept Invitation Page for Unregistered User is Missing Input Placeholders</td><td><span class="badge readydev">READY FOR DEVELOPER</span></td></tr>
+        <tr><td>TE-1668</td><td class="pri-high">[WEB][BE] Group Plan | Refunded Group Plan still allows primary user to invite members</td><td><span class="badge qainprog">QA IN PROGRESS</span></td></tr>
+        <tr><td>TE-1664</td><td class="pri-high">DevOps | Test env: Redis connectivity issue</td><td><span class="badge progress">IN PROGRESS</span></td></tr>
+        <tr><td>TE-1444</td><td class="pri-high">eSIM landing page admin view | 403 Forbidden error on Invite members and Install eSIM CTAs</td><td><span class="badge progress">IN PROGRESS</span></td></tr>
+        <tr><td>TE-1610</td><td class="pri-medium">Incorrect localization behavior for campaign label in German (CMS)</td><td><span class="badge progress">IN PROGRESS</span></td></tr>
+        <tr><td>TE-1626</td><td class="pri-medium">Localization Issues across Mobile App and Web (Campaign Label, Missing Info, Duplicate Labels)</td><td><span class="badge progress">IN PROGRESS</span></td></tr>
+        <tr><td>TE-1669</td><td class="pri-medium">DevOps | Connection Refused on Test Env</td><td><span class="badge analysis">ANALYSIS</span></td></tr>
+        <tr><td>TE-1594</td><td class="pri-high">Group Plan | Invite user API can be manipulated</td><td><span class="badge analysis">ANALYSIS</span></td></tr>
+        <tr><td>TE-1654</td><td class="pri-medium">[Web] Accept Invitation — First/Last name fields accept numeric input with misleading error</td><td><span class="badge analysis">ANALYSIS</span></td></tr>
+        <tr><td>TE-1665</td><td class="pri-medium">Group Plan | Improper behavior when trying to re-invite a pending user after removing them</td><td><span class="badge analysis">ANALYSIS</span></td></tr>
+        <tr><td>TE-1666</td><td class="pri-high">Group Plan | Order Confirmation Email | Email product summary line does not show Group Plan label</td><td><span class="badge analysis">ANALYSIS</span></td></tr>
+        <tr><td>TE-1667</td><td class="pri-medium">Group Plan | 'Days' is not translated on the invitation page</td><td><span class="badge new">NEW</span></td></tr>
+        <tr><td>TE-1637</td><td class="pri-medium">[Mobile][and Web] My eSIMs — FIFO ordering not implemented; most recently purchased eSIM appears last</td><td><span class="badge new">NEW</span></td></tr>
+        <tr><td>TE-1672</td><td class="pri-medium">Group Plan | Country not reflected in Personal Info after registration via invitation flow</td><td><span class="badge new">NEW</span></td></tr>
+      </tbody>
+    </table>
+    <p class="bug-note">* The remaining 16 issues in TE_R_10.0.41 are story/feature tickets (TE-20, TE-42, TE-43, TE-44, TE-47, TE-48, TE-49, TE-51, TE-52, TE-64, TE-341, TE-399, TE-438, TE-466, TE-713, TE-782) and are excluded from the bug count.</p>
+  </div>
+
+  <!-- MOBILE BUGS TABLE -->
+  <div style="margin-top: 36px;"><h2>Mobile Bugs — TE_Mobile_10.0.41 (43 Bugs)</h2></div>
+  <div class="card">
+    <table>
+      <thead>
+        <tr><th>Key</th><th>Summary</th><th>Status</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>TE-1628</td><td class="pri-high">[Mobile] Group Plan | eSIM Remains in "Not Installed" Status After Successful Installation</td><td><span class="badge done">DONE</span></td></tr>
+        <tr><td>TE-1646</td><td class="pri-high">Group plan | Invitation acceptance redirects to blank white page</td><td><span class="badge done">DONE</span></td></tr>
+        <tr><td>TE-1455</td><td class="pri-high">[Mobile] Group plan | Add another device not working</td><td><span class="badge done">DONE</span></td></tr>
+        <tr><td>TE-1562</td><td class="pri-high">Group Plan Invite — No error message shown when invitation link is already accepted</td><td><span class="badge done">DONE</span></td></tr>
+        <tr><td>TE-1591</td><td class="pri-medium">[Mobile] Invite modal | Remaining slots count not updated correctly</td><td><span class="badge done">DONE</span></td></tr>
+        <tr><td>TE-1592</td><td class="pri-medium">[Mobile] Group plan admin view — E-sims section not displayed after adding devices</td><td><span class="badge done">DONE</span></td></tr>
+        <tr><td>TE-1644</td><td class="pri-medium">[Mobile] Group plan admin view — Added devices remain visible in eSIMs after group plan refund</td><td><span class="badge done">DONE</span></td></tr>
+        <tr><td>TE-1434</td><td class="pri-high">[Mobile] Group plan | Add Another device missing</td><td><span class="badge done">DONE</span></td></tr>
+        <tr><td>TE-1435</td><td class="pri-medium">[Mobile] Group plan | Keyboard hides input field in Add Member modal</td><td><span class="badge done">DONE</span></td></tr>
+        <tr><td>TE-1441</td><td class="pri-medium">[Mobile] Group Plan | The "Travel Together" information card is not displayed on Destination page</td><td><span class="badge done">DONE</span></td></tr>
+        <tr><td>TE-1458</td><td class="pri-medium">[Mobile] Group Plan | "Invite" and "Add Device" CTAs Remain Visible After All Slots Are Filled</td><td><span class="badge done">DONE</span></td></tr>
+        <tr><td>TE-1470</td><td class="pri-medium">[Mobile] Destination Page | Group Plan modal has inconsistent content and missing information</td><td><span class="badge done">DONE</span></td></tr>
+        <tr><td>TE-1487</td><td class="pri-medium">[Mobile] Group Plan | Internal Navigation Arrow Missing on Group Plan Banner</td><td><span class="badge done">DONE</span></td></tr>
+        <tr><td>TE-1570</td><td class="pri-medium">[Mobile] Group Plan | Accepting Email Invite a Second Time Redirects to Blank Page</td><td><span class="badge done">DONE</span></td></tr>
+        <tr><td>TE-1590</td><td class="pri-medium">[Mobile] Group Plan | Invite members — Input fields lack placeholders and allow invalid values</td><td><span class="badge done">DONE</span></td></tr>
+        <tr><td>TE-1599</td><td class="pri-medium">[Mobile] Group plan — "No slots available" message not displayed when slots are used</td><td><span class="badge done">DONE</span></td></tr>
+        <tr><td>TE-1602</td><td class="pri-medium">[Mobile] Group plan — Add another device — Incorrect device name mapping and inconsistent headings</td><td><span class="badge done">DONE</span></td></tr>
+        <tr><td>TE-1607</td><td class="pri-medium">[Mobile] Group plan | Invitation flow — Missing "Pending" status and UI breaks with email-only invite</td><td><span class="badge done">DONE</span></td></tr>
+        <tr><td>TE-1614</td><td class="pri-medium">[Mobile] Group Plan | Two confirmation modals appear instead of one after invite submission</td><td><span class="badge done">DONE</span></td></tr>
+        <tr><td>TE-1658</td><td class="pri-medium">[Mobile] Group Plan Admin view — Incorrect CTAs displayed when eSIM is activated without members</td><td><span class="badge done">DONE</span></td></tr>
+        <tr><td>TE-1440</td><td class="pri-medium">[Mobile] Group Plan | label missing on Egypt 50GB plan in mobile app</td><td><span class="badge done">DONE</span></td></tr>
+        <tr><td>TE-1492</td><td class="pri-medium">[Mobile] Group Plan | SMDP button dont have text</td><td><span class="badge done">DONE</span></td></tr>
+        <tr><td>TE-1585</td><td class="pri-medium">Group Plan | Informational Blue Banner is Displayed on Subsequent Visits</td><td><span class="badge done">DONE</span></td></tr>
+        <tr><td>TE-1645</td><td class="pri-medium">[Mobile] Group Plan | "Invite People" CTA not translated</td><td><span class="badge done">DONE</span></td></tr>
+        <tr><td>TE-1479</td><td class="pri-high">[Mobile] Group Plan | Primary User Behaves as Member After Invited User Accepts Invitation</td><td><span class="badge discarded">DISCARDED</span></td></tr>
+        <tr><td>TE-1433</td><td class="pri-medium">[Mobile] Group plan | Duplicate product cards displayed for group plans with multiple devices</td><td><span class="badge discarded">DISCARDED</span></td></tr>
+        <tr><td>TE-1445</td><td class="pri-medium">[Mobile] Group Plan | User is Automatically Logged Out After Installing an eSIM</td><td><span class="badge discarded">DISCARDED</span></td></tr>
+        <tr><td>TE-1446</td><td class="pri-medium">[Mobile] Group Plan | eSIM Status Displays as Active Even When Roaming Services Are Disabled</td><td><span class="badge discarded">DISCARDED</span></td></tr>
+        <tr><td>TE-1635</td><td class="pri-medium">[Web &amp; Mobile] Group Plan | "Share Invite Link" Feature — "Create Link" CTA missing</td><td><span class="badge discarded">DISCARDED</span></td></tr>
+        <tr><td>TE-1563</td><td class="pri-high">Group Plan | eSIM Status Not Updating Correctly After Installation and Roaming Activation</td><td><span class="badge readyqa">READY FOR QA</span></td></tr>
+        <tr><td>TE-1456</td><td class="pri-high">[Mobile] Group Plan — Adding Device on Web Displays Unclear Message in Mobile App</td><td><span class="badge readyqa">READY FOR QA</span></td></tr>
+        <tr><td>TE-1471</td><td class="pri-medium">[Mobile] Destination Page | Promotional banner missing above eligible plans on destination pages</td><td><span class="badge done">DONE</span></td></tr>
+        <tr><td>TE-1501</td><td class="pri-medium">[Mobile] Group Plan | no FAQ sub-section includes Group plan related questions</td><td><span class="badge readyqa">READY FOR QA</span></td></tr>
+        <tr><td>TE-1566</td><td class="pri-high">Group Plan | Usage Data Mismatch Between Primary User and Member for Same Plan</td><td><span class="badge readyqa">READY FOR QA</span></td></tr>
+        <tr><td>TE-1453</td><td class="pri-medium">[Mobile] Group Plan | removal/invite modal shows temp text</td><td><span class="badge readyqa">READY FOR QA</span></td></tr>
+        <tr><td>TE-1634</td><td class="pri-medium">[Mobile] Group Plan | eSIM installation Status Displays Raw Value "notInstalled"</td><td><span class="badge done">DONE</span></td></tr>
+        <tr><td>TE-1497</td><td class="pri-high">[Mobile] Group Plan | Installation button missing from the manage plan screen</td><td><span class="badge blocked">BLOCKED</span></td></tr>
+        <tr><td>TE-1632</td><td class="pri-medium">[Mobile] Localization — Localization issues in modals and text across multiple languages</td><td><span class="badge underrev">UNDER REVIEW</span></td></tr>
+        <tr><td>TE-1638</td><td class="pri-medium">[Mobile] Group Plan | No Error Message Displayed for Invalid Email Format</td><td><span class="badge analysis">UNDER ANALYSIS</span></td></tr>
+        <tr><td>TE-1666</td><td class="pri-high">Group Plan | Order Confirmation Email | Email product summary line does not show Group Plan label</td><td><span class="badge analysis">ANALYSIS</span></td></tr>
+        <tr><td>TE-1671</td><td class="pri-medium">[Mobile] Group plan admin view — CTA Order on eSIM Page is incorrect</td><td><span class="badge new">NEW</span></td></tr>
+        <tr><td>TE-1637</td><td class="pri-medium">[Mobile][and Web] My eSIMs — FIFO ordering not implemented; most recently purchased eSIM appears last</td><td><span class="badge new">NEW</span></td></tr>
+      </tbody>
+    </table>
+    <p class="bug-note">* Cross-platform bugs (e.g. TE-1666, TE-1637, TE-1635, TE-1646, TE-1562, TE-1563, TE-1566) appear in both fix versions but represent a single defect. Counted once per version per Jira fix version tracking, but the unique bug is shared.</p>
+  </div>
+
+  <!-- OPEN RISKS -->
+  <div style="margin-top: 36px;"><h2>Open Risks &amp; Attention Areas</h2></div>
+  <div class="alert-box risk">
+    <h3>⚠️ Cycles With Remaining Test Cases</h3>
+    <table style="margin-top:8px;">
+      <thead><tr><th>Cycle</th><th>Progress</th><th>Tests Remaining</th><th>Open Issues</th></tr></thead>
+      <tbody>
+        <tr><td>TE-C102 — Member Invitation Acceptance Email (iOS)</td><td>95%</td><td>~1</td><td>2</td></tr>
+        <tr><td>TE-C76 — My eSIMs Details Page | Secondary User (Web)</td><td>60%</td><td>~9</td><td>1</td></tr>
+        <tr><td>TE-C101 — Member Invitation Acceptance Email (Android)</td><td>77%</td><td>~5</td><td>9</td></tr>
+        <tr><td>TE-C82 — Destination Page (Android)</td><td>87%</td><td>~2</td><td>8</td></tr>
+        <tr><td>TE-C84/85 — Primary User (admin) View (iOS/Android)</td><td>81%</td><td>~2 each</td><td>2 each</td></tr>
+        <tr><td>TE-C80/128 — Primary User Landing Page (Android/iOS)</td><td>86%</td><td>~5 each</td><td>10 / 9</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</main>
+
+<footer>
+  Generated by VRS QA Team · Travel eSIM — Group Plan Testing · TE_R_10.0.41 / TE_Mobile_10.0.41 · June 29, 2026
+</footer>
+
+<script>
+  // Chart 1: Overall Execution
+  new Chart(document.getElementById('chartExec'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Executed (~514)', 'Not Executed (~41)'],
+      datasets: [{ data: [514, 41], backgroundColor: ['#22a854', '#E60000'], borderWidth: 0 }]
+    },
+    options: { plugins: { legend: { position: 'bottom', labels: { font: { size: 11 } } } }, cutout: '68%' }
+  });
+
+  // Chart 2: Cycle Status
+  new Chart(document.getElementById('chartCycle'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Done (20)', 'In Progress (13)', 'Not Started (0)'],
+      datasets: [{ data: [20, 13, 0], backgroundColor: ['#2980b9', '#f39c12', '#E60000'], borderWidth: 0 }]
+    },
+    options: { plugins: { legend: { position: 'bottom', labels: { font: { size: 11 } } } }, cutout: '68%' }
+  });
+
+  // Chart 3: Execution by Platform
+  new Chart(document.getElementById('chartPlatform'), {
+    type: 'bar',
+    data: {
+      labels: ['Web', 'Android', 'iOS'],
+      datasets: [
+        { label: 'Executed', data: [215, 150, 140], backgroundColor: '#22a854' },
+        { label: 'Not Executed', data: [16, 20, 19], backgroundColor: '#ffb3b3' }
+      ]
+    },
+    options: {
+      plugins: { legend: { position: 'bottom', labels: { font: { size: 11 } } } },
+      scales: {
+        x: { stacked: true, grid: { display: false } },
+        y: { stacked: true, beginAtZero: true }
+      }
+    }
+  });
+
+  // Chart 4: Execution by Folder
+  new Chart(document.getElementById('chartFolder'), {
+    type: 'bar',
+    data: {
+      labels: ['Purchase Flow', 'Admin User View', 'Secondary User View'],
+      datasets: [
+        { label: 'Executed', data: [106, 223, 185], backgroundColor: '#22a854' },
+        { label: 'Not Executed', data: [2, 19, 20], backgroundColor: '#ffb3b3' }
+      ]
+    },
+    options: {
+      indexAxis: 'y',
+      plugins: { legend: { position: 'bottom', labels: { font: { size: 11 } } } },
+      scales: {
+        x: { stacked: true, beginAtZero: true },
+        y: { stacked: true, grid: { display: false } }
+      }
+    }
+  });
+
+  // Chart 5: Bug Status Comparison
+  new Chart(document.getElementById('chartBugs'), {
+    type: 'bar',
+    data: {
+      labels: ['Done/Discarded', 'In Progress', 'New/To Do'],
+      datasets: [
+        { label: 'Web (47)', data: [30, 14, 3], backgroundColor: '#8e44ad' },
+        { label: 'Mobile (43)', data: [30, 11, 2], backgroundColor: '#E60000' }
+      ]
+    },
+    options: {
+      plugins: { legend: { position: 'bottom', labels: { font: { size: 11 } } } },
+      scales: {
+        x: { grid: { display: false } },
+        y: { beginAtZero: true }
+      }
+    }
+  });
+
+  // Chart 6: Web Bugs by Status
+  new Chart(document.getElementById('chartWebBugs'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Done (22)', 'Discarded (8)', 'Ready for QA/Dev (7)', 'In Progress (5)', 'Analysis (5)', 'New (3)'],
+      datasets: [{ data: [22, 8, 7, 5, 5, 3], backgroundColor: ['#22a854', '#bdc3c7', '#27ae60', '#f39c12', '#8e44ad', '#2980b9'], borderWidth: 0 }]
+    },
+    options: { plugins: { legend: { position: 'bottom', labels: { font: { size: 10 } } } }, cutout: '60%' }
+  });
+
+  // Chart 7: Mobile Bugs by Status
+  new Chart(document.getElementById('chartMobileBugs'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Done (26)', 'Discarded (5)', 'Ready for QA (5)', 'Blocked/Under Review (2)', 'Analysis (3)', 'New (2)'],
+      datasets: [{ data: [26, 5, 5, 2, 3, 2], backgroundColor: ['#22a854', '#bdc3c7', '#27ae60', '#E60000', '#8e44ad', '#2980b9'], borderWidth: 0 }]
+    },
+    options: { plugins: { legend: { position: 'bottom', labels: { font: { size: 10 } } } }, cutout: '60%' }
+  });
+</script>
+</body>
+</html>

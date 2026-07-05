@@ -2,7 +2,7 @@ import { test } from '../../../fixtures/page-manager';
 import { ValidLoginDetails, InvalidLoginDetails, emptyLoginDetails, emptyEmailLoginDetails, emptyPasswordLoginDetails, AppUrls, LoginErrorMessages } from '../../../data/credentials';
 
 test.describe('Login', () => {
-    test('Login with valid credentials', async ({ loginOrSignupPage, loginPage, homePage, myAccountPage }) => {
+    test('Login with valid credentials', { tag: ['@regression', '@P1'] }, async ({ loginOrSignupPage, loginPage, homePage, myAccountPage }) => {
         await loginOrSignupPage.navigateToLoginOrSignUpPage(AppUrls.login);
         await loginOrSignupPage.proceedWithLogin();
         await loginPage.verifyRedirectionAndCompleteLoadToLoginPage();
@@ -11,7 +11,7 @@ test.describe('Login', () => {
         await myAccountPage.signOutFromAccount();
     });
 
-    test('Login with invalid credentials', async ({ loginOrSignupPage, loginPage }) => {
+    test('Login with invalid credentials', { tag: ['@regression', '@P2'] }, async ({ loginOrSignupPage, loginPage }) => {
         await loginOrSignupPage.navigateToLoginOrSignUpPage(AppUrls.login);
         await loginOrSignupPage.proceedWithLogin();
         await loginPage.verifyRedirectionAndCompleteLoadToLoginPage();
@@ -19,7 +19,7 @@ test.describe('Login', () => {
         await loginPage.verifyErrorMessageForInvalidUsername(LoginErrorMessages.invalidCredentials);
     });
 
-    test('Login with empty credentials', async ({ loginOrSignupPage, loginPage }) => {
+    test('Login with empty credentials', { tag: ['@regression', '@P2'] }, async ({ loginOrSignupPage, loginPage }) => {
         await loginOrSignupPage.navigateToLoginOrSignUpPage(AppUrls.login);
         await loginOrSignupPage.proceedWithLogin();
         await loginPage.verifyRedirectionAndCompleteLoadToLoginPage();
@@ -27,7 +27,7 @@ test.describe('Login', () => {
         await loginPage.verifyErrorMessageForEmptyEmail(LoginErrorMessages.emailRequired);
     });
 
-    test('Login with empty email', async ({ loginOrSignupPage, loginPage }) => {
+    test('Login with empty email', { tag: ['@regression', '@P2'] }, async ({ loginOrSignupPage, loginPage }) => {
         await loginOrSignupPage.navigateToLoginOrSignUpPage(AppUrls.login);
         await loginOrSignupPage.proceedWithLogin();
         await loginPage.verifyRedirectionAndCompleteLoadToLoginPage();
@@ -35,7 +35,7 @@ test.describe('Login', () => {
         await loginPage.verifyErrorMessageForEmptyEmail(LoginErrorMessages.emailRequired);
     });
 
-    test('Login with empty password', async ({ loginOrSignupPage, loginPage }) => {
+    test('Login with empty password', { tag: ['@regression', '@P2'] }, async ({ loginOrSignupPage, loginPage }) => {
         await loginOrSignupPage.navigateToLoginOrSignUpPage(AppUrls.login);
         await loginOrSignupPage.proceedWithLogin();
         await loginPage.verifyRedirectionAndCompleteLoadToLoginPage();
@@ -43,7 +43,7 @@ test.describe('Login', () => {
         await loginPage.verifyErrorMessageForEmptyPassword(LoginErrorMessages.passwordRequired);
     });
 
-    test('Cancel login navigates back to VRS', async ({ loginOrSignupPage, loginPage }) => {
+    test('Cancel login navigates back to VRS', { tag: ['@regression', '@P3'] }, async ({ loginOrSignupPage, loginPage }) => {
         await loginOrSignupPage.navigateToLoginOrSignUpPage(AppUrls.login);
         await loginOrSignupPage.proceedWithLogin();
         await loginPage.verifyRedirectionAndCompleteLoadToLoginPage();
@@ -51,7 +51,7 @@ test.describe('Login', () => {
         await loginPage.verifyNavigationBackToVRS();
     });
 
-    test('Forgot password link navigates to reset password page', async ({ loginOrSignupPage, loginPage }) => {
+    test('Forgot password link navigates to reset password page', { tag: ['@regression', '@P3'] }, async ({ loginOrSignupPage, loginPage }) => {
         await loginOrSignupPage.navigateToLoginOrSignUpPage(AppUrls.login);
         await loginOrSignupPage.proceedWithLogin();
         await loginPage.verifyRedirectionAndCompleteLoadToLoginPage();

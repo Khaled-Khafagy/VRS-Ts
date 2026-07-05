@@ -1,4 +1,5 @@
 import { test as base } from '@playwright/test';
+import { DestinationOption, pickRandomDestination, pickRandomRegion } from '../utils/testDataGenerator';
 import { HomePage } from '../Pages/HomePage';
 import { RegionPlansPage } from '../Pages/RegionPlansPage';
 import { CartPage } from '../Pages/CartPage';
@@ -33,6 +34,8 @@ type MyFixtures = {
     myEsimsPage: MyEsimsPage;
     esimDetailsPage: EsimDetailsPage;
     ssoPage: SSOPage;
+    randomDestination: DestinationOption;
+    twoRandomRegions: [DestinationOption, DestinationOption];
     // Add other pages here
 };
 
@@ -132,6 +135,14 @@ export const test = customPage.extend<MyFixtures>({
     ssoPage: async ({ page }, use) => {
         const ssoPage = new SSOPage(page);
         await use(ssoPage);
+    },
+
+    randomDestination: async ({}, use) => {
+        await use(pickRandomDestination());
+    },
+
+    twoRandomRegions: async ({}, use) => {
+        await use([pickRandomRegion(), pickRandomRegion()]);
     },
 
     // Add other pages here

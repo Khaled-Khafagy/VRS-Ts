@@ -76,22 +76,24 @@ private readonly homePageLocators = {
     });
   }
 
-  async navigateToEuropeRegionPlansPage() {
-    await test.step('Navigate to Europe Region Plans Page', async () => {
-      const europeBtn = this.homePageLocators.btnExploreEurope;
-      await europeBtn.scrollIntoViewIfNeeded();
-      await europeBtn.hover();
-      await europeBtn.click();
+  async navigateToRegionPlansPage(slug: string, tab: 'regions' | 'countries' = 'regions') {
+    await test.step(`Navigate to ${slug} plans page`, async () => {
+      if (tab === 'countries') {
+        await this.switchToCountriesTab();
+      }
+      const btn = this.homePageLocators.regionExploreBtn(slug);
+      await btn.scrollIntoViewIfNeeded();
+      await btn.hover();
+      await btn.click();
     });
   }
 
+  async navigateToEuropeRegionPlansPage() {
+    await this.navigateToRegionPlansPage('europe');
+  }
+
   async navigateToAsiaRegionPlansPage() {
-    await test.step('Navigate to Asia Region Plans Page', async () => {
-      const asiaBtn = this.homePageLocators.btnExploreAsia;
-      await asiaBtn.scrollIntoViewIfNeeded();
-      await asiaBtn.hover();
-      await asiaBtn.click();
-    });
+    await this.navigateToRegionPlansPage('asia');
   }
 
   async navigateToMyAccountTab() {

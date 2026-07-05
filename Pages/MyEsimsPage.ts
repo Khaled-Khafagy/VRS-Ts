@@ -3,9 +3,9 @@ import { BasePage } from './BasePage';
 
 export class MyEsimsPage extends BasePage {
     private readonly myEsimsPageLocators = {
-        hdgMyEsims:this.page.getByRole('heading', { name: /eSIM/i }),
-        badgeNotInstalled:this.page.locator('[data-test-id="pill"]').first(),
-        btnViewDetails:this.page.getByRole('button', { name: 'View Details' }).first(),
+        hdgMyEsims:        this.page.getByRole('heading', { name: /eSIM/i }),
+        badgeNotInstalled: this.page.getByText('Not installed').first(),
+        btnSeeDetails:     this.page.getByRole('button', { name: 'See details' }).first(),
     };
 
     constructor(page: Page) {
@@ -14,19 +14,19 @@ export class MyEsimsPage extends BasePage {
 
     async verifyMyEsimsPageLoaded() {
         await test.step('Verify My eSIMs page is loaded', async () => {
-            await expect(this.myEsimsPageLocators.hdgMyEsims).toBeVisible({ timeout: 30000 });
+            await expect(this.myEsimsPageLocators.hdgMyEsims).toBeVisible();
         });
     }
 
     async verifyNotInstalledEsimPresent() {
         await test.step('Verify at least one Not Installed eSIM is present', async () => {
-            await expect(this.myEsimsPageLocators.badgeNotInstalled).toBeVisible({ timeout: 15000 });
+            await expect(this.myEsimsPageLocators.badgeNotInstalled).toBeVisible();
         });
     }
 
     async clickViewDetailsOnFirstNotInstalledEsim() {
         await test.step('Click View Details on first Not Installed eSIM', async () => {
-            await this.myEsimsPageLocators.btnViewDetails.click();
+            await this.myEsimsPageLocators.btnSeeDetails.click();
         });
     }
 }

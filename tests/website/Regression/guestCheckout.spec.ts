@@ -1,24 +1,34 @@
 import { test } from '../../../fixtures/page-manager';
-import { generateGuestUserData } from '../../../utils/testDataGenerator';
+import { generateGuestUserData, pickRandomDestination } from '../../../utils/testDataGenerator';
 import { GuestUserData, ValidLoginDetails, PaymentDetails, BillingDetails, AppUrls } from '../../../data/credentials';
+import { emailTestTimeout } from '../../../playwright.config';
 
 test.describe('Guest Checkout', () => {
-    test('Guest checkout for non-existing user', async ({ homePage, regionPlansPage, cartPage, checkoutPage, emailVerificationPage, paymentPage, orderSuccessfulPage }) => {
+    test('Guest checkout for non-existing user', { tag: ['@regression', '@P1'] }, async ({ homePage, regionPlansPage, cartPage, checkoutPage, emailVerificationPage, paymentPage, orderSuccessfulPage }) => {
+        test.setTimeout(emailTestTimeout);
+        const sentAt = Date.now();
+        const guestData = generateGuestUserData();
+        const destination = pickRandomDestination();
         await homePage.gotoHomepage(AppUrls.base);
-        await homePage.navigateToEuropeRegionPlansPage();
-        await regionPlansPage.selectPlanInEuropeRegion();
+        await homePage.navigateToRegionPlansPage(destination.slug, destination.tab);
+        await regionPlansPage.selectFirstPlan(destination.heading);
         await cartPage.proceedToCheckoutFromCart();
-        await checkoutPage.fillPersonalDetailsForNonExistingUser(generateGuestUserData());
+        await checkoutPage.fillPersonalDetailsForNonExistingUser(guestData);
         await checkoutPage.fillBillingAddressDetailsForUserAndProceedToPayment(BillingDetails);
         await emailVerificationPage.handleOTPVerificationNonExistingUser();
+        await emailVerificationPage.verifyOTPEmailReceived(guestData.email, sentAt);
         await paymentPage.fillCardDetailsAndPay(PaymentDetails);
         await orderSuccessfulPage.verifyOrderSuccessfulPageDisplayedForGuestUsers();
+        await orderSuccessfulPage.verifyQRCodeEmailReceived(guestData.email, sentAt);
+        await orderSuccessfulPage.verifyReceiptEmailReceived(guestData.email, sentAt);
+        await orderSuccessfulPage.verifyWelcomeEmailReceived(guestData.email, sentAt);
     });
 
-    test('Guest checkout with existing account email', async ({ homePage, regionPlansPage, cartPage, checkoutPage, emailVerificationPage, loginPage, paymentPage, orderSuccessfulPage, myAccountPage }) => {
+    test('Guest checkout with existing account email', { tag: ['@regression', '@P1'] }, async ({ homePage, regionPlansPage, cartPage, checkoutPage, emailVerificationPage, loginPage, paymentPage, orderSuccessfulPage, myAccountPage: _myAccountPage }) => {
+        const destination = pickRandomDestination();
         await homePage.gotoHomepage(AppUrls.base);
-        await homePage.navigateToEuropeRegionPlansPage();
-        await regionPlansPage.selectPlanInEuropeRegion();
+        await homePage.navigateToRegionPlansPage(destination.slug, destination.tab);
+        await regionPlansPage.selectFirstPlan(destination.heading);
         await cartPage.proceedToCheckoutFromCart();
         await checkoutPage.fillPersonalDetailsForExistingUser(GuestUserData);
         await checkoutPage.fillBillingAddressDetailsForUserAndProceedToPayment(BillingDetails);
@@ -30,10 +40,11 @@ test.describe('Guest Checkout', () => {
         await orderSuccessfulPage.verifyOrderSuccessfulPageDisplayedForLoggedinUsers();
     });
 
-    test('Guest checkout login with existing account', async ({ homePage, regionPlansPage, cartPage, checkoutPage, loginPage, paymentPage, orderSuccessfulPage, myAccountPage }) => {
+    test('Guest checkout login with existing account', { tag: ['@regression', '@P2'] }, async ({ homePage, regionPlansPage, cartPage, checkoutPage, loginPage, paymentPage, orderSuccessfulPage, myAccountPage: _myAccountPage }) => {
+        const destination = pickRandomDestination();
         await homePage.gotoHomepage(AppUrls.base);
-        await homePage.navigateToEuropeRegionPlansPage();
-        await regionPlansPage.selectPlanInEuropeRegion();
+        await homePage.navigateToRegionPlansPage(destination.slug, destination.tab);
+        await regionPlansPage.selectFirstPlan(destination.heading);
         await cartPage.proceedToCheckoutFromCart();
         await checkoutPage.guestCheckoutLoginWithExistingAccount();
         await loginPage.verifyRedirectionAndCompleteLoadToLoginPage();
@@ -43,10 +54,11 @@ test.describe('Guest Checkout', () => {
         await orderSuccessfulPage.verifyOrderSuccessfulPageDisplayedForLoggedinUsers();
     });
 
-    test('Asia region guest checkout for non-existing user', async ({ homePage, regionPlansPage, cartPage, checkoutPage, emailVerificationPage }) => {
+    test('Guest checkout for non-existing user - random region', { tag: ['@regression', '@P2'] }, async ({ homePage, regionPlansPage, cartPage, checkoutPage, emailVerificationPage }) => {
+        const destination = pickRandomDestination();
         await homePage.gotoHomepage(AppUrls.base);
-        await homePage.navigateToAsiaRegionPlansPage();
-        await regionPlansPage.selectPlanInAsiaRegion();
+        await homePage.navigateToRegionPlansPage(destination.slug, destination.tab);
+        await regionPlansPage.selectFirstPlan(destination.heading);
         await cartPage.proceedToCheckoutFromCart();
         await checkoutPage.fillPersonalDetailsForNonExistingUser(generateGuestUserData());
         await checkoutPage.fillBillingAddressDetailsForUserAndProceedToPayment(BillingDetails);

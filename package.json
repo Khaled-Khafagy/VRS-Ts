@@ -5,7 +5,12 @@
   "main": "index.js",
   "scripts": {
     "test:allure": "rm -rf allure-results && npx playwright test && npx allure serve allure-results",
-    "test:headless": "rm -rf allure-results && CI=true npx playwright test && npx allure generate allure-results --clean -o allure-report && npx allure open allure-report"
+    "test:headless": "rm -rf allure-results && CI=true npx playwright test && npx allure generate allure-results --clean -o allure-report && npx allure open allure-report",
+    "test:regression": "npx playwright test tests/website/Regression",
+    "test:sanity": "npx playwright test tests/website/Sanity",
+    "test:p1": "npx playwright test --grep @P1",
+    "test:p2": "npx playwright test --grep @P2",
+    "report:exit": "ts-node scripts/generateExitReport.ts"
   },
   "repository": {
     "type": "git",
@@ -18,7 +23,7 @@
   "devDependencies": {
     "@faker-js/faker": "^10.4.0",
     "@playwright/mcp": "^0.0.70",
-    "@playwright/test": "^1.59.1",
+    "@playwright/test": "^1.60.0",
     "@types/node": "^25.5.0",
     "allure-commandline": "^2.38.1",
     "allure-playwright": "^3.6.0",
@@ -26,11 +31,13 @@
     "dotenv": "^17.4.0",
     "joi": "^18.1.2",
     "pino": "^10.3.1",
+    "ts-node": "^10.9.2",
     "typescript": "^6.0.2",
     "uuid": "^14.0.0",
     "yargs": "^18.0.0"
   },
   "dependencies": {
-    "playwright": "^1.59.1"
+    "googleapis": "^172.0.0",
+    "playwright": "^1.60.0"
   }
 }
