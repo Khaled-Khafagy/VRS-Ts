@@ -1,96 +1,107 @@
-import {test, expect, Page, Locator, FrameLocator} from '@playwright/test';
+import { test, expect, Page } from '@playwright/test';
 import { BasePage } from './BasePage';
 import { CreditCardDetails } from './index';
-
-
-
+import { actionTimeout, typingDelay, shortDelay } from '../playwright.config';
 
 export class PaymentPage extends BasePage {
-  readonly paymentFrame: FrameLocator;
-  readonly lnkSavedVisaCard: Locator;
-  readonly btnAddNewCard: Locator;
-  readonly txtCardNumber: Locator;
-  readonly txtCardExpiry: Locator;
-  readonly txtCardCVC: Locator;
-  readonly txtCardHolderName: Locator;
-  readonly btnPayLoggedIn: Locator;
-  readonly btnPayLoggedOut: Locator;
 
+    private readonly paymentPageLocators = {
 
+        // ── Section 1: Guest card form (new card) ─────────────────────────────
+        // Entry point — visible before card form fields are shown
+        btnAddNewCard:          this.page.frameLocator('iframe[title="checkout-payment-iframe"]')
+                                    .getByTestId('addCardButton'),
 
-constructor(page : Page) {
-    super(page);
-    // 1. Locate the iframe containing the payment gateway
-    this.paymentFrame = page.frameLocator('iframe[src*="pre.pay.vodafone.com"]');
+        // ── Section 2: Secure nested iframes (card details) ───────────────────
+        // Each field lives inside its own nested iframe — .fill() is silently
+        // ignored by the payment gateway; always use .pressSequentially()
+        txtCardNumber:          this.page.frameLocator('iframe[title="checkout-payment-iframe"]')
+                                    .frameLocator('iframe[title="Iframe for card number"]')
+                                    .getByRole('textbox', { name: 'Card number' }),
 
-    
-    // 2. The button is directly in the main payment frame
-    this.btnAddNewCard = this.paymentFrame.getByTestId('addCardButton');
+        txtCardExpiry:          this.page.frameLocator('iframe[title="checkout-payment-iframe"]')
+                                    .frameLocator('iframe[title="Iframe for expiry date"]')
+                                    .getByRole('textbox', { name: 'Expiry date' }),
 
-    // 3. SECURE FIELDS: These are nested IFRAMES inside the paymentFrame
-    this.txtCardNumber = this.paymentFrame
-        .frameLocator('iframe[title="Iframe for card number"]')
-        .locator('input[aria-label="Card number"]');
-        
-    this.txtCardExpiry = this.paymentFrame
-        .frameLocator('iframe[title="Iframe for expiry date"]')
-        .locator('input[aria-label="Expiry date"]');
-        
-    this.txtCardCVC = this.paymentFrame
-        .frameLocator('iframe[title="Iframe for security code"]')
-        .locator('input[aria-label="Security code"]');
-        
+        txtCardCVC:             this.page.frameLocator('iframe[title="checkout-payment-iframe"]')
+                                    .frameLocator('iframe[title="Iframe for security code"]')
+                                    .getByRole('textbox', { name: 'CVV' }),
 
-    this.lnkSavedVisaCard = this.paymentFrame.getByTestId('payment-card-item-ctob');
+        // ── Section 3: Card form fields (in outer payment iframe) ─────────────
+        txtCardHolderName:      this.page.frameLocator('iframe[title="checkout-payment-iframe"]')
+                                    .getByPlaceholder('Name on card'),
 
-    this.txtCardHolderName = this.paymentFrame.getByLabel('Name on card');
-    this.btnPayLoggedIn = this.paymentFrame.getByRole('button', { name: 'Pay' });
+        chkSaveCard:            this.page.frameLocator('iframe[title="checkout-payment-iframe"]')
+                                    .getByTestId('card-form-checkbox'),
 
-    this.btnPayLoggedOut = this.paymentFrame.getByTestId('pay');
+        // Pay button for guest (new card) flow
+        btnPayGuest:            this.page.frameLocator('iframe[title="checkout-payment-iframe"]')
+                                    .getByTestId('pay'),
 
-  }
+        // ── Section 4: Logged-in user (saved card) ────────────────────────────
+        lnkSavedVisaCard:       this.page.frameLocator('iframe[title="checkout-payment-iframe"]')
+                                    .getByTestId('payment-card-item-ctob'),
 
-async fillCardDetailsAndPay(cardDetails : CreditCardDetails) {
-    await test.step('Fill Card Details and Pay', async () => {
-    await this.assertVisibilityOfPaymentGateway();
-    await this.btnAddNewCard.click();
-    // Use .pressSequentially with a small delay if .fill() is ignored by the secure frame
-    await this.txtCardNumber.pressSequentially(cardDetails.number, { delay: 100 });
-    await this.txtCardExpiry.pressSequentially(cardDetails.expiry, { delay: 100 });
-    await this.txtCardCVC.pressSequentially(cardDetails.cvc, { delay: 100 });
-    await this.txtCardHolderName.fill(cardDetails.name);
-    await this.btnPayLoggedOut.click();
-});}
+        // Pay button for logged-in (saved card) flow
+        btnPayLoggedIn:         this.page.frameLocator('iframe[title="checkout-payment-iframe"]')
+                                    .getByRole('button', { name: 'Pay' }),
+    };
 
+    constructor(page: Page) {
+        super(page);
+    }
 
-  async performPaymentWithCardForLoggedInUsers(){
-    await test.step('Perform Payment with Card for Logged-in Users', async () => {
-    await this.lnkSavedVisaCard.click();
-    await this.btnPayLoggedIn.waitFor({ state: 'visible', timeout: 15000 });
+    // ── Verification methods ──────────────────────────────────────────────────
 
-    // Scroll the Pay button into view inside the iframe's own document
-    const paymentFrame = this.page.frames().find(f => f.url().includes('pre.pay.vodafone.com'));
-    if (paymentFrame) {
-        await paymentFrame.evaluate(() => {
-            const btn = Array.from(document.querySelectorAll('button'))
-                .find(b => b.textContent?.trim() === 'Pay');
-            btn?.scrollIntoView({ behavior: 'instant', block: 'center' });
+    async verifyPaymentGatewayLoaded(): Promise<void> {
+        await test.step('Verify payment gateway is loaded', async () => {
+            await expect(this.paymentPageLocators.btnAddNewCard).toBeVisible();
         });
     }
 
-    // Scroll the iframe element into the main page viewport
-    await this.page.locator('iframe[src*="pre.pay.vodafone.com"]').scrollIntoViewIfNeeded();
-    await this.page.waitForTimeout(300);
-    await this.btnPayLoggedIn.click();
+    // ── Action methods ────────────────────────────────────────────────────────
 
-});}
+    async fillCardDetailsAndPay(cardDetails: CreditCardDetails): Promise<void> {
+        await test.step('Fill card details and pay (guest)', async () => {
+            await this.verifyPaymentGatewayLoaded();
+            await this.paymentPageLocators.btnAddNewCard.click();
 
-  private async assertVisibilityOfPaymentGateway(){
-    await test.step('Assert visibility of Payment Gateway Heading', async () => {
-    await expect (this.btnAddNewCard).toBeVisible({timeout:30000});
-});}
+            // Secure iframe fields — must use pressSequentially, not fill()
+            await this.paymentPageLocators.txtCardNumber.pressSequentially(cardDetails.number, { delay: typingDelay });
+            await this.paymentPageLocators.txtCardExpiry.pressSequentially(cardDetails.expiry, { delay: typingDelay });
+            await this.paymentPageLocators.txtCardCVC.pressSequentially(cardDetails.cvc, { delay: typingDelay });
 
+            await this.paymentPageLocators.txtCardHolderName.fill(cardDetails.name);
 
+            // Save card checkbox — label intercepts pointer events, force is required
+            const saveCard = this.paymentPageLocators.chkSaveCard;
+            if (await saveCard.isVisible()) {
+                await saveCard.check({ force: true });
+            }
 
+            await this.paymentPageLocators.btnPayGuest.click();
+        });
+    }
 
+    async performPaymentWithCardForLoggedInUsers(): Promise<void> {
+        await test.step('Perform payment with saved card (logged-in)', async () => {
+            await this.paymentPageLocators.lnkSavedVisaCard.waitFor({ state: 'visible' });
+            await this.paymentPageLocators.lnkSavedVisaCard.click();
+            await this.paymentPageLocators.btnPayLoggedIn.waitFor({ state: 'visible', timeout: actionTimeout });
+
+            // Scroll the Pay button into view inside the iframe's own document
+            const paymentFrame = this.page.frames().find(f => f.url().includes('pre.pay.vodafone.com'));
+            if (paymentFrame) {
+                await paymentFrame.evaluate(() => {
+                    const btn = Array.from(document.querySelectorAll('button'))
+                        .find(b => b.textContent?.trim() === 'Pay');
+                    btn?.scrollIntoView({ behavior: 'instant', block: 'center' });
+                });
+            }
+
+            await this.page.locator('iframe[title="checkout-payment-iframe"]').scrollIntoViewIfNeeded();
+            await this.page.waitForTimeout(shortDelay);
+            await this.paymentPageLocators.btnPayLoggedIn.click();
+        });
+    }
 }

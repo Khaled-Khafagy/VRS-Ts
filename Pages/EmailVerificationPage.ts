@@ -1,13 +1,21 @@
 import {expect, Page,test} from '@playwright/test';
 import { BasePage } from './BasePage';
-import { GuestInfo, BillingAddressInfo, NonExistingUser } from './index';   
+import { waitForEmail } from '../utils/gmailHelper';
+import { emailTestTimeout } from '../playwright.config';
 export class EmailVerificationPage extends BasePage { 
 
     private readonly emailVerificationPageLocators = {
-        hdgOtpNonExisting: this.page.getByRole('heading', { name: 'Email Verification' }),
-        hdgOtpExisting: this.page.getByRole('heading', { name: /Welcome back, you already have an account\./i }),
+        hdgOtpNonExisting:                          this.page.getByRole('heading', { name: 'Email Verification' }),
+        hdgOtpExisting:                             this.page.getByRole('heading', { name: /Welcome back, you already have an account\./i }),
         btnLoginExistingAccountInEmailVerification: this.page.getByRole('button', { name: 'Login' }).last(),
-        verifyButton : this. page.locator('#checkout_email_continue_btn')
+        // OTP input fields — id-based as no accessible-name alternative exists on this form
+        otpInput0:                                  this.page.locator('#otp-code-input-0'),
+        otpInput1:                                  this.page.locator('#otp-code-input-1'),
+        otpInput2:                                  this.page.locator('#otp-code-input-2'),
+        otpInput3:                                  this.page.locator('#otp-code-input-3'),
+        otpInput4:                                  this.page.locator('#otp-code-input-4'),
+        otpInput5:                                  this.page.locator('#otp-code-input-5'),
+        btnVerify:                                  this.page.getByRole('button', { name: 'Verify' }),
     };
 
 
@@ -18,7 +26,7 @@ export class EmailVerificationPage extends BasePage {
 
 async handleOTPVerificationNonExistingUser(){
     await test.step('Handle OTP Verification during Checkout', async () => {
-    await expect(this.emailVerificationPageLocators.hdgOtpNonExisting).toBeVisible({timeout:10000});
+    await expect(this.emailVerificationPageLocators.hdgOtpNonExisting).toBeVisible();
     await this.enterMagicOTP();
     await this.continueToPayment();
 });}
@@ -27,47 +35,42 @@ async handleOTPVerificationNonExistingUser(){
 
 async handleOTPVerificationExistingUser(){
     await test.step('Handle OTP Verification for Existing User during Checkout', async () => {
-    await expect(this.emailVerificationPageLocators.hdgOtpExisting).toBeVisible({timeout:10000});
+    await expect(this.emailVerificationPageLocators.hdgOtpExisting).toBeVisible();
     await this.emailVerificationPageLocators.btnLoginExistingAccountInEmailVerification.click();
 
 });}
 
 private async enterMagicOTP() {
-    const magicPin = "000000";
-    const digits = magicPin.split(''); // Creates ['0', '0', '0', '0', '0', '0']
-
-    // Get all OTP input fields - using getByRole for better reliability
-    const otpInputs = this.page.locator('input[type="text"][inputmode="numeric"]');
-    
-    for (let i = 0; i < digits.length; i++) {
-        const box = otpInputs.nth(i);
-        
-        // Wait for visibility
-        await box.waitFor({ state: 'visible', timeout: 5000 });
-        
-        // Clear and fill with the digit
-        await box.fill(digits[i]); 
-        
-        // Press Tab to move to next field (triggers field validation)
-        await box.press('Tab');
-        
-        // Allow field processing
-        await this.page.waitForTimeout(200);
+    const inputs = [
+        this.emailVerificationPageLocators.otpInput0,
+        this.emailVerificationPageLocators.otpInput1,
+        this.emailVerificationPageLocators.otpInput2,
+        this.emailVerificationPageLocators.otpInput3,
+        this.emailVerificationPageLocators.otpInput4,
+        this.emailVerificationPageLocators.otpInput5,
+    ];
+    for (const input of inputs) {
+        await input.waitFor({ state: 'visible' });
+        await input.fill('0');
     }
-    
-    // Press Enter on the last field to submit OTP
-    const lastBox = otpInputs.nth(5);
-    await lastBox.press('Enter');
-    
-    // Wait for OTP processing and navigation
-    await this.page.waitForTimeout(2000);
 }
 
 
-private async continueToPayment() {
-    // Assuming there's a "Verify" button after OTP verification    
-    await this.emailVerificationPageLocators.verifyButton.click();  
+async verifyOTPEmailReceived(email: string, sentAt: number) {
+    await test.step('Verify OTP email is received', async () => {
+        const received = await waitForEmail({
+            to: email,
+            subject: /Vodafone Travel One-Time PIN/i,
+            timeout: emailTestTimeout,
+            afterTimestamp: sentAt,
+        });
+        expect(received.subject).toContain('Vodafone Travel One-Time PIN');
+        expect(received.body).toContain('Your One-Time PIN is');
+    });
+}
 
+private async continueToPayment() {
+    await this.emailVerificationPageLocators.btnVerify.click();
 }
 
 

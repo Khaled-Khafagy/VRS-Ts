@@ -2,7 +2,9 @@ import { test, expect, Page } from '@playwright/test';
 import { BasePage } from './BasePage';
 import { RegistrationInfo } from './index';
 import { RegistrationTestData } from '../data/credentials';
-import { time } from 'console';
+import { generateAliasEmail } from '../utils/testDataGenerator';
+import { actionTimeout, emailTestTimeout, shortDelay, animationDelay } from '../playwright.config';
+import { waitForEmail } from '../utils/gmailHelper';
 
 export class RegistationPage extends BasePage {
 
@@ -83,7 +85,7 @@ export class RegistationPage extends BasePage {
         await this.fillRegistrationForm({
             firstName:       RegistrationTestData.firstName,
             lastName:        RegistrationTestData.lastName,
-            email:           RegistrationTestData.email,
+            email:           generateAliasEmail(),
             country:         RegistrationTestData.country,
             stateProvince:   RegistrationTestData.stateProvince,
             password:        RegistrationTestData.validPassword,
@@ -198,13 +200,13 @@ export class RegistationPage extends BasePage {
             const digits = otp.split('');
             for (let i = 0; i < digits.length; i++) {
                 const box = this.locators.otpInputs.nth(i);
-                await box.waitFor({ state: 'visible', timeout: 5000 });
+                await box.waitFor({ state: 'visible', timeout: actionTimeout });
                 await box.fill(digits[i]);
                 await box.press('Tab');
-                await this.page.waitForTimeout(200);
+                await this.page.waitForTimeout(shortDelay);
             }
             await this.locators.otpInputs.nth(5).press('Enter');
-            await this.page.waitForTimeout(2000);
+            await this.page.waitForTimeout(animationDelay);
         });
     }
 
@@ -220,7 +222,7 @@ export class RegistationPage extends BasePage {
 
     async verifyRegistrationSuccess() {
         await test.step('Verify Registration Success', async () => {
-            await expect(this.locators.hdgSuccess).toBeVisible({ timeout: 15000 });
+            await expect(this.locators.hdgSuccess).toBeVisible();
         });
     }
 
@@ -252,6 +254,32 @@ export class RegistationPage extends BasePage {
             await expect(this.locators.msgRequiredEmail).toBeVisible();
             await expect(this.locators.msgRequiredPassword).toBeVisible();
             await expect(this.locators.msgRequiredConfirmPassword).toBeVisible();
+        });
+    }
+
+    async verifyOTPEmailReceived(email: string, sentAt: number) {
+        await test.step('Verify OTP email is received', async () => {
+            const received = await waitForEmail({
+                to: email,
+                subject: /Vodafone Travel One-Time PIN/i,
+                timeout: emailTestTimeout,
+                afterTimestamp: sentAt,
+            });
+            expect(received.subject).toContain('Vodafone Travel One-Time PIN');
+            expect(received.body).toContain('Your One-Time PIN is');
+        });
+    }
+
+    async verifyWelcomeEmailReceived(email: string, sentAt: number) {
+        await test.step('Verify welcome email is received', async () => {
+            const received = await waitForEmail({
+                to: email,
+                subject: /welcome/i,
+                timeout: emailTestTimeout,
+                afterTimestamp: sentAt,
+            });
+            expect(received.subject).toMatch(/welcome/i);
+            expect(received.body).toContain('Thank you for making an account with Vodafone Travel');
         });
     }
 }

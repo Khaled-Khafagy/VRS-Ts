@@ -1,5 +1,6 @@
 import { expect, Page, test } from "@playwright/test";
 import { BasePage } from "./BasePage";
+import { shortDelay } from '../playwright.config';
 
 export class OurDestinationsPage extends BasePage {
   private readonly ourDestinationsLocators = {
@@ -126,7 +127,7 @@ export class OurDestinationsPage extends BasePage {
       await searchInput.click();
       await searchInput.fill(destinationName);
       // Wait for autocomplete/dropdown to appear
-      await this.page.waitForTimeout(500);
+      await this.page.waitForTimeout(shortDelay);
     });
   }
 
@@ -145,15 +146,15 @@ export class OurDestinationsPage extends BasePage {
 
   async verifySearchDropdownVisible(searchTerm: string) {
     await test.step(`Verify search dropdown shows results for "${searchTerm}"`, async () => {
-      await expect(this.page.getByText(searchTerm, { exact: true }).first()).toBeVisible({ timeout: 3000 });
+      await expect(this.page.getByText(searchTerm, { exact: true }).first()).toBeVisible({ timeout: actionTimeout });
     });
   }
 
   async verifySearchShowsCountriesAndRegions() {
     await test.step('Verify search results show both Countries and Regions sections', async () => {
       await this.searchForDestination('A');
-      await expect(this.page.getByText('Countries').first()).toBeVisible({ timeout: 3000 });
-      await expect(this.page.getByText('Regions').first()).toBeVisible({ timeout: 3000 });
+      await expect(this.page.getByText('Countries').first()).toBeVisible({ timeout: actionTimeout });
+      await expect(this.page.getByText('Regions').first()).toBeVisible({ timeout: actionTimeout });
     });
   }
 
@@ -213,7 +214,7 @@ export class OurDestinationsPage extends BasePage {
       await countriesTab.scrollIntoViewIfNeeded();
       await countriesTab.hover();
       await countriesTab.click();
-      await this.page.waitForTimeout(500);
+      await this.page.waitForTimeout(shortDelay);
     });
   }
 
@@ -223,7 +224,7 @@ export class OurDestinationsPage extends BasePage {
       await regionsTab.scrollIntoViewIfNeeded();
       await regionsTab.hover();
       await regionsTab.click();
-      await this.page.waitForTimeout(500);
+      await this.page.waitForTimeout(shortDelay);
     });
   }
 

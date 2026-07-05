@@ -1,6 +1,7 @@
 import {test, expect,Page  } from '@playwright/test';
 import { BasePage } from './BasePage';
 import { LoginInfo } from './index';
+import { navigationTimeout } from '../playwright.config';
 
 
 
@@ -27,6 +28,21 @@ export class LoginPage extends BasePage {
         super(page);
     }
 
+
+    async navigateAndLogin(loginUrl: string, credentials: LoginInfo) {
+        await test.step('Navigate to VRS login page and sign in', async () => {
+            await this.navigateToUrl(loginUrl);
+            await this.page.locator('#login_btn').click();
+            await this.verifyRedirectionAndCompleteLoadToLoginPage();
+            await this.fillLoginDetailsAndSubmit(credentials);
+            const baseUrl = (process.env.BASE_URL ?? '').replace(/\/$/, '');
+            await this.page.waitForURL(
+                url => url.toString().startsWith(baseUrl) && !url.toString().includes('/login'),
+                { timeout: navigationTimeout, waitUntil: 'commit' }
+            );
+            await this.page.waitForLoadState('domcontentloaded');
+        });
+    }
 
     async fillLoginDetailsAndSubmit(info: LoginInfo) {
         await test.step('Fill Login Details and Submit', async () => {

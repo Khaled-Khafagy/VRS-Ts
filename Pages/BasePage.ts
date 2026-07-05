@@ -1,4 +1,5 @@
 import { Page, Locator, test } from "@playwright/test";
+import { actionTimeout } from '../playwright.config';
 
 export abstract class BasePage {
   protected page: Page;
@@ -21,7 +22,7 @@ export abstract class BasePage {
     await test.step('Accept cookies', async () => {
       const button = customLocator || this.btnAcceptCookies;
       try {
-        await button.waitFor({ state: 'visible', timeout: 4000 });
+        await button.waitFor({ state: 'visible', timeout: actionTimeout });
         await button.click();
       } catch {
         // Banner not present or already dismissed
