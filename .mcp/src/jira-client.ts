@@ -89,6 +89,96 @@ export class JiraClient {
         }
     }
 
+    /** Create a Bug issue and return its key and browse URL. */
+    async createBug(params: {
+        projectKey: string;
+        summary: string;
+        description: string;
+        priority?: string;
+        labels?: string[];
+        environment?: string;
+        fixVersions?: string[];
+    }): Promise<{ key: string; url: string }> {
+        const fields: any = {
+            project: { key: params.projectKey },
+            summary: params.summary,
+            description: params.description,
+            issuetype: { name: 'Bug' },
+        };
+        if (params.priority) fields.priority = { name: params.priority };
+        if (params.labels?.length) fields.labels = params.labels;
+        if (params.environment) fields.environment = params.environment;
+        if (params.fixVersions?.length) fields.fixVersions = params.fixVersions.map(name => ({ name }));
+
+        const response = await fetch(`${this.baseUrl}/rest/api/2/issue`, {
+            method: 'POST',
+            headers: this.headers,
+            body: JSON.stringify({ fields }),
+        });
+
+        if (!response.ok) {
+            const error = await response.text();
+            throw new Error(`Failed to create bug: ${response.status} ${error}`);
+        }
+        const data = await response.json() as any;
+        return { key: data.key, url: `${this.baseUrl}/browse/${data.key}` };
+    }
+
+    /** Link two issues (default "Relates" link type). */
+    async linkIssues(fromKey: string, toKey: string, linkType = 'Relates'): Promise<void> {
+        const response = await fetch(`${this.baseUrl}/rest/api/2/issueLink`, {
+            method: 'POST',
+            headers: this.headers,
+            body: JSON.stringify({
+                type: { name: linkType },
+                inwardIssue: { key: fromKey },
+                outwardIssue: { key: toKey },
+            }),
+        });
+        if (!response.ok) {
+            const error = await response.text();
+            throw new Error(`Failed to link ${fromKey} to ${toKey}: ${response.status} ${error}`);
+        }
+    }
+
+    /** List the (unreleased first) versions of a project. */
+    async getProjectVersions(projectKey: string): Promise<{ name: string; released: boolean }[]> {
+        const response = await fetch(`${this.baseUrl}/rest/api/2/project/${projectKey}/versions`, {
+            headers: this.headers,
+        });
+        if (!response.ok) {
+            const error = await response.text();
+            throw new Error(`Failed to fetch versions for ${projectKey}: ${response.status} ${error}`);
+        }
+        const data = await response.json() as any[];
+        return data
+            .filter(v => !v.archived)
+            .sort((a, b) => Number(a.released) - Number(b.released))
+            .map(v => ({ name: v.name, released: !!v.released }));
+    }
+
+    /** Attach a local file to an issue. */
+    async attachFile(issueKey: string, filePath: string): Promise<void> {
+        const { readFileSync } = await import('node:fs');
+        const { basename } = await import('node:path');
+        const form = new FormData();
+        form.append('file', new Blob([readFileSync(filePath)]), basename(filePath));
+
+        const response = await fetch(`${this.baseUrl}/rest/api/2/issue/${issueKey}/attachments`, {
+            method: 'POST',
+            headers: {
+                'Authorization': this.headers['Authorization'],
+                'X-Atlassian-Token': 'no-check',
+            },
+            body: form,
+        });
+
+        if (!response.ok) {
+            const error = await response.text();
+            throw new Error(`Failed to attach file to ${issueKey}: ${response.status} ${error}`);
+        }
+    }
+
     /** Fetch just the project key from a Jira issue key (e.g. "PROJ-123" → "PROJ"). */
     async fetchProjectKey(issueKey: string): Promise<string> {
         const issue = await this.fetchIssue(issueKey);

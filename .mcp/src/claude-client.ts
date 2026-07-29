@@ -1,59 +1,128 @@
-import { execSync } from 'node:child_process';
-import { writeFileSync, unlinkSync } from 'node:fs';
-import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+/**
+ * Extracts the first balanced top-level JSON object from arbitrary LLM output,
+ * tolerating code fences and surrounding prose. Returns null when none parses.
+ */
+function extractJsonObject(raw: string): any | null {
+    let text = raw.trim();
+    const fence = text.match(/```(?:json)?\s*([\s\S]*?)```/i);
+    if (fence) text = fence[1].trim();
 
-export class CopilotClient {
-    private readonly ghToken: string;
+    const start = text.indexOf('{');
+    if (start === -1) return null;
 
-    constructor(ghToken: string) {
-        if (!ghToken) throw new Error('GH_TOKEN is required for Copilot CLI');
-        this.ghToken = ghToken;
-    }
-
-    async invoke(systemPrompt: string, userPrompt: string, _maxTokens = 4096): Promise<string> {
-        const fullPrompt = `System instructions: ${systemPrompt}\n\n${userPrompt}`;
-        const tempFile = join(tmpdir(), `copilot_${Date.now()}.txt`);
-
-        writeFileSync(tempFile, fullPrompt, 'utf-8');
-
-        let output: string;
-        try {
-            output = execSync(`type "${tempFile}" | copilot --yolo -s`, {
-                env: { ...process.env, GH_TOKEN: this.ghToken },
-                timeout: 120_000,
-                encoding: 'utf-8',
-                windowsHide: true,
-                shell: 'cmd.exe',
-            });
-        } catch (err: any) {
-            // execSync throws on non-zero exit; stdout may still contain the response
-            output = (err.stdout as string) ?? '';
-            if (!output || output.trim().length < 10) {
-                throw new Error(`Copilot CLI failed: ${err.message ?? String(err)}`);
+    let depth = 0;
+    let inStr = false;
+    let escape = false;
+    for (let i = start; i < text.length; i++) {
+        const ch = text[i];
+        if (escape) { escape = false; continue; }
+        if (ch === '\\') { escape = true; continue; }
+        if (ch === '"') { inStr = !inStr; continue; }
+        if (inStr) continue;
+        if (ch === '{') depth++;
+        else if (ch === '}') {
+            depth--;
+            if (depth === 0) {
+                const candidate = text.slice(start, i + 1);
+                try { return JSON.parse(candidate); } catch { return null; }
             }
-        } finally {
-            try { unlinkSync(tempFile); } catch { /* ignore */ }
         }
+    }
+    return null;
+}
 
-        return this.extractResponse(output);
+export class ClaudeClient {
+    private readonly apiKey: string;
+
+    constructor(apiKey: string) {
+        if (!apiKey) throw new Error('ANTHROPIC_API_KEY (or ANTHROPIC_AUTH_TOKEN) is required');
+        this.apiKey = apiKey;
     }
 
-    /** Strip ANSI codes and the Copilot stats footer from raw CLI output. */
-    private extractResponse(raw: string): string {
-        const cleaned = raw.replace(/\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])/g, '');
+    async invoke(systemPrompt: string, userPrompt: string, maxTokens = 4096): Promise<string> {
+        return this.invokeAnthropic(this.apiKey, systemPrompt, userPrompt, maxTokens);
+    }
 
-        const lines = cleaned.split('\n');
-        const responseLines: string[] = [];
-        for (const line of lines) {
-            if (/^(Changes|Requests|Tokens|Files)\s/.test(line.trim())) break;
-            responseLines.push(line);
+    private async invokeAnthropic(apiKey: string, systemPrompt: string, userPrompt: string, maxTokens: number): Promise<string> {
+        const isOAuth = apiKey.startsWith('sk-ant-oat');
+        const headers: Record<string, string> = {
+            'content-type': 'application/json',
+            'anthropic-version': '2023-06-01',
+        };
+        if (isOAuth) {
+            headers['authorization'] = `Bearer ${apiKey}`;
+            headers['anthropic-beta'] = 'oauth-2025-04-20';
+        } else {
+            headers['x-api-key'] = apiKey;
         }
 
-        return responseLines.join('\n').trim();
+        const res = await fetch('https://api.anthropic.com/v1/messages', {
+            method: 'POST',
+            headers,
+            body: JSON.stringify({
+                model: process.env.ANTHROPIC_MODEL || 'claude-opus-4-8',
+                max_tokens: maxTokens,
+                system: systemPrompt,
+                messages: [{ role: 'user', content: userPrompt }],
+            }),
+            signal: AbortSignal.timeout(120_000),
+        });
+
+        if (!res.ok) {
+            const body = await res.text();
+            throw new Error(`Anthropic API ${res.status}: ${body}`);
+        }
+        const data = await res.json() as any;
+        return (data.content || [])
+            .filter((b: any) => b.type === 'text')
+            .map((b: any) => b.text)
+            .join('')
+            .trim();
     }
 
     // ── High-level prompt methods ────────────────────────────────────────────
+
+    /** Drafts a Jira bug report from test-execution context. Returns JSON {summary, description}. */
+    async draftBugReport(context: {
+        testCaseKey: string;
+        testCaseName: string;
+        testCycleKey?: string;
+        notes?: string;
+        environment?: string;
+    }): Promise<{ summary: string; description: string }> {
+        const systemPrompt =
+            'You are a senior QA engineer at Vodafone writing a high-quality, production-ready ' +
+            'Jira bug report. Return ONLY a single JSON object, no prose before or after, no ' +
+            'code fences: {"summary": "...", "description": "..."}.\n' +
+            'summary: a concise, specific one-liner in the form "[Area] Problem — condition".\n' +
+            'description: rich Jira wiki markup with these exact sections in order:\n' +
+            'h3. Summary — one short paragraph of what is broken and its user impact.\n' +
+            'h3. Pre-conditions — bulleted (*) setup/state needed.\n' +
+            'h3. Steps to Reproduce — a numbered list (# ) of concrete UI steps.\n' +
+            'h3. Expected Result — what should happen per the test case.\n' +
+            'h3. Actual Result — what actually happened, from the tester brief.\n' +
+            'h3. Severity / Priority — a reasoned suggestion (Blocker/Critical/Major/Minor).\n' +
+            'h3. Evidence — state that a screen recording GIF is attached.\n' +
+            'Write in clear professional English. Infer realistic steps from the test case name ' +
+            'and the tester brief; where a detail is genuinely unknown, add {color:#de350b}[TO VERIFY]{color}.';
+
+        const userPrompt = [
+            `A test execution FAILED. Draft the bug report from the following context.`,
+            `Test case: ${context.testCaseKey} — ${context.testCaseName}`,
+            context.testCycleKey ? `Test cycle: ${context.testCycleKey}` : '',
+            context.environment ? `Environment: ${context.environment}` : '',
+            context.notes
+                ? `Tester brief / observed behaviour (PRIMARY source — base Actual Result on this): ${context.notes}`
+                : 'No tester brief was provided; infer conservatively from the test case name.',
+        ].filter(Boolean).join('\n');
+
+        const raw = await this.invoke(systemPrompt, userPrompt);
+        const parsed = extractJsonObject(raw);
+        if (!parsed || !parsed.summary || !parsed.description) {
+            throw new Error('Draft missing summary/description');
+        }
+        return { summary: String(parsed.summary), description: String(parsed.description) };
+    }
 
     async analyzeRequirement(
         ticketKey: string,

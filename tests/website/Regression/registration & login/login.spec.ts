@@ -1,5 +1,5 @@
-import { test } from '../../../fixtures/page-manager';
-import { ValidLoginDetails, InvalidLoginDetails, emptyLoginDetails, emptyEmailLoginDetails, emptyPasswordLoginDetails, AppUrls, LoginErrorMessages } from '../../../data/credentials';
+import { test } from '../../../../fixtures/page-manager';
+import { ValidLoginDetails, InvalidLoginDetails, emptyLoginDetails, emptyEmailLoginDetails, emptyPasswordLoginDetails, AppUrls, LoginErrorMessages } from '../../../../data/credentials';
 
 test.describe('Login', () => {
     test('Login with valid credentials', { tag: ['@regression', '@P1'] }, async ({ loginOrSignupPage, loginPage, homePage, myAccountPage }) => {

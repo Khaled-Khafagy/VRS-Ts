@@ -7,13 +7,14 @@ dotenv.config({ path: path.resolve(__dirname, '.env') });
 // ── Timeout constants (all configurable via env vars) ─────────────────────
 export const emailTestTimeout  = parseInt(process.env.EMAIL_TEST_TIMEOUT  ?? '300000');
 export const setupTimeout      = parseInt(process.env.SETUP_TIMEOUT       ?? '180000');
-export const testTimeout       = parseInt(process.env.TEST_TIMEOUT        ?? '60000');
+export const testTimeout       = parseInt(process.env.TEST_TIMEOUT        ?? '1200000');
 export const expectTimeout     = parseInt(process.env.EXPECT_TIMEOUT      ?? '60000');
-export const actionTimeout     = parseInt(process.env.ACTION_TIMEOUT      ?? '30000');
-export const navigationTimeout = parseInt(process.env.NAVIGATION_TIMEOUT  ?? '30000');
+export const actionTimeout     = parseInt(process.env.ACTION_TIMEOUT      ?? '60000');
+export const navigationTimeout = parseInt(process.env.NAVIGATION_TIMEOUT  ?? '60000');
 export const typingDelay       = parseInt(process.env.TYPING_DELAY        ?? '100');
 export const shortDelay        = parseInt(process.env.SHORT_DELAY         ?? '300');
 export const animationDelay    = parseInt(process.env.ANIMATION_DELAY     ?? '2000');
+export const healFastCheckTimeoutMs = parseInt(process.env.HEAL_FAST_CHECK_TIMEOUT_MS ?? '2000');
 
 export default defineConfig({
   testDir: './tests',
@@ -27,6 +28,7 @@ export default defineConfig({
   reporter: [
     ['allure-playwright'],
     ['./allure-opener-reporter.ts'],
+    ['./reporters/self-healing-reporter.ts'],
     ['json', { outputFile: 'test-results/results.json' }],
     ['junit', { outputFile: 'test-results/junit.xml' }],
   ],

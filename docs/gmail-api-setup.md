@@ -134,6 +134,24 @@ If emails are received and assertions pass, the setup is complete.
 
 ---
 
+## Refreshing an Expired/Revoked Token (Quick Reference)
+
+If tests start failing with `invalid_grant` (see Troubleshooting below), the refresh token is dead and needs to be regenerated. `GMAIL_CLIENT_ID` and `GMAIL_CLIENT_SECRET` stay the same — only `GMAIL_REFRESH_TOKEN` needs replacing. No need to touch Google Cloud Console.
+
+1. Run the token script:
+   ```bash
+   npx ts-node scripts/generateGmailToken.ts
+   ```
+2. Open the printed URL in a browser, signed in as the test Gmail account (e.g. `testv225@gmail.com`)
+3. Click through the consent screen (click **Continue** past any warning)
+4. You'll be redirected to `http://localhost/?code=4/0Axxxx...` — the page will show a connection error, that's expected
+5. Copy the `code` value from the URL bar (everything after `code=` and before `&scope`)
+6. Paste it into the terminal prompt
+7. The script prints a new `GMAIL_REFRESH_TOKEN` — replace the old value in `.env` with it
+8. Re-run the failing test to confirm it now passes
+
+---
+
 ## How the + alias trick works
 
 Instead of creating a new Gmail account per test, a single account receives all test emails using `+` suffixes:

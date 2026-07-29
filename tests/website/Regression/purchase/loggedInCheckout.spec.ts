@@ -1,6 +1,6 @@
-import { test } from '../../../fixtures/page-manager';
-import { AppUrls, ValidLoginDetails } from '../../../data/credentials';
-import { emailTestTimeout } from '../../../playwright.config';
+import { test } from '../../../../fixtures/page-manager';
+import { AppUrls, ValidLoginDetails } from '../../../../data/credentials';
+import { emailTestTimeout } from '../../../../playwright.config';
 
 test.describe('Logged-in Checkout', () => {
     test('One e-Sim checkout as logged-in user', { tag: ['@regression', '@P1'] }, async ({ loginPage, homePage, regionPlansPage, cartPage, checkoutPage, paymentPage, orderSuccessfulPage, myAccountPage: _myAccountPage, randomDestination }) => {

@@ -1,6 +1,6 @@
-import { test } from '../../../fixtures/page-manager';
-import { ValidLoginDetails, AppUrls, RefundReasons } from '../../../data/credentials';
-import { emailTestTimeout } from '../../../playwright.config';
+import { test } from '../../../../fixtures/page-manager';
+import { ValidLoginDetails, AppUrls, RefundReasons } from '../../../../data/credentials';
+import { emailTestTimeout } from '../../../../playwright.config';
 
 test.describe('Refund', () => {
     test('Request refund for not installed eSIM', { tag: ['@regression', '@P1'] }, async ({ loginPage, homePage, myAccountPage, myEsimsPage, esimDetailsPage, orderSuccessfulPage }) => {

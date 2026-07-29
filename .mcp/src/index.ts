@@ -3,19 +3,19 @@ import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import { CallToolRequestSchema, ListToolsRequestSchema } from '@modelcontextprotocol/sdk/types.js';
 import { JiraClient } from './jira-client.js';
 import { ZephyrClient } from './zephyr-client.js';
-import { CopilotClient } from './claude-client.js';
+import { ClaudeClient } from './claude-client.js';
 import { GeneratedTestCase } from './types.js';
 
 const JIRA_BASE_URL = process.env.JIRA_BASE_URL || '';
 const JIRA_PAT = process.env.JIRA_PAT || '';
-const GH_TOKEN = process.env.GH_TOKEN || '';
+const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY || process.env.ANTHROPIC_AUTH_TOKEN || '';
 
 if (!JIRA_PAT) {
     process.stderr.write('ERROR: JIRA_PAT environment variable is required\n');
     process.exit(1);
 }
-if (!GH_TOKEN) {
-    process.stderr.write('ERROR: GH_TOKEN environment variable is required\n');
+if (!ANTHROPIC_API_KEY) {
+    process.stderr.write('ERROR: ANTHROPIC_API_KEY (or ANTHROPIC_AUTH_TOKEN) environment variable is required\n');
     process.exit(1);
 }
 if (!JIRA_BASE_URL) {
@@ -25,7 +25,7 @@ if (!JIRA_BASE_URL) {
 
 const jira = new JiraClient(JIRA_BASE_URL, JIRA_PAT);
 const zephyr = new ZephyrClient(JIRA_BASE_URL, JIRA_PAT);
-const claude = new CopilotClient(GH_TOKEN);
+const claude = new ClaudeClient(ANTHROPIC_API_KEY);
 
 const server = new Server(
     { name: 'vrs-tc-generator', version: '2.0.0' },
@@ -201,6 +201,60 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
                     folder_path: { type: 'string', description: 'Optional folder path for the plan' },
                 },
                 required: ['project_key', 'plan_name', 'cycle_key'],
+            },
+        },
+        {
+            name: 'create_bug',
+            description:
+                'Create a Jira Bug from a failed test execution. If summary/description are not given, ' +
+                'the AI drafts them from the test case context (falling back to a plain template). ' +
+                'Optionally attaches an evidence file (e.g. the recording GIF).',
+            inputSchema: {
+                type: 'object',
+                properties: {
+                    project_key: { type: 'string', description: 'Jira project key to create the bug in' },
+                    test_case_key: { type: 'string', description: 'Zephyr test case key that failed' },
+                    test_case_name: { type: 'string', description: 'Name of the failed test case' },
+                    test_cycle_key: { type: 'string', description: 'Optional test cycle key' },
+                    notes: { type: 'string', description: 'Tester notes / observed behaviour' },
+                    environment: { type: 'string', description: 'Optional environment info' },
+                    summary: { type: 'string', description: 'Bug summary; omit to let the AI draft it' },
+                    description: { type: 'string', description: 'Bug description; omit to let the AI draft it' },
+                    priority: { type: 'string', description: 'Optional Jira priority name' },
+                    attachment_path: { type: 'string', description: 'Optional local file path to attach (evidence GIF)' },
+                    labels: { type: 'array', items: { type: 'string' }, description: 'Jira labels' },
+                    fix_versions: { type: 'array', items: { type: 'string' }, description: 'Fix version names' },
+                    link_issue_keys: { type: 'array', items: { type: 'string' }, description: 'Issue keys to link the bug to (Relates)' },
+                },
+                required: ['project_key', 'test_case_key'],
+            },
+        },
+        {
+            name: 'draft_bug_report',
+            description:
+                'AI-drafts a bug summary and description from failed-test context WITHOUT creating anything. ' +
+                'Returns JSON {"summary": "...", "description": "..."} for preview/editing before create_bug.',
+            inputSchema: {
+                type: 'object',
+                properties: {
+                    test_case_key: { type: 'string', description: 'Failed test case key' },
+                    test_case_name: { type: 'string', description: 'Failed test case name' },
+                    test_cycle_key: { type: 'string', description: 'Optional test cycle key' },
+                    notes: { type: 'string', description: 'Tester notes / observed behaviour' },
+                    environment: { type: 'string', description: 'Optional environment info' },
+                },
+                required: ['test_case_key'],
+            },
+        },
+        {
+            name: 'get_project_versions',
+            description: 'Lists the fix versions of a Jira project (unreleased first, archived excluded).',
+            inputSchema: {
+                type: 'object',
+                properties: {
+                    project_key: { type: 'string', description: 'Jira project key' },
+                },
+                required: ['project_key'],
             },
         },
     ],
@@ -505,6 +559,137 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
                         issue_key ? `**Linked Issue:** ${issue_key}` : '',
                     ].join('\n'),
                 }],
+            };
+        }
+
+        // ── create_bug ─────────────────────────────────────────────────────────
+        if (name === 'create_bug') {
+            const {
+                project_key, test_case_key, test_case_name, test_cycle_key,
+                notes, environment, summary, description, priority, attachment_path,
+                labels, fix_versions, link_issue_keys,
+            } = args as any;
+
+            let bugSummary: string = summary || '';
+            let bugDescription: string = description || '';
+
+            if (!bugSummary || !bugDescription) {
+                try {
+                    const draft = await claude.draftBugReport({
+                        testCaseKey: test_case_key,
+                        testCaseName: test_case_name || test_case_key,
+                        testCycleKey: test_cycle_key,
+                        notes,
+                        environment,
+                    });
+                    bugSummary = bugSummary || draft.summary;
+                    bugDescription = bugDescription || draft.description;
+                } catch {
+                    // AI unavailable (e.g. Copilot CLI not installed): plain template
+                    bugSummary = bugSummary ||
+                        `[${test_case_key}] Failed: ${test_case_name || 'test execution'}`;
+                    bugDescription = bugDescription || [
+                        `h3. Failed Test Case`,
+                        `${test_case_key} — ${test_case_name || ''}`,
+                        test_cycle_key ? `Test cycle: ${test_cycle_key}` : '',
+                        '',
+                        `h3. Observed Behaviour`,
+                        notes || '_No notes provided._',
+                        '',
+                        environment ? `h3. Environment\n${environment}\n` : '',
+                        `h3. Evidence`,
+                        `See attached recording GIF (captured by test-evidence-tool).`,
+                    ].filter(Boolean).join('\n');
+                }
+            }
+
+            const bug = await jira.createBug({
+                projectKey: project_key,
+                summary: bugSummary,
+                description: bugDescription,
+                priority,
+                labels: [...new Set(['test-evidence-tool', ...((labels as string[]) || [])])],
+                environment,
+                fixVersions: fix_versions,
+            });
+
+            const linkNotes: string[] = [];
+            for (const linkKey of ((link_issue_keys as string[]) || []).filter(Boolean)) {
+                try {
+                    await jira.linkIssues(bug.key, linkKey);
+                    linkNotes.push(`**Linked to:** ${linkKey}`);
+                } catch (err) {
+                    linkNotes.push(`**Link to ${linkKey} failed:** ${err instanceof Error ? err.message : String(err)}`);
+                }
+            }
+
+            let attachNote = '';
+            if (attachment_path) {
+                try {
+                    await jira.attachFile(bug.key, attachment_path);
+                    attachNote = '**Evidence:** attached';
+                } catch (err) {
+                    attachNote = `**Evidence:** attach failed — ${err instanceof Error ? err.message : String(err)}`;
+                }
+            }
+
+            return {
+                content: [{
+                    type: 'text',
+                    text: [
+                        `## Bug Created`,
+                        `**Bug:** ${bug.key}`,
+                        `**URL:** ${bug.url}`,
+                        `**Summary:** ${bugSummary}`,
+                        attachNote,
+                        ...linkNotes,
+                    ].filter(Boolean).join('\n'),
+                }],
+            };
+        }
+
+        // ── draft_bug_report ───────────────────────────────────────────────────
+        if (name === 'draft_bug_report') {
+            const { test_case_key, test_case_name, test_cycle_key, notes, environment } = args as any;
+            let draft: { summary: string; description: string };
+            let source = 'ai';
+            try {
+                draft = await claude.draftBugReport({
+                    testCaseKey: test_case_key,
+                    testCaseName: test_case_name || test_case_key,
+                    testCycleKey: test_cycle_key,
+                    notes,
+                    environment,
+                });
+            } catch {
+                source = 'template';
+                draft = {
+                    summary: `[${test_case_key}] Failed: ${test_case_name || 'test execution'}`,
+                    description: [
+                        `h3. Failed Test Case`,
+                        `${test_case_key} — ${test_case_name || ''}`,
+                        test_cycle_key ? `Test cycle: ${test_cycle_key}` : '',
+                        '',
+                        `h3. Observed Behaviour`,
+                        notes || '_No notes provided._',
+                        '',
+                        environment ? `h3. Environment\n${environment}\n` : '',
+                        `h3. Evidence`,
+                        `See attached recording GIF (captured by test-evidence-tool).`,
+                    ].filter(Boolean).join('\n'),
+                };
+            }
+            return {
+                content: [{ type: 'text', text: JSON.stringify({ ...draft, source }) }],
+            };
+        }
+
+        // ── get_project_versions ───────────────────────────────────────────────
+        if (name === 'get_project_versions') {
+            const { project_key } = args as any;
+            const versions = await jira.getProjectVersions(project_key);
+            return {
+                content: [{ type: 'text', text: JSON.stringify(versions) }],
             };
         }
 

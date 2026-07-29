@@ -5,6 +5,9 @@ import { emailTestTimeout } from '../playwright.config';
 
 export class OrderSuccessfulPage extends BasePage {
 
+    protected readonly pageName = 'OrderSuccessfulPage';
+    protected readonly sourceFilePath = __filename;
+
     private readonly orderSuccessfulPageLocators = {
 
         // ── Section 1: Shared heading (all flows) ─────────────────────────────
@@ -48,53 +51,64 @@ export class OrderSuccessfulPage extends BasePage {
 
     async verifyOrderSuccessfulPageDisplayedForGuestUsers(): Promise<void> {
         await test.step('Verify order success page for guest user (regular eSIM)', async () => {
-            await expect(this.orderSuccessfulPageLocators.hdgThankYouForYourOrder).toBeVisible();
-            await expect(this.orderSuccessfulPageLocators.txtEsimSentMessage).toBeVisible();
-            await expect(this.orderSuccessfulPageLocators.txtContactSupport).toBeVisible();
-            await expect(this.orderSuccessfulPageLocators.txtSetYourPassword).toBeVisible();
+            await expect(await this.heal('hdgThankYouForYourOrder', this.orderSuccessfulPageLocators.hdgThankYouForYourOrder)).toBeVisible();
+            await expect(await this.heal('txtEsimSentMessage', this.orderSuccessfulPageLocators.txtEsimSentMessage)).toBeVisible();
+            await expect(await this.heal('txtContactSupport', this.orderSuccessfulPageLocators.txtContactSupport)).toBeVisible();
+            await expect(await this.heal('txtSetYourPassword', this.orderSuccessfulPageLocators.txtSetYourPassword)).toBeVisible();
         });
     }
 
     async verifyOrderSuccessfulPageDisplayedForLoggedinUsers(): Promise<void> {
         await test.step('Verify order success page for logged-in user (regular eSIM)', async () => {
-            await expect(this.orderSuccessfulPageLocators.hdgThankYouForYourOrder).toBeVisible();
-            await expect(this.orderSuccessfulPageLocators.hdgEsimSentMessage).toBeVisible();
-            await expect(this.orderSuccessfulPageLocators.hdgContactSupport).toBeVisible();
+            await expect(await this.heal('hdgThankYouForYourOrder', this.orderSuccessfulPageLocators.hdgThankYouForYourOrder)).toBeVisible();
+            await expect(await this.heal('hdgEsimSentMessage', this.orderSuccessfulPageLocators.hdgEsimSentMessage)).toBeVisible();
+            await expect(await this.heal('hdgContactSupport', this.orderSuccessfulPageLocators.hdgContactSupport)).toBeVisible();
         });
     }
 
     async verifyTravelTogetherPlanOrderSuccessForGuestUser(): Promise<void> {
         await test.step('Verify Travel Together Plan order success page for guest user', async () => {
-            await expect(this.orderSuccessfulPageLocators.hdgThankYouForYourOrder).toBeVisible();
-            await expect(this.orderSuccessfulPageLocators.txtTravelTogetherPlanConfirmationMsg).toBeVisible();
-            await expect(this.orderSuccessfulPageLocators.txtContactSupportWithOrderNum).toBeVisible();
-            await expect(this.orderSuccessfulPageLocators.hdgCompleteRegistration).toBeVisible();
-            await expect(this.orderSuccessfulPageLocators.btnCompleteRegistration).toBeVisible();
+            await expect(await this.heal('hdgThankYouForYourOrder', this.orderSuccessfulPageLocators.hdgThankYouForYourOrder)).toBeVisible();
+            await expect(await this.heal('txtTravelTogetherPlanConfirmationMsg', this.orderSuccessfulPageLocators.txtTravelTogetherPlanConfirmationMsg)).toBeVisible();
+            await expect(await this.heal('txtContactSupportWithOrderNum', this.orderSuccessfulPageLocators.txtContactSupportWithOrderNum)).toBeVisible();
+            await expect(await this.heal('hdgCompleteRegistration', this.orderSuccessfulPageLocators.hdgCompleteRegistration)).toBeVisible();
+            await expect(await this.heal('btnCompleteRegistration', this.orderSuccessfulPageLocators.btnCompleteRegistration)).toBeVisible();
         });
     }
 
     async verifyTravelTogetherPlanOrderSuccessForLoggedInUser(): Promise<void> {
         await test.step('Verify Travel Together Plan order success page for logged-in user', async () => {
-            await expect(this.orderSuccessfulPageLocators.hdgThankYouForYourOrder).toBeVisible();
-            await expect(this.orderSuccessfulPageLocators.txtTravelTogetherPlanConfirmationMsg).toBeVisible();
-            await expect(this.orderSuccessfulPageLocators.txtContactSupportWithOrderNum).toBeVisible();
-            await expect(this.orderSuccessfulPageLocators.lnkSetupTravelTogetherPlan).toBeVisible();
+            await expect(await this.heal('hdgThankYouForYourOrder', this.orderSuccessfulPageLocators.hdgThankYouForYourOrder)).toBeVisible();
+            await expect(await this.heal('txtTravelTogetherPlanConfirmationMsg', this.orderSuccessfulPageLocators.txtTravelTogetherPlanConfirmationMsg)).toBeVisible();
+            await expect(await this.heal('txtContactSupportWithOrderNum', this.orderSuccessfulPageLocators.txtContactSupportWithOrderNum)).toBeVisible();
+            await expect(await this.heal('lnkSetupTravelTogetherPlan', this.orderSuccessfulPageLocators.lnkSetupTravelTogetherPlan)).toBeVisible();
         });
     }
 
     async verifyTravelTogetherPlanSetupGuideVisible(): Promise<void> {
         await test.step('Verify Travel Together Plan 3-step setup guide is visible', async () => {
-            await expect(this.orderSuccessfulPageLocators.divStep01).toBeVisible();
-            await expect(this.orderSuccessfulPageLocators.divStep02).toBeVisible();
-            await expect(this.orderSuccessfulPageLocators.lnkSetupTravelTogetherPlan).toBeVisible();
-            await expect(this.orderSuccessfulPageLocators.divStep03).toBeVisible();
-            await expect(this.orderSuccessfulPageLocators.txtStep03InviteMembers).toBeVisible();
+            await expect(await this.heal('divStep01', this.orderSuccessfulPageLocators.divStep01)).toBeVisible();
+            await expect(await this.heal('divStep02', this.orderSuccessfulPageLocators.divStep02)).toBeVisible();
+            await expect(await this.heal('lnkSetupTravelTogetherPlan', this.orderSuccessfulPageLocators.lnkSetupTravelTogetherPlan)).toBeVisible();
+            await expect(await this.heal('divStep03', this.orderSuccessfulPageLocators.divStep03)).toBeVisible();
+            await expect(await this.heal('txtStep03InviteMembers', this.orderSuccessfulPageLocators.txtStep03InviteMembers)).toBeVisible();
         });
     }
 
     // ── Email verification methods ────────────────────────────────────────────
 
     async verifyQRCodeEmailReceived(email: string, sentAt: number): Promise<void> {
+        await test.step('Verify eSIM QR Code email is received', async () => {
+            const received = await waitForEmail({
+                to: email,
+                subject: /Your eSIM is ready to install/i,
+                timeout: emailTestTimeout,
+                afterTimestamp: sentAt,
+            });
+            expect(received.subject).toMatch(/Your eSIM is ready to install/i);
+        });
+    }
+      async verifyQRCodeEmailReceivedGroupPlan(email: string, sentAt: number): Promise<void> {
         await test.step('Verify eSIM QR Code email is received', async () => {
             const received = await waitForEmail({
                 to: email,
@@ -116,7 +130,7 @@ export class OrderSuccessfulPage extends BasePage {
                 afterTimestamp: sentAt,
             });
             expect(received.subject).toMatch(/Vodafone Travel - Receipt and Agreement/i);
-            expect(received.body).toContain('thanks for your purchase');
+            expect(received.body).toContain('Thanks for your purchase');
         });
     }
 

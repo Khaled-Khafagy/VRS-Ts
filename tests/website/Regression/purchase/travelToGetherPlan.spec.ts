@@ -1,6 +1,6 @@
-import { test } from '../../../fixtures/page-manager';
-import { generateGuestUserData, pickRandomTravelTogetherPlanDestination } from '../../../utils/testDataGenerator';
-import { AppUrls, ValidLoginDetails, GuestUserData, PaymentDetails, BillingDetails, TravelTogetherPlanPromoCode } from '../../../data/credentials';
+import { test } from '../../../../fixtures/page-manager';
+import { generateGuestUserData, pickRandomTravelTogetherPlanDestination } from '../../../../utils/testDataGenerator';
+import { AppUrls, ValidLoginDetails, GuestUserData, PaymentDetails, BillingDetails, TravelTogetherPlanPromoCode } from '../../../../data/credentials';
 
 test.describe('Travel Together Plan - Purchase Journey (TE-90)', () => {
 
@@ -80,7 +80,7 @@ test.describe('Travel Together Plan - Purchase Journey (TE-90)', () => {
             await emailVerificationPage.handleOTPVerificationNonExistingUser();
             await paymentPage.fillCardDetailsAndPay(PaymentDetails);
             await orderSuccessfulPage.verifyTravelTogetherPlanOrderSuccessForGuestUser();
-            await orderSuccessfulPage.verifyQRCodeEmailReceived(guestData.email, sentAt);
+            await orderSuccessfulPage.verifyQRCodeEmailReceivedGroupPlan(guestData.email, sentAt);
             await orderSuccessfulPage.verifyReceiptEmailMatchesOrderSummary(guestData.email, sentAt, orderSummary);
         });
 

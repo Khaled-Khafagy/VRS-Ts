@@ -1,7 +1,7 @@
-import { test } from '../../../fixtures/page-manager';
-import { AppUrls, RegistrationTestData, RegistrationErrorMessages } from '../../../data/credentials';
-import { generateAliasEmail } from '../../../utils/testDataGenerator';
-import { emailTestTimeout } from '../../../playwright.config';
+import { test } from '../../../../fixtures/page-manager';
+import { AppUrls, RegistrationTestData, RegistrationErrorMessages } from '../../../../data/credentials';
+import { generateAliasEmail } from '../../../../utils/testDataGenerator';
+import { emailTestTimeout } from '../../../../playwright.config';
 
 test.describe('Registration', () => {
     const navigate = async (loginOrSignupPage: any) => {
