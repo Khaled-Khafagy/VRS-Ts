@@ -16,9 +16,15 @@ export class RegionPlansPage extends BasePage {
         badgeTravelTogetherPlan:    this.page.getByText(/Travel Together Plan/i).first(),
         txtConnectUpTo5Devices:     this.page.getByText(/Connect up to 5 devices/i).first(),
 
-        // Regular plan "Add to cart" (non-Travel-Together-Plan)
-        btnFirstAddToCart:          this.page.locator('button').filter({ hasText: 'Add to cart' }).first(),
-        btnGoToCheckout:            this.page.getByRole('button', { name: 'Go to checkout' }),
+        // Regular plan "Add to cart" (non-Travel-Together-Plan). Matched by CSS-module class instead of
+        // button text/name, since this needs to keep working when the page is rendered in a non-English
+        // locale (the "Add to cart" label itself gets translated, but this class name doesn't).
+        btnFirstAddToCart:          this.page.locator('button[class*="button_button_appearance_secondary"]').first(),
+        // Scoped to the floating cart summary popover, and the only primary button in it — needed
+        // because the header's "Log in" button shares the same `button_button_appearance_primary` class.
+        // `.filter({ visible: true })` because the page renders a hidden (mobile-layout) duplicate of
+        // this popover before the visible desktop one in DOM order.
+        btnGoToCheckout:            this.page.locator('div[class*="cartContainer_cartContainer"] button[class*="button_button_appearance_primary"]').filter({ visible: true }).first(),
 
         // ── Section 2: "Global plan details" modal ───────────────────────────
         // Triggered by clicking the "Find out more" button inside the banner
@@ -128,7 +134,9 @@ export class RegionPlansPage extends BasePage {
 
     async addToCart(regionOrCountry: string): Promise<void> {
         await test.step(`Add first plan in ${regionOrCountry} to cart`, async () => {
-            await expect(this.regionPlansPageLocators.hdgPageTitle(regionOrCountry)).toBeVisible();
+            // URL-based instead of the `hdgPageTitle` text match — the heading itself gets translated
+            // on non-English locales, but the URL path segment doesn't.
+            await expect(this.page).toHaveURL(/\/our-destinations\//);
             await this.regionPlansPageLocators.btnFirstAddToCart.waitFor({ state: 'visible' });
             await this.regionPlansPageLocators.btnFirstAddToCart.click();
             await this.regionPlansPageLocators.btnGoToCheckout.waitFor({ state: 'visible' });
@@ -137,7 +145,7 @@ export class RegionPlansPage extends BasePage {
 
     async selectFirstPlan(regionOrCountry: string): Promise<void> {
         await test.step(`Select first plan in ${regionOrCountry} and go to checkout`, async () => {
-            await expect(this.regionPlansPageLocators.hdgPageTitle(regionOrCountry)).toBeVisible();
+            await expect(this.page).toHaveURL(/\/our-destinations\//);
             await this.regionPlansPageLocators.btnFirstAddToCart.waitFor({ state: 'visible' });
             await this.regionPlansPageLocators.btnFirstAddToCart.click();
             await this.regionPlansPageLocators.btnGoToCheckout.waitFor({ state: 'visible' });

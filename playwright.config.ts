@@ -18,12 +18,12 @@ export const healFastCheckTimeoutMs = parseInt(process.env.HEAL_FAST_CHECK_TIMEO
 
 export default defineConfig({
   testDir: './tests',
-  fullyParallel: false,
+  fullyParallel: true,
   forbidOnly: !!process.env.CI,
   timeout: testTimeout,
   expect: { timeout: expectTimeout },
   retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 4 : 4,
+  workers: process.env.CI ? 1 : 4,
 
   reporter: [
     ['allure-playwright'],

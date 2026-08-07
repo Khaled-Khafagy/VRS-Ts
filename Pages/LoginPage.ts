@@ -55,7 +55,9 @@ export class LoginPage extends BasePage {
 
     async verifyRedirectionAndCompleteLoadToLoginPage() {
         await test.step('Verify redirect to login page', async () => {
-        await expect(this.page).toHaveTitle('Vodafone ID');
+        // Title dropped: it reads "Vodafone ID" on production but "Vodafone | Log in to your account"
+        // on the Test env's IDP (xm.pre.idp.vodafone.com) — the URL check below already confirms the
+        // meaningful fact (redirected to the identity provider) without hardcoding an env-specific title.
         await expect (this.page).toHaveURL(/.*idp.vodafone.com/);
 
         });

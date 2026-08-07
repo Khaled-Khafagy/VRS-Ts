@@ -1,5 +1,4 @@
 import { Page, Locator, test } from "@playwright/test";
-import { actionTimeout } from '../playwright.config';
 import { healLocator } from '../utils/selfHealing';
 
 export abstract class BasePage {
@@ -13,7 +12,13 @@ export abstract class BasePage {
 
   constructor(page: Page) {
     this.page = page;
-    this.btnAcceptCookies = this.page.getByRole('button', { name: 'Accept All Cookies' });
+    // OneTrust CMP button id — stable across locales, unlike its accessible name ("Accept All Cookies" in English only).
+    this.btnAcceptCookies = this.page.locator('#onetrust-accept-btn-handler');
+    // Registered here (not in navigateToUrl) so it also covers direct page.goto() calls, e.g. from TranslationCheckPage.
+    void this.page.addLocatorHandler(
+      this.btnAcceptCookies,
+      async () => { await this.btnAcceptCookies.click(); }
+    );
   }
 
   /**
@@ -33,10 +38,6 @@ export abstract class BasePage {
   }
 
   async navigateToUrl(url: string) {
-    await this.page.addLocatorHandler(
-      this.btnAcceptCookies,
-      async () => { await this.btnAcceptCookies.click(); }
-    );
     await this.page.goto(url, { waitUntil: 'domcontentloaded' });
   }
 
@@ -44,7 +45,10 @@ export abstract class BasePage {
     await test.step('Accept cookies', async () => {
       const button = customLocator || this.btnAcceptCookies;
       try {
-        await button.waitFor({ state: 'visible', timeout: actionTimeout });
+        // Short timeout: this is a best-effort dismiss, not a required action — the banner only
+        // shows once per session, so most calls correctly find nothing and should fail fast rather
+        // than block for the full actionTimeout (60s) on every subsequent navigation.
+        await button.waitFor({ state: 'visible', timeout: 5000 });
         await button.click();
       } catch {
         // Banner not present or already dismissed

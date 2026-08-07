@@ -1,6 +1,6 @@
 import { expect, Page, test } from "@playwright/test";
 import { BasePage } from "./BasePage";
-import { shortDelay } from '../playwright.config';
+import { actionTimeout, shortDelay } from '../playwright.config';
 
 export class OurDestinationsPage extends BasePage {
   private readonly ourDestinationsLocators = {

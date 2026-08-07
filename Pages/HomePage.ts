@@ -54,7 +54,10 @@ private readonly homePageLocators = {
     // Generic region selectors - Using text-based locators
     regionCard: (regionName: string) => this.page.getByRole('heading', { level: 3, name: regionName }),
     regionHeading: (regionName: string) => this.page.getByRole('heading', { level: 3, name: regionName }),
-    regionExploreBtn: (regionName: string) => this.page.locator(`a[href="/our-destinations/${regionName.toLowerCase().replace(/ /g, '-')}"]`),
+    // `$=` (ends-with) instead of an exact match, so this still matches a locale-prefixed href
+    // (e.g. `/ko/our-destinations/europe`) as well as the unprefixed English one. `.first()` because
+    // each region card renders two links to the same href (an "Explore" link plus the heading link).
+    regionExploreBtn: (regionName: string) => this.page.locator(`a[href$="/our-destinations/${regionName.toLowerCase().replace(/ /g, '-')}"]`).first(),
   };
 
   constructor(page: Page) {

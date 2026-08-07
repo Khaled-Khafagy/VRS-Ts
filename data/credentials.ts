@@ -59,7 +59,7 @@ export const SSOCredentials: SSOInfo = {
 };
 
 export const AppUrls = {
-    base: process.env.BASE_URL ?? '',
+    base: (process.env.BASE_URL ?? '').replace(/\/+$/, ''),
     login: process.env.LOGIN_URL ?? '',
     ourDestinations: process.env.OUR_DESTINATIONS_URL ?? '',
 };

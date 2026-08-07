@@ -15,6 +15,7 @@ import { RegistationPage } from '../Pages/RegistationPage';
 import { MyEsimsPage } from '../Pages/MyEsimsPage';
 import { EsimDetailsPage } from '../Pages/EsimDetailsPage';
 import { SSOPage } from '../Pages/SSOPage';
+import { TranslationCheckPage } from '../Pages/TranslationCheckPage';
 // Import other pages as you create them
 
 // 1. Define a type for your fixtures
@@ -34,6 +35,7 @@ type MyFixtures = {
     myEsimsPage: MyEsimsPage;
     esimDetailsPage: EsimDetailsPage;
     ssoPage: SSOPage;
+    translationCheckPage: TranslationCheckPage;
     randomDestination: DestinationOption;
     twoRandomRegions: [DestinationOption, DestinationOption];
     // Add other pages here
@@ -135,6 +137,11 @@ export const test = customPage.extend<MyFixtures>({
     ssoPage: async ({ page }, use) => {
         const ssoPage = new SSOPage(page);
         await use(ssoPage);
+    },
+
+    translationCheckPage: async ({ page }, use) => {
+        const translationCheckPage = new TranslationCheckPage(page);
+        await use(translationCheckPage);
     },
 
     randomDestination: async ({}, use) => {

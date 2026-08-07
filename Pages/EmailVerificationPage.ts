@@ -26,7 +26,9 @@ export class EmailVerificationPage extends BasePage {
 
 async handleOTPVerificationNonExistingUser(){
     await test.step('Handle OTP Verification during Checkout', async () => {
-    await expect(this.emailVerificationPageLocators.hdgOtpNonExisting).toBeVisible();
+    // otpInput0 instead of the 'Email Verification' heading text — the heading gets translated on
+    // non-English locales, but the OTP fields are id-based and stay the same everywhere.
+    await expect(this.emailVerificationPageLocators.otpInput0).toBeVisible();
     await this.enterMagicOTP();
     await this.continueToPayment();
 });}

@@ -12,17 +12,22 @@ export class CheckoutPage extends BasePage {
         imgAvatarLoggedIn:          this.page.getByAltText('avatar'),
 
         // ── Section 2: Personal information form ─────────────────────────────
-        txtFirstName:               this.page.getByRole('textbox', { name: 'John', exact: true }),
-        txtLastName:                this.page.getByRole('textbox', { name: 'Wick' }),
-        txtEmail:                   this.page.getByRole('textbox', { name: 'john.wich@gmail.com' }),
+        // By field `id` instead of placeholder text, since the placeholders ("John", "Wick", ...) are
+        // translated on non-English locales but the underlying form field ids are not.
+        txtFirstName:               this.page.locator('#firstName'),
+        txtLastName:                this.page.locator('#lastName'),
+        txtEmail:                   this.page.locator('#email'),
 
         // ── Section 3: Billing address form ──────────────────────────────────
+        // Country/state option labels stay in English on every locale (billing data is compliance-driven,
+        // not translated), so name-based matching for those stays safe — only the field ids below needed
+        // to change off placeholder text.
         selBillingCountry:          this.page.getByRole('combobox'),
         selBillingState:            this.page.locator('#state'),
-        txtBillingCity:             this.page.getByRole('textbox', { name: 'Johannesburg' }),
-        txtBillingAddressLine1:     this.page.getByRole('textbox', { name: 'The Paddocks' }),
-        txtBillingAddressLine2:     this.page.getByRole('textbox', { name: 'Canary Road' }),
-        txtBillingZipCode:          this.page.getByRole('textbox', { name: '02340' }),
+        txtBillingCity:             this.page.locator('#city'),
+        txtBillingAddressLine1:     this.page.locator('#address1'),
+        txtBillingAddressLine2:     this.page.locator('#address2'),
+        txtBillingZipCode:          this.page.locator('#zip'),
 
         // ── Section 4: Consent checkboxes ────────────────────────────────────
         // Label wraps hyperlinks so clicking it navigates away — check via evaluate only
@@ -30,7 +35,10 @@ export class CheckoutPage extends BasePage {
         chkPersonalizedOffers:      this.page.locator('input[value="offers"]'),
 
         // ── Section 5: CTA ────────────────────────────────────────────────────
-        btnContinueToPayment:       this.page.getByRole('button', { name: 'Continue to payment' }),
+        // Real id, not the `.last()`-of-class heuristic — see CartPage.btnContinueToCheckout for why
+        // that's flaky. There's also a `checkout_payment_btn_mobile` duplicate; this targets the
+        // desktop one specifically (exact id, no substring match) since tests run at desktop viewport.
+        btnContinueToPayment:       this.page.locator('#checkout_payment_btn'),
 
         // ── Section 6: Order summary sidebar ─────────────────────────────────
         // Matches any Travel Together Plan regardless of GB/days

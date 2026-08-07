@@ -38,7 +38,13 @@ export class CartPage extends BasePage {
         txtPromoCodeSuccess:            this.page.getByText(/code applied|promo applied/i),
 
         // ── Section 6: Primary CTA ────────────────────────────────────────────
-        btnContinueToCheckout:          this.page.getByRole('button', { name: 'Continue to checkout' }),
+        // Real, non-hashed id (not translated) instead of button name, so this survives translation.
+        // A class+`.last()` heuristic was tried first but is flaky: this button renders after the cart's
+        // pricing API call resolves, and if it hasn't rendered yet when the locator is queried, `.last()`
+        // resolves to the header's "Log in" button instead (same primary-appearance class) and clicks
+        // that — no waiting for a second match to appear, since the one match it has is already
+        // actionable. The id doesn't exist until the real button renders, so waiting on it is correct.
+        btnContinueToCheckout:          this.page.locator('#go_to_checkout_btn'),
 
         // ── Section 7: Pricing value cells (sibling of each label) ───────────
         // XPath: find the element immediately following the label in the same row
