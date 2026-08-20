@@ -58,4 +58,20 @@ test.describe('Login', () => {
         await loginPage.clickForgotPasswordLink();
         await loginPage.verifyNavigationToForgotPasswordPage();
     });
+
+    test('Login with Google redirects to Google sign-in', { tag: ['@regression', '@P3'] }, async ({ loginOrSignupPage, loginPage }) => {
+        await loginOrSignupPage.navigateToLoginOrSignUpPage(AppUrls.login);
+        await loginOrSignupPage.proceedWithLogin();
+        await loginPage.verifyRedirectionAndCompleteLoadToLoginPage();
+        await loginPage.clickLoginWithGoogle();
+        await loginPage.verifyRedirectionToGoogleSignIn();
+    });
+
+    test('Login with Apple redirects to Apple sign-in', { tag: ['@regression', '@P3'] }, async ({ loginOrSignupPage, loginPage }) => {
+        await loginOrSignupPage.navigateToLoginOrSignUpPage(AppUrls.login);
+        await loginOrSignupPage.proceedWithLogin();
+        await loginPage.verifyRedirectionAndCompleteLoadToLoginPage();
+        await loginPage.clickLoginWithApple();
+        await loginPage.verifyRedirectionToAppleSignIn();
+    });
 });

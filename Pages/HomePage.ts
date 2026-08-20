@@ -15,15 +15,26 @@ private readonly homePageLocators = {
     imgUserProfileLoggedIn: this.page.locator('div.avatar_overlay__bto13x9:visible'),
     
     // Hero Banner
-    hdgHeroBanner: this.page.getByRole('heading', { level: 1, name: 'Big Travel eSIM spring savings' }),
-    lnkSeeOfferTerms: this.page.getByRole('link', { name: 'See offer terms' }),
-    
+    hdgHeroBanner: this.page.getByRole('heading', { level: 1, name: 'Find the best data plan for your trip' }),
+    hdgHeroSubtitle: this.page.getByRole('heading', { level: 5, name: 'Get 15% OFF all Travel eSIM plans' }),
+
     // Search Section
-    hdgWhereVisiting: this.page.getByText('Where are you visiting?'),
-    inputSearchCountry: this.page.getByPlaceholder('Country or Region'),
-    btnCountryDropdown: this.page.getByRole('button', { name: 'Country or Region' }),
-    btnSearch: this.page.getByRole('button', { name: 'Search' }),
-    
+    inputFindDestination: this.page.getByPlaceholder('Where are you going'),
+    btnFindAPlan: this.page.getByRole('button', { name: 'Find a plan' }),
+
+    // Stats bar
+    statDestinations: this.page.getByText('Destinations'),
+    statSupport: this.page.getByText('support'),
+    statActivation: this.page.getByText('activation'),
+
+    // Hero Carousel
+    carouselSection: this.page.getByRole('region', { name: 'Image carousel' }),
+    btnCarouselPrevious: this.page.getByRole('button', { name: 'Previous slide' }),
+    btnCarouselNext: this.page.getByRole('button', { name: 'Next slide' }),
+    carouselSlide: (slideNumber: number, totalSlides = 3) =>
+      this.page.getByRole('group', { name: `Slide ${slideNumber} of ${totalSlides}` }),
+    carouselDots: this.page.getByTestId('pips-container').locator('li'),
+
     // Region/Country Tabs
     tabRegions: this.page.getByRole('tab', { name: 'Regions' }),
     tabCountries: this.page.getByRole('tab', { name: 'Countries' }),
@@ -139,26 +150,26 @@ private readonly homePageLocators = {
 
   async searchForCountry(countryName: string) {
     await test.step(`Search for country: ${countryName}`, async () => {
-      await this.homePageLocators.inputSearchCountry.scrollIntoViewIfNeeded();
-      await this.homePageLocators.inputSearchCountry.hover();
-      await this.homePageLocators.inputSearchCountry.click();
-      await this.homePageLocators.inputSearchCountry.fill(countryName);
+      await this.homePageLocators.inputFindDestination.scrollIntoViewIfNeeded();
+      await this.homePageLocators.inputFindDestination.hover();
+      await this.homePageLocators.inputFindDestination.click();
+      await this.homePageLocators.inputFindDestination.fill(countryName);
     });
   }
 
   async clearSearchInput() {
     await test.step('Clear Search Input', async () => {
-      await this.homePageLocators.inputSearchCountry.scrollIntoViewIfNeeded();
-      await this.homePageLocators.inputSearchCountry.hover();
-      await this.homePageLocators.inputSearchCountry.clear();
+      await this.homePageLocators.inputFindDestination.scrollIntoViewIfNeeded();
+      await this.homePageLocators.inputFindDestination.hover();
+      await this.homePageLocators.inputFindDestination.clear();
     });
   }
 
-  async clickSearchButton() {
-    await test.step('Click Search Button', async () => {
-      await this.homePageLocators.btnSearch.scrollIntoViewIfNeeded();
-      await this.homePageLocators.btnSearch.hover();
-      await this.homePageLocators.btnSearch.click();
+  async clickFindAPlanButton() {
+    await test.step('Click Find a plan Button', async () => {
+      await this.homePageLocators.btnFindAPlan.scrollIntoViewIfNeeded();
+      await this.homePageLocators.btnFindAPlan.hover();
+      await this.homePageLocators.btnFindAPlan.click();
     });
   }
 
@@ -192,20 +203,15 @@ private readonly homePageLocators = {
   async verifyHeroBannerVisible() {
     await test.step('Verify Hero Banner is visible', async () => {
       await expect(this.homePageLocators.hdgHeroBanner).toBeVisible();
+      await expect(this.homePageLocators.hdgHeroSubtitle).toBeVisible();
     });
   }
 
-  async clickSeeOfferTerms() {
-    await test.step('Click See Offer Terms link', async () => {
-      await this.homePageLocators.lnkSeeOfferTerms.scrollIntoViewIfNeeded();
-      await this.homePageLocators.lnkSeeOfferTerms.hover();
-      await this.homePageLocators.lnkSeeOfferTerms.click();
-    });
-  }
-
-  async verifySeeOfferTermsLinkVisible() {
-    await test.step('Verify See Offer Terms link is visible', async () => {
-      await expect(this.homePageLocators.lnkSeeOfferTerms).toBeVisible();
+  async verifyStatsBarVisible() {
+    await test.step('Verify stats bar (Destinations / support / activation) is visible', async () => {
+      await expect(this.homePageLocators.statDestinations).toBeVisible();
+      await expect(this.homePageLocators.statSupport).toBeVisible();
+      await expect(this.homePageLocators.statActivation).toBeVisible();
     });
   }
 
@@ -226,37 +232,31 @@ private readonly homePageLocators = {
 
   async verifySearchInputVisible() {
     await test.step('Verify search input is visible', async () => {
-      await expect(this.homePageLocators.inputSearchCountry).toBeVisible();
+      await expect(this.homePageLocators.inputFindDestination).toBeVisible();
     });
   }
 
   async verifySearchInputPlaceholder() {
     await test.step('Verify search input placeholder text', async () => {
-      await expect(this.homePageLocators.inputSearchCountry).toHaveAttribute('placeholder', 'Country or Region');
+      await expect(this.homePageLocators.inputFindDestination).toHaveAttribute('placeholder', 'Where are you going');
     });
   }
 
-  async verifySearchButtonDisabled() {
-    await test.step('Verify search button is disabled initially', async () => {
-      await expect(this.homePageLocators.btnSearch).toBeDisabled();
+  async verifyFindAPlanButtonDisabled() {
+    await test.step('Verify Find a plan button is disabled initially', async () => {
+      await expect(this.homePageLocators.btnFindAPlan).toBeDisabled();
     });
   }
 
-  async verifySearchButtonEnabled() {
-    await test.step('Verify search button is enabled', async () => {
-      await expect(this.homePageLocators.btnSearch).toBeEnabled();
+  async verifyFindAPlanButtonEnabled() {
+    await test.step('Verify Find a plan button is enabled', async () => {
+      await expect(this.homePageLocators.btnFindAPlan).toBeEnabled();
     });
   }
 
   async verifySearchInputIsEmpty() {
     await test.step('Verify search input is empty', async () => {
-      await expect(this.homePageLocators.inputSearchCountry).toHaveValue('');
-    });
-  }
-
-  async verifySearchDropdownVisible() {
-    await test.step('Verify search autocomplete dropdown is visible', async () => {
-      await expect(this.page.getByRole('listbox')).toBeVisible();
+      await expect(this.homePageLocators.inputFindDestination).toHaveValue('');
     });
   }
 
@@ -271,6 +271,56 @@ private readonly homePageLocators = {
       await expect(this.homePageLocators.btnExploreEgypt).toBeVisible();
       await expect(this.homePageLocators.btnExploreGermany).toBeVisible();
       await expect(this.homePageLocators.btnExploreGreece).toBeVisible();
+    });
+  }
+
+  // ============ HERO CAROUSEL ============
+
+  async verifyCarouselVisible() {
+    await test.step('Verify hero carousel is visible', async () => {
+      await expect(this.homePageLocators.carouselSection).toBeVisible();
+    });
+  }
+
+  async verifyCarouselSlideActive(slideNumber: number) {
+    await test.step(`Verify carousel slide ${slideNumber} is active`, async () => {
+      await expect(this.homePageLocators.carouselSlide(slideNumber)).toHaveAttribute('aria-hidden', 'false');
+    });
+  }
+
+  async clickCarouselNext() {
+    await test.step('Click carousel Next slide button', async () => {
+      await this.homePageLocators.btnCarouselNext.click();
+    });
+  }
+
+  async clickCarouselPrevious() {
+    await test.step('Click carousel Previous slide button', async () => {
+      await this.homePageLocators.btnCarouselPrevious.click();
+    });
+  }
+
+  async verifyCarouselPreviousButtonDisabled() {
+    await test.step('Verify carousel Previous slide button is disabled', async () => {
+      await expect(this.homePageLocators.btnCarouselPrevious).toBeDisabled();
+    });
+  }
+
+  async verifyCarouselNextButtonDisabled() {
+    await test.step('Verify carousel Next slide button is disabled', async () => {
+      await expect(this.homePageLocators.btnCarouselNext).toBeDisabled();
+    });
+  }
+
+  async verifyCarouselNextButtonEnabled() {
+    await test.step('Verify carousel Next slide button is enabled', async () => {
+      await expect(this.homePageLocators.btnCarouselNext).toBeEnabled();
+    });
+  }
+
+  async verifyCarouselDotsCount(count: number) {
+    await test.step(`Verify carousel has ${count} navigation dots`, async () => {
+      await expect(this.homePageLocators.carouselDots).toHaveCount(count);
     });
   }
 }

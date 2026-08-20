@@ -1,6 +1,6 @@
 import { expect, Page, test } from '@playwright/test';
 import { BasePage } from './BasePage';
-import { RouteConfig, ALLOWLIST, CJK_RATIO_THRESHOLD, LocaleConfig, MIN_LINE_LENGTH } from '../tests/i18n/i18n.config';
+import { RouteConfig, ALLOWLIST, CJK_RATIO_THRESHOLD, LocaleConfig, MIN_LINE_LENGTH } from '../tests/language-checker/translataion.config';
 import { findSuspiciousLines } from '../utils/translationCompare';
 import { LoginPage } from './LoginPage';
 import { HomePage } from './HomePage';

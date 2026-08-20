@@ -24,12 +24,13 @@ export class EmailVerificationPage extends BasePage {
     }
 
 
-async handleOTPVerificationNonExistingUser(){
+async handleOTPVerificationNonExistingUser(email: string, sentAt: number){
     await test.step('Handle OTP Verification during Checkout', async () => {
     // otpInput0 instead of the 'Email Verification' heading text — the heading gets translated on
     // non-English locales, but the OTP fields are id-based and stay the same everywhere.
     await expect(this.emailVerificationPageLocators.otpInput0).toBeVisible();
-    await this.enterMagicOTP();
+    const otp = await this.getOTPFromEmail(email, sentAt);
+    await this.enterOTP(otp);
     await this.continueToPayment();
 });}
 
@@ -42,7 +43,7 @@ async handleOTPVerificationExistingUser(){
 
 });}
 
-private async enterMagicOTP() {
+private async enterOTP(otp: string) {
     const inputs = [
         this.emailVerificationPageLocators.otpInput0,
         this.emailVerificationPageLocators.otpInput1,
@@ -51,10 +52,26 @@ private async enterMagicOTP() {
         this.emailVerificationPageLocators.otpInput4,
         this.emailVerificationPageLocators.otpInput5,
     ];
-    for (const input of inputs) {
-        await input.waitFor({ state: 'visible' });
-        await input.fill('0');
+    const digits = otp.split('');
+    for (let i = 0; i < inputs.length; i++) {
+        await inputs[i].waitFor({ state: 'visible' });
+        await inputs[i].fill(digits[i]);
     }
+}
+
+private async getOTPFromEmail(email: string, sentAt: number): Promise<string> {
+    const received = await waitForEmail({
+        to: email,
+        subject: /Vodafone Travel One-Time PIN/i,
+        timeout: emailTestTimeout,
+        afterTimestamp: sentAt,
+    });
+
+    const otpMatch = received.body.match(/Your One-Time PIN is\s*:?\s*(\d{6})/i);
+    if (!otpMatch) {
+        throw new Error(`Could not extract OTP from email body: ${received.body}`);
+    }
+    return otpMatch[1];
 }
 
 

@@ -7,6 +7,7 @@ test.describe('Travel Together Plan - Purchase Journey (TE-90)', () => {
     test('TC-01: Guest checkout - new user - Desktop',
         { tag: ['@regression', '@P1', '@travelTogetherPlan'] },
         async ({ homePage, regionPlansPage, cartPage, checkoutPage, emailVerificationPage, paymentPage, orderSuccessfulPage }) => {
+            const sentAt = Date.now();
             const guestData = generateGuestUserData();
             const dest = pickRandomTravelTogetherPlanDestination();
             await homePage.gotoHomepage(AppUrls.base);
@@ -20,7 +21,7 @@ test.describe('Travel Together Plan - Purchase Journey (TE-90)', () => {
             await cartPage.proceedToCheckoutFromCart();
             await checkoutPage.fillPersonalDetailsForNonExistingUser(guestData);
             await checkoutPage.fillBillingAddressDetailsForUserAndProceedToPayment(BillingDetails);
-            await emailVerificationPage.handleOTPVerificationNonExistingUser();
+            await emailVerificationPage.handleOTPVerificationNonExistingUser(guestData.email, sentAt);
             await paymentPage.fillCardDetailsAndPay(PaymentDetails);
             await orderSuccessfulPage.verifyTravelTogetherPlanOrderSuccessForGuestUser();
         });
@@ -77,7 +78,7 @@ test.describe('Travel Together Plan - Purchase Journey (TE-90)', () => {
             await cartPage.proceedToCheckoutFromCart();
             await checkoutPage.fillPersonalDetailsForNonExistingUser(guestData);
             await checkoutPage.fillBillingAddressDetailsForUserAndProceedToPayment(BillingDetails);
-            await emailVerificationPage.handleOTPVerificationNonExistingUser();
+            await emailVerificationPage.handleOTPVerificationNonExistingUser(guestData.email, sentAt);
             await paymentPage.fillCardDetailsAndPay(PaymentDetails);
             await orderSuccessfulPage.verifyTravelTogetherPlanOrderSuccessForGuestUser();
             await orderSuccessfulPage.verifyQRCodeEmailReceivedGroupPlan(guestData.email, sentAt);

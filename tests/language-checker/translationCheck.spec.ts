@@ -1,7 +1,7 @@
 import { test } from '../../fixtures/page-manager';
 import { AppUrls } from '../../data/credentials';
 import { TranslationCheckPage } from '../../Pages/TranslationCheckPage';
-import { LocaleConfig, RouteConfig, ROUTES, TARGET_LOCALES } from './i18n.config';
+import { LocaleConfig, RouteConfig, ROUTES, TARGET_LOCALES } from './translataion.config';
 
 // Checks that each route in ROUTES (tests/i18n/i18n.config.ts) renders translated content for each
 // locale in TARGET_LOCALES, instead of falling back to English or leaving untranslated lines behind.
@@ -36,7 +36,7 @@ test.describe('Guest', () => {
 });
 
 test.describe('Authenticated', () => {
-    for (const locale of TARGET_LOCALES) {
+    for (const locale of TARGET_LOCALES) { 
         test.describe(`Translations — ${locale.label}`, () => {
             test.use({ locale: locale.code });
 

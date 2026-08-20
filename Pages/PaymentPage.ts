@@ -83,6 +83,7 @@ export class PaymentPage extends BasePage {
         });
     }
 
+
     async performPaymentWithCardForLoggedInUsers(): Promise<void> {
         await test.step('Perform payment with saved card (logged-in)', async () => {
             await this.paymentPageLocators.lnkSavedVisaCard.waitFor({ state: 'visible' });

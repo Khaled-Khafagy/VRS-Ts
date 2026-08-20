@@ -1,4 +1,4 @@
-import { LocaleConfig } from '../tests/i18n/i18n.config';
+import { LocaleConfig } from '../tests/language-checker/translataion.config';
 
 const CJK_RANGE = /[㐀-鿿豈-﫿぀-ヿ가-힯]/;
 const HAS_LETTERS = /[A-Za-zÀ-ɏ]/;

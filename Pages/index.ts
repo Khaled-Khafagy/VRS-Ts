@@ -35,6 +35,23 @@
     pin: string;
     }
 
+    export interface TopUpOption {
+    dataGb: number;
+    validityDays: number;
+    price: string;
+    }
+
+    export interface UnlimitedTopUpOption {
+    validityDays: number;
+    price: string;
+    }
+
+    export interface TopUpBalance {
+    dataRemainingGb: number;
+    dataTotalGb: number;
+    validityDaysRemaining: number;
+    }
+
     export interface RegistrationInfo {
     email: string;
     password: string;

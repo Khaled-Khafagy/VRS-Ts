@@ -7,9 +7,9 @@ test.describe('Homepage Exploration', () => {
         await homePage.verifyHeroBannerVisible();
     });
 
-    test('See offer terms link is visible on homepage', { tag: ['@sanity', '@P2'] }, async ({ homePage }) => {
+    test('Homepage stats bar is visible', { tag: ['@sanity', '@P3'] }, async ({ homePage }) => {
         await homePage.gotoHomepage(AppUrls.base);
-        await homePage.verifySeeOfferTermsLinkVisible();
+        await homePage.verifyStatsBarVisible();
     });
 
     test('Header navigation links are visible', { tag: ['@sanity', '@P2'] }, async ({ homePage }) => {
@@ -105,16 +105,16 @@ test.describe('Homepage Exploration', () => {
         await homePage.verifySearchInputPlaceholder();
     });
 
-    test('Search button is disabled initially', { tag: ['@sanity', '@P3'] }, async ({ homePage }) => {
+    test('Find a plan button is disabled initially', { tag: ['@sanity', '@P3'] }, async ({ homePage }) => {
         await homePage.gotoHomepage(AppUrls.base);
-        await homePage.verifySearchButtonDisabled();
+        await homePage.verifyFindAPlanButtonDisabled();
     });
 
-    test('Typing in search input enables the search button', { tag: ['@sanity', '@P3'] }, async ({ homePage }) => {
+    test('Typing in search input enables the Find a plan button', { tag: ['@sanity', '@P3'] }, async ({ homePage }) => {
         await homePage.gotoHomepage(AppUrls.base);
-        await homePage.verifySearchButtonDisabled();
+        await homePage.verifyFindAPlanButtonDisabled();
         await homePage.searchForCountry('France');
-        await homePage.verifySearchButtonEnabled();
+        await homePage.verifyFindAPlanButtonEnabled();
     });
 
     test('Clearing search input resets to empty state', { tag: ['@sanity', '@P3'] }, async ({ homePage }) => {
@@ -122,5 +122,37 @@ test.describe('Homepage Exploration', () => {
         await homePage.searchForCountry('Italy');
         await homePage.clearSearchInput();
         await homePage.verifySearchInputIsEmpty();
+    });
+
+    test('Hero carousel is visible with first slide active and Previous button disabled', { tag: ['@sanity', '@P2'] }, async ({ homePage }) => {
+        await homePage.gotoHomepage(AppUrls.base);
+        await homePage.verifyCarouselVisible();
+        await homePage.verifyCarouselSlideActive(1);
+        await homePage.verifyCarouselPreviousButtonDisabled();
+        await homePage.verifyCarouselDotsCount(3);
+    });
+
+    test('Clicking Next advances the carousel to the next slide', { tag: ['@sanity', '@P2'] }, async ({ homePage }) => {
+        await homePage.gotoHomepage(AppUrls.base);
+        await homePage.clickCarouselNext();
+        await homePage.verifyCarouselSlideActive(2);
+        await homePage.verifyCarouselNextButtonEnabled();
+    });
+
+    test('Clicking Previous returns the carousel to the first slide', { tag: ['@sanity', '@P3'] }, async ({ homePage }) => {
+        await homePage.gotoHomepage(AppUrls.base);
+        await homePage.clickCarouselNext();
+        await homePage.verifyCarouselSlideActive(2);
+        await homePage.clickCarouselPrevious();
+        await homePage.verifyCarouselSlideActive(1);
+        await homePage.verifyCarouselPreviousButtonDisabled();
+    });
+
+    test('Reaching the last carousel slide disables the Next button', { tag: ['@sanity', '@P3'] }, async ({ homePage }) => {
+        await homePage.gotoHomepage(AppUrls.base);
+        await homePage.clickCarouselNext();
+        await homePage.clickCarouselNext();
+        await homePage.verifyCarouselSlideActive(3);
+        await homePage.verifyCarouselNextButtonDisabled();
     });
 });

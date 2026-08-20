@@ -8,48 +8,6 @@ jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
-    env:
-      # App URLs
-      BASE_URL:                           ${{ secrets.BASE_URL }}
-      LOGIN_URL:                          ${{ secrets.LOGIN_URL }}
-      OUR_DESTINATIONS_URL:               ${{ secrets.OUR_DESTINATIONS_URL }}
-      # Test credentials
-      TEST_EMAIL:                         ${{ secrets.TEST_EMAIL }}
-      TEST_PASSWORD:                      ${{ secrets.TEST_PASSWORD }}
-      Exiting_Guest_User_Firt_Name:       ${{ secrets.EXISTING_GUEST_USER_FIRST_NAME }}
-      Exiting_Guest_User_Last_Name:       ${{ secrets.EXISTING_GUEST_USER_LAST_NAME }}
-      INVALID_LOGIN_EMAIL:                ${{ secrets.INVALID_LOGIN_EMAIL }}
-      INVALID_LOGIN_PASSWORD:             ${{ secrets.INVALID_LOGIN_PASSWORD }}
-      # Payment details
-      PAYMENT_CARD_NUMBER:                ${{ secrets.PAYMENT_CARD_NUMBER }}
-      PAYMENT_EXPIRY:                     ${{ secrets.PAYMENT_EXPIRY }}
-      PAYMENT_CVC:                        ${{ secrets.PAYMENT_CVC }}
-      PAYMENT_NAME:                       ${{ secrets.PAYMENT_NAME }}
-      # Billing address
-      BILLING_COUNTRY:                    ${{ secrets.BILLING_COUNTRY }}
-      BILLING_STATE:                      ${{ secrets.BILLING_STATE }}
-      BILLING_CITY:                       ${{ secrets.BILLING_CITY }}
-      BILLING_ADDRESS_LINE1:              ${{ secrets.BILLING_ADDRESS_LINE1 }}
-      BILLING_ADDRESS_LINE2:              ${{ secrets.BILLING_ADDRESS_LINE2 }}
-      BILLING_ZIP_CODE:                   ${{ secrets.BILLING_ZIP_CODE }}
-      # SSO (non-preprod Cloudflare access)
-      SSO_EMAIL:                          ${{ secrets.SSO_EMAIL }}
-      SSO_PIN:                            ${{ secrets.SSO_PIN }}
-      # Registration test data
-      REGISTRATION_TEST_PASSWORD:         ${{ secrets.REGISTRATION_TEST_PASSWORD }}
-      REGISTRATION_MISMATCHED_PASSWORD:   ${{ secrets.REGISTRATION_MISMATCHED_PASSWORD }}
-      REGISTRATION_OTP:                   ${{ secrets.REGISTRATION_OTP }}
-      REGISTRATION_INVALID_EMAIL_FORMAT:  ${{ secrets.REGISTRATION_INVALID_EMAIL_FORMAT }}
-      REGISTRATION_TEST_FIRST_NAME:       ${{ secrets.REGISTRATION_TEST_FIRST_NAME }}
-      REGISTRATION_TEST_LAST_NAME:        ${{ secrets.REGISTRATION_TEST_LAST_NAME }}
-      REGISTRATION_COUNTRY:               ${{ secrets.REGISTRATION_COUNTRY }}
-      REGISTRATION_STATE_PROVINCE:        ${{ secrets.REGISTRATION_STATE_PROVINCE }}
-      REGISTRATION_COUNTRY_WITH_STATE:    ${{ secrets.REGISTRATION_COUNTRY_WITH_STATE }}
-      REGISTRATION_COUNTRY_WITHOUT_STATE: ${{ secrets.REGISTRATION_COUNTRY_WITHOUT_STATE }}
-      # Gmail API (for email verification tests)
-      GMAIL_CLIENT_ID:                    ${{ secrets.GMAIL_CLIENT_ID }}
-      GMAIL_CLIENT_SECRET:                ${{ secrets.GMAIL_CLIENT_SECRET }}
-      GMAIL_REFRESH_TOKEN:                ${{ secrets.GMAIL_REFRESH_TOKEN }}
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-node@v4

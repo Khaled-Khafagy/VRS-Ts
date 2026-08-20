@@ -16,6 +16,7 @@ import { MyEsimsPage } from '../Pages/MyEsimsPage';
 import { EsimDetailsPage } from '../Pages/EsimDetailsPage';
 import { SSOPage } from '../Pages/SSOPage';
 import { TranslationCheckPage } from '../Pages/TranslationCheckPage';
+import { TopUpPage } from '../Pages/TopUpPage';
 // Import other pages as you create them
 
 // 1. Define a type for your fixtures
@@ -36,6 +37,7 @@ type MyFixtures = {
     esimDetailsPage: EsimDetailsPage;
     ssoPage: SSOPage;
     translationCheckPage: TranslationCheckPage;
+    topUpPage: TopUpPage;
     randomDestination: DestinationOption;
     twoRandomRegions: [DestinationOption, DestinationOption];
     // Add other pages here
@@ -43,8 +45,17 @@ type MyFixtures = {
 
 // Custom page fixture that skips teardown if KEEP_BROWSER is set
 const customPage = base.extend({
-    page: async ({ page }, use) => {
+    page: async ({ page }, use, testInfo) => {
         await use(page);
+
+        // Attach a final-state screenshot to the Allure report on passing tests.
+        // playwright.config.ts sets screenshot: 'only-on-failure', so failures already
+        // get one automatically — this fills the gap for passed tests.
+        if (testInfo.status === 'passed' && !page.isClosed()) {
+            const screenshot = await page.screenshot();
+            await testInfo.attach('Final state (passed)', { body: screenshot, contentType: 'image/png' });
+        }
+
         // Skip browser teardown if environment variable is set
         if (process.env.KEEP_BROWSER) {
             // Don't close the page/browser
@@ -142,6 +153,11 @@ export const test = customPage.extend<MyFixtures>({
     translationCheckPage: async ({ page }, use) => {
         const translationCheckPage = new TranslationCheckPage(page);
         await use(translationCheckPage);
+    },
+
+    topUpPage: async ({ page }, use) => {
+        const topUpPage = new TopUpPage(page);
+        await use(topUpPage);
     },
 
     randomDestination: async ({}, use) => {

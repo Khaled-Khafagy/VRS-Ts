@@ -23,7 +23,7 @@ export default defineConfig({
   timeout: testTimeout,
   expect: { timeout: expectTimeout },
   retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : 4,
+  workers: process.env.CI ? 1 : 1,
 
   reporter: [
     ['allure-playwright'],

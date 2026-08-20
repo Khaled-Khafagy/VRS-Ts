@@ -15,7 +15,7 @@ test.describe('Guest Checkout', () => {
         await cartPage.proceedToCheckoutFromCart();
         await checkoutPage.fillPersonalDetailsForNonExistingUser(guestData);
         await checkoutPage.fillBillingAddressDetailsForUserAndProceedToPayment(BillingDetails);
-        await emailVerificationPage.handleOTPVerificationNonExistingUser();
+        await emailVerificationPage.handleOTPVerificationNonExistingUser(guestData.email, sentAt);
         await paymentPage.fillCardDetailsAndPay(PaymentDetails);
         await orderSuccessfulPage.verifyOrderSuccessfulPageDisplayedForGuestUsers();
         await emailVerificationPage.verifyOTPEmailReceived(guestData.email, sentAt);

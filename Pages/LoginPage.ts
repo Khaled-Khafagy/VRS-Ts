@@ -98,6 +98,30 @@ export class LoginPage extends BasePage {
         });
     }
 
+    async clickLoginWithGoogle() {
+        await test.step('Click Login with Google button', async () => {
+            await this.loginPageLocators.btnLoginGoogle.click();
+        });
+    }
+
+    async clickLoginWithApple() {
+        await test.step('Click Login with Apple button', async () => {
+            await this.loginPageLocators.btnLoginApple.click();
+        });
+    }
+
+    async verifyRedirectionToGoogleSignIn() {
+        await test.step('Verify redirect to Google sign-in', async () => {
+            await expect(this.page).toHaveURL(/^https:\/\/accounts\.google\.com\//);
+        });
+    }
+
+    async verifyRedirectionToAppleSignIn() {
+        await test.step('Verify redirect to Apple sign-in', async () => {
+            await expect(this.page).toHaveURL(/^https:\/\/appleid\.apple\.com\//);
+        });
+    }
+
     async verifyNavigationBackToVRS() {
         await test.step('Verify navigation back to VRS site', async () => {
             await expect(this.page).toHaveURL(/.*vrs.preprod.travel.vodafone.com/);

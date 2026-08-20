@@ -45,6 +45,8 @@ export class RegistationPage extends BasePage {
         msgEmailAlreadyExists: this.page.getByRole('heading', { name: 'Your e-mail address already exists' }),
         msgInvalidEmailFormat: this.page.getByText('Format is invalid. Please, enter a valid one.', { exact: true }),
         msgPasswordMismatch:   this.page.getByText('Password does not match', { exact: true }),
+        msgPasswordTooWeak:    this.page.getByText('Password is too weak. Please check the criteria below.', { exact: true }),
+        msgPasswordTooShort:   this.page.getByText('Password must be at least 8 characters', { exact: true }),
         msgRequiredFirstName:      this.page.getByText('First name is required', { exact: true }),
         msgRequiredLastName:       this.page.getByText('Family name is required', { exact: true }),
         msgRequiredEmail:          this.page.getByText('Email is required', { exact: true }),
@@ -112,6 +114,43 @@ export class RegistationPage extends BasePage {
 
     async isStateProvinceVisible(): Promise<boolean> {
         return this.locators.ddStateProvince.isVisible();
+    }
+
+    async fillEmail(email: string) {
+        await test.step('Fill email field', async () => {
+            await this.locators.txtEmail.fill(email);
+        });
+    }
+
+    async fillPassword(password: string) {
+        await test.step('Fill password field', async () => {
+            await this.locators.txtPassword.fill(password);
+        });
+    }
+
+    async fillConfirmPassword(password: string) {
+        await test.step('Fill confirm password field', async () => {
+            await this.locators.txtConfirmPassword.fill(password);
+        });
+    }
+
+    async verifyPasswordRuleAchieved(ruleName: string, achieved: boolean) {
+        await test.step(`Verify password rule "${ruleName}" is ${achieved ? 'achieved' : 'not achieved'}`, async () => {
+            const expectedText = `${ruleName}: ${achieved ? 'achieved' : 'not achieved'}`;
+            await expect(this.page.getByText(expectedText, { exact: true })).toBeVisible();
+        });
+    }
+
+    async verifyPasswordTooWeakError() {
+        await test.step('Verify "Password is too weak" validation error is shown', async () => {
+            await expect(this.locators.msgPasswordTooWeak).toBeVisible();
+        });
+    }
+
+    async verifyPasswordTooShortError() {
+        await test.step('Verify "Password must be at least 8 characters" validation error is shown', async () => {
+            await expect(this.locators.msgPasswordTooShort).toBeVisible();
+        });
     }
 
     async submitForm() {
@@ -267,6 +306,23 @@ export class RegistationPage extends BasePage {
             });
             expect(received.subject).toContain('Vodafone Travel One-Time PIN');
             expect(received.body).toContain('Your One-Time PIN is');
+        });
+    }
+
+    async getOTPFromEmail(email: string, sentAt: number): Promise<string> {
+        return await test.step('Get real OTP from received email', async () => {
+            const received = await waitForEmail({
+                to: email,
+                subject: /Vodafone Travel One-Time PIN/i,
+                timeout: emailTestTimeout,
+                afterTimestamp: sentAt,
+            });
+
+            const otpMatch = received.body.match(/Your One-Time PIN is\s*:?\s*(\d{6})/i);
+            if (!otpMatch) {
+                throw new Error(`Could not extract OTP from email body: ${received.body}`);
+            }
+            return otpMatch[1];
         });
     }
 

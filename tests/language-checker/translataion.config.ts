@@ -5,6 +5,7 @@ import { RegionPlansPage } from '../../Pages/RegionPlansPage';
 import { CartPage } from '../../Pages/CartPage';
 import { CheckoutPage } from '../../Pages/CheckoutPage';
 import { BillingDetails } from '../../data/credentials';
+import { MyEsimsPage } from '../../Pages/MyEsimsPage';
 import { generateGuestUserData } from '../../utils/testDataGenerator';
 
 /** Adds the first Europe plan to cart and lands on the Cart page — shared first step for Cart/Checkout/Payment routes below. */
@@ -29,13 +30,13 @@ export interface LocaleConfig {
 
 // ── Add a new language to test here. Nothing else needs to change. ─────────
 export const TARGET_LOCALES: LocaleConfig[] = [
-    { code: 'es-ES', urlPrefix: '/es', label: 'Spanish', checkMode: 'default' },
+    // { code: 'es-ES', urlPrefix: '/es', label: 'Spanish', checkMode: 'default' },
     // { code: 'de-DE', urlPrefix: '/de', label: 'German', checkMode: 'default' },   
     // { code: 'fr-FR', urlPrefix: '/fr', label: 'French', checkMode: 'default' },
     // { code: 'el-GR', urlPrefix: '/el', label: 'Greek', checkMode: 'default' },
     // { code: 'pt-PT', urlPrefix: '/pt', label: 'Portuguese', checkMode: 'default' },
     // { code: 'zh-CN', urlPrefix: '/zh', label: 'Chinese', checkMode: 'cjk' },
-    // { code: 'ko-KR', urlPrefix: '/ko', label: 'Korean', checkMode: 'default' },
+    { code: 'ko-KR', urlPrefix: '/ko', label: 'Korean', checkMode: 'default' },
 ];
 
 export interface RouteConfig {
@@ -82,7 +83,7 @@ export const ROUTES: RouteConfig[] = [
     // { path: '/our-destinations/oceania', label: 'Oceania region' },
     { path: '/our-destinations/uefachampionsleague', label: 'Uefa Champions League' },
 
-//     // Login-required pages with no direct URL — reached via a click sequence instead of `path`.
+    // Login-required pages with no direct URL — reached via a click sequence instead of `path`.
     {
         label: 'My Account panel',
         access: 'authenticated',
@@ -143,17 +144,17 @@ export const ROUTES: RouteConfig[] = [
     },
 
     // A page that renders differently for guests vs logged-in users can be checked both ways:
-    // { path: '', label: 'Homepage', access: 'both' },
+    { path: '', label: 'Homepage', access: 'both' },
     // Add more authenticated-only pages the same way, e.g.:
-    // {
-    //     label: 'eSIM Details',
-    //     access: 'authenticated',
-    //     navigate: async (page: Page) => {
-    //         await new HomePage(page).navigateToMyAccountTab();
-    //         await new MyAccountPage(page).clickEsimsTab();
-    //         await new MyEsimsPage(page).clickViewDetailsOnFirstNotInstalledEsim();
-    //     },
-    // },
+    {
+        label: 'eSIM Details',
+        access: 'authenticated',
+        navigate: async (page: Page) => {
+            await new HomePage(page).navigateToMyAccountTab();
+            await new MyAccountPage(page).clickEsimsTab();
+            await new MyEsimsPage(page).clickViewDetailsOnFirstNotInstalledEsim();
+        },
+    },
 
 ];
 
