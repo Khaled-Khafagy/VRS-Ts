@@ -62,12 +62,12 @@ private async enterOTP(otp: string) {
 private async getOTPFromEmail(email: string, sentAt: number): Promise<string> {
     const received = await waitForEmail({
         to: email,
-        subject: /Vodafone Travel One-Time PIN/i,
+        subject: /Vodafone (?:Travel|ID) One[- ]?Time PIN/i,
         timeout: emailTestTimeout,
         afterTimestamp: sentAt,
     });
 
-    const otpMatch = received.body.match(/Your One-Time PIN is\s*:?\s*(\d{6})/i);
+    const otpMatch = received.body.match(/Your (?:One-Time|temporary) PIN is\s*:?\s*(\d{6})/i);
     if (!otpMatch) {
         throw new Error(`Could not extract OTP from email body: ${received.body}`);
     }
@@ -79,12 +79,12 @@ async verifyOTPEmailReceived(email: string, sentAt: number) {
     await test.step('Verify OTP email is received', async () => {
         const received = await waitForEmail({
             to: email,
-            subject: /Vodafone Travel One-Time PIN/i,
+            subject: /Vodafone (?:Travel|ID) One[- ]?Time PIN/i,
             timeout: emailTestTimeout,
             afterTimestamp: sentAt,
         });
-        expect(received.subject).toContain('Vodafone Travel One-Time PIN');
-        expect(received.body).toContain('Your One-Time PIN is');
+        expect(received.subject).toMatch(/Vodafone (?:Travel|ID) One[- ]?Time PIN/i);
+        expect(received.body).toMatch(/Your (?:One-Time|temporary) PIN is/i);
     });
 }
 

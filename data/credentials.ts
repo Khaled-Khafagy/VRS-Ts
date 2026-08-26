@@ -62,6 +62,7 @@ export const AppUrls = {
     base: (process.env.BASE_URL ?? '').replace(/\/+$/, ''),
     login: process.env.LOGIN_URL ?? '',
     ourDestinations: process.env.OUR_DESTINATIONS_URL ?? '',
+    travelTogether: process.env.TRAVEL_TOGETHER_URL ?? '',
 };
 
 export const RegistrationTestData = {

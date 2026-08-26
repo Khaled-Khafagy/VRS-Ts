@@ -1,0 +1,3 @@
+◇ injecting env (38) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injecting env (0) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+Report successfully generated to allure-report

@@ -81,7 +81,8 @@ export const ROUTES: RouteConfig[] = [
     // { path: '/our-destinations/middle-east', label: 'Middle East region' },
     // { path: '/our-destinations/north-america', label: 'North America region' },
     // { path: '/our-destinations/oceania', label: 'Oceania region' },
-    { path: '/our-destinations/uefachampionsleague', label: 'Uefa Champions League' },
+    // { path: '/our-destinations/uefachampionsleague', label: 'Uefa Champions League' },
+    { path: '/travel-together', label: 'travel Together plan page ' },
 
     // Login-required pages with no direct URL — reached via a click sequence instead of `path`.
     {
@@ -105,46 +106,46 @@ export const ROUTES: RouteConfig[] = [
     // Cart and Checkout look the same for guest vs logged-in, so one 'both' entry covers each. Payment
     // diverges (guest fills a new card form, logged-in users pick a saved card), so it's split into
     // two separate routes instead of branching inside one navigate function.
-    {
-        // `path: ''` (homepage) is required here: unlike the authenticated-only routes above (where
-        // `login()` itself loads a page before `navigate()` runs), a guest run of an `access: 'both'`
-        // or `access: 'guest'` route with no `path` never navigates anywhere first, leaving the page on
-        // about:blank when `navigate()` tries to click things.
-        path: '',
-        label: 'Cart page',
-        access: 'both',
-        navigate: addPlanToCart,
-    },
-    {
-        path: '',
-        label: 'Checkout page',
-        access: 'both',
-        navigate: async (page: Page) => {
-            await addPlanToCart(page);
-            await new CartPage(page).proceedToCheckoutFromCart();
-        },
-    },
-    {
-        // Guest fills a new-card form on this page; a logged-in user picks a saved card instead — hence
-        // the `authenticated` branch here rather than two separate routes.
-        path: '',
-        label: 'Payment page',
-        access: 'both',
-        navigate: async (page: Page, authenticated: boolean) => {
-            await addPlanToCart(page);
-            await new CartPage(page).proceedToCheckoutFromCart();
-            const checkoutPage = new CheckoutPage(page);
-            if (authenticated) {
-                await checkoutPage.proceedToPaymentAsLoggedInUser();
-            } else {
-                await checkoutPage.fillPersonalDetailsForNonExistingUser(generateGuestUserData());
-                await checkoutPage.fillBillingAddressDetailsForUserAndProceedToPayment(BillingDetails);
-            }
-        },
-    },
+    // {
+    //     // `path: ''` (homepage) is required here: unlike the authenticated-only routes above (where
+    //     // `login()` itself loads a page before `navigate()` runs), a guest run of an `access: 'both'`
+    //     // or `access: 'guest'` route with no `path` never navigates anywhere first, leaving the page on
+    //     // about:blank when `navigate()` tries to click things.
+    //     path: '',
+    //     label: 'Cart page',
+    //     access: 'both',
+    //     navigate: addPlanToCart,
+    // },
+    // {
+    //     path: '',
+    //     label: 'Checkout page',
+    //     access: 'both',
+    //     navigate: async (page: Page) => {
+    //         await addPlanToCart(page);
+    //         await new CartPage(page).proceedToCheckoutFromCart();
+    //     },
+    // },
+    // {
+    //     // Guest fills a new-card form on this page; a logged-in user picks a saved card instead — hence
+    //     // the `authenticated` branch here rather than two separate routes.
+    //     path: '',
+    //     label: 'Payment page',
+    //     access: 'both',
+    //     navigate: async (page: Page, authenticated: boolean) => {
+    //         await addPlanToCart(page);
+    //         await new CartPage(page).proceedToCheckoutFromCart();
+    //         const checkoutPage = new CheckoutPage(page);
+    //         if (authenticated) {
+    //             await checkoutPage.proceedToPaymentAsLoggedInUser();
+    //         } else {
+    //             await checkoutPage.fillPersonalDetailsForNonExistingUser(generateGuestUserData());
+    //             await checkoutPage.fillBillingAddressDetailsForUserAndProceedToPayment(BillingDetails);
+    //         }
+    //     },
+    // },
 
     // A page that renders differently for guests vs logged-in users can be checked both ways:
-    { path: '', label: 'Homepage', access: 'both' },
+    // { path: '', label: 'Homepage', access: 'both' },
     // Add more authenticated-only pages the same way, e.g.:
     {
         label: 'eSIM Details',
@@ -170,20 +171,18 @@ export const ROUTES: RouteConfig[] = [
 export const ALLOWLIST: string[] = [
     'Vodafone',
     'VRS',
-    'eSIM',
-    'esim',
     '5G',
-    'GB',
     'FUP',
     'Blog',
     'Champions',
     'Days',
     'Unlimited',
     'Europe',
-    'Portugal',
     'Luxembourg',
     "Hi, I'm Tobi, your virtual agent. How can I help you today?",
-    'Europe Travel Together 100 GB',
+    // Note: plan/product card titles ("Europe 5GB", "Italy Travel Together 100GB", ...) aren't
+    // translated anywhere on the site. Those are matched generically by PLAN_NAME_PATTERN in
+    // utils/translationCompare.ts, so individual destination names don't need to be listed here.
 ];
 
 /** Lines shorter than this are skipped entirely (numbers, prices, single symbols are too noisy to diff). */

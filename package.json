@@ -11,7 +11,7 @@
     "test:p1": "npx playwright test --grep @P1",
     "test:p2": "npx playwright test --grep @P2",
     "report:exit": "ts-node scripts/generateExitReport.ts",
-    "test:i18n": "npx playwright test tests/i18n"
+    "test:i18n": "npx playwright test tests/language-checker"
   },
   "repository": {
     "type": "git",

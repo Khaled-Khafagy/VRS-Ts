@@ -17,7 +17,11 @@ import { EsimDetailsPage } from '../Pages/EsimDetailsPage';
 import { SSOPage } from '../Pages/SSOPage';
 import { TranslationCheckPage } from '../Pages/TranslationCheckPage';
 import { TopUpPage } from '../Pages/TopUpPage';
+import { TravelTogetherPlanPage } from '../Pages/TravelTogetherPlanPage';
+import { installStepScreenshots, registerPageForStepScreenshots, unregisterPageForStepScreenshots } from '../utils/stepScreenshots';
 // Import other pages as you create them
+
+installStepScreenshots();
 
 // 1. Define a type for your fixtures
 type MyFixtures = {
@@ -38,6 +42,7 @@ type MyFixtures = {
     ssoPage: SSOPage;
     translationCheckPage: TranslationCheckPage;
     topUpPage: TopUpPage;
+    travelTogetherPlanPage: TravelTogetherPlanPage;
     randomDestination: DestinationOption;
     twoRandomRegions: [DestinationOption, DestinationOption];
     // Add other pages here
@@ -46,7 +51,9 @@ type MyFixtures = {
 // Custom page fixture that skips teardown if KEEP_BROWSER is set
 const customPage = base.extend({
     page: async ({ page }, use, testInfo) => {
+        registerPageForStepScreenshots(testInfo, page);
         await use(page);
+        unregisterPageForStepScreenshots(testInfo);
 
         // Attach a final-state screenshot to the Allure report on passing tests.
         // playwright.config.ts sets screenshot: 'only-on-failure', so failures already
@@ -158,6 +165,11 @@ export const test = customPage.extend<MyFixtures>({
     topUpPage: async ({ page }, use) => {
         const topUpPage = new TopUpPage(page);
         await use(topUpPage);
+    },
+
+    travelTogetherPlanPage: async ({ page }, use) => {
+        const travelTogetherPlanPage = new TravelTogetherPlanPage(page);
+        await use(travelTogetherPlanPage);
     },
 
     randomDestination: async ({}, use) => {

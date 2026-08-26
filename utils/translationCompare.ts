@@ -3,6 +3,15 @@ import { LocaleConfig } from '../tests/language-checker/translataion.config';
 const CJK_RANGE = /[㐀-鿿豈-﫿぀-ヿ가-힯]/;
 const HAS_LETTERS = /[A-Za-zÀ-ɏ]/;
 
+/**
+ * Matches a plan/product card title such as "Europe 5GB", "Italy Travel Together 100GB", or
+ * "South Africa Unlimited" — a destination name (one or more capitalized words) followed by a data
+ * size. These names aren't translated anywhere on the site regardless of destination, so a line
+ * shaped like this is treated as expected-English rather than requiring every destination to be
+ * hand-added to ALLOWLIST.
+ */
+const PLAN_NAME_PATTERN = /^[A-ZÀ-Ý][\p{L}'-]*(?:\s+[A-ZÀ-Ý][\p{L}'-]*)*(?:\s+Travel Together)?\s+(?:\d+\s*GB|Unlimited)$/u;
+
 function cjkRatio(line: string): number {
     const chars = [...line].filter((c) => /\S/.test(c));
     if (chars.length === 0) return 1;
@@ -55,6 +64,7 @@ export function findSuspiciousLines(
 
     for (const line of targetLines) {
         if (sourceSet.has(line)) {
+            if (PLAN_NAME_PATTERN.test(line)) continue;
             const residual = stripAllowlistedAndNumeric(line, allowlist);
             if (residual.length === 0) continue;
             suspicious.add(line);
