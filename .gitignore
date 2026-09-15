@@ -11,6 +11,10 @@ node_modules/
 allure-results/
 allure-report/
 
+# macOS metadata (AppleDouble sidecar files / Finder folder settings)
+._*
+.DS_Store
+
 # Claude docs submodule content
 # claude-docs/
 # claude-docs
