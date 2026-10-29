@@ -13,7 +13,7 @@ const REGIONS: DestinationOption[] = [
     { slug: 'africa',        heading: 'Africa',               tab: 'regions' },
     { slug: 'asia',          heading: 'Asia',                 tab: 'regions' },
     { slug: 'caribbean',     heading: 'Caribbean',            tab: 'regions' },
-    { slug: 'south-america', heading: 'Latin America',        tab: 'regions' },
+    { slug: 'latin-america', heading: 'Latin America',        tab: 'regions' },
     { slug: 'oceania',       heading: 'Oceania',              tab: 'regions' },
 ];
 
@@ -27,7 +27,9 @@ const COUNTRIES: DestinationOption[] = [
     { slug: 'egypt',        heading: 'Egypt',                 tab: 'countries' },
     { slug: 'germany',      heading: 'Germany',               tab: 'countries' },
     { slug: 'greece',       heading: 'Greece',                tab: 'countries' },
-    { slug: 'kenya',        heading: 'Kenya',                 tab: 'countries' },
+    // Kenya is not one of the homepage's Countries-tab cards (confirmed against the live site) — it's
+    // only reachable from /our-destinations, so it's excluded here even though it exists on
+    // TRAVEL_TOGETHER_PLAN_DESTINATIONS below, which targets that page instead.
 ];
 
 // Destinations that support the Travel Together Plan.
@@ -75,9 +77,15 @@ export const FOCUSED_TRAVEL_TOGETHER_PLAN_DESTINATIONS: DestinationOption[] = [
 
 const pick = <T>(arr: T[]): T => arr[Math.floor(Math.random() * arr.length)];
 
+// Every country in COUNTRIES is also Travel-Together-Plan-eligible, and eligible destinations now
+// feature the Travel Together Plan card first — so selectFirstPlan() would grab a Travel Together
+// Plan instead of a regular eSIM. Excluded here so regular-eSIM checkout tests stay on that flow.
+const travelTogetherSlugs = new Set(TRAVEL_TOGETHER_PLAN_DESTINATIONS.map(d => d.slug));
+
 export const pickRandomRegion               = (): DestinationOption => pick(REGIONS);
 export const pickRandomCountry              = (): DestinationOption => pick(COUNTRIES);
-export const pickRandomDestination          = (): DestinationOption => pick([...REGIONS, ...COUNTRIES]);
+export const pickRandomDestination          = (): DestinationOption =>
+    pick([...REGIONS, ...COUNTRIES].filter(d => !travelTogetherSlugs.has(d.slug)));
 export const pickRandomTravelTogetherPlanDestination = (): DestinationOption => pick(FOCUSED_TRAVEL_TOGETHER_PLAN_DESTINATIONS);
 
 export const generateAliasEmail = (): string => {

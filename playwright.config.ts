@@ -15,6 +15,7 @@ export const typingDelay       = parseInt(process.env.TYPING_DELAY        ?? '10
 export const shortDelay        = parseInt(process.env.SHORT_DELAY         ?? '300');
 export const animationDelay    = parseInt(process.env.ANIMATION_DELAY     ?? '2000');
 export const healFastCheckTimeoutMs = parseInt(process.env.HEAL_FAST_CHECK_TIMEOUT_MS ?? '2000');
+export const orderStatusDelay      = parseInt(process.env.ORDER_STATUS_DELAY        ?? '15000');
 
 export default defineConfig({
   testDir: './tests',
@@ -23,9 +24,10 @@ export default defineConfig({
   timeout: testTimeout,
   expect: { timeout: expectTimeout },
   retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : 1,
+  workers: process.env.CI ? 1 :1,
 
   reporter: [
+    ['list'],
     ['allure-playwright'],
     ['./allure-opener-reporter.ts'],
     ['./reporters/self-healing-reporter.ts'],

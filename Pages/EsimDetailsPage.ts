@@ -1,5 +1,6 @@
 import { test, expect, Page } from '@playwright/test';
 import { BasePage } from './BasePage';
+import { TopUpBalance, TopUpOption } from './index';
 
 export class EsimDetailsPage extends BasePage {
     private readonly esimDetailsPageLocators = {
@@ -65,6 +66,15 @@ export class EsimDetailsPage extends BasePage {
     async verifyRefundRequestSubmitted() {
         await test.step('Verify refund request was submitted successfully', async () => {
             await expect(this.esimDetailsPageLocators.msgRefundSuccess).toBeVisible();
+        });
+    }
+
+    async verifyTopUpReflectedInDetails(before: TopUpBalance, option: TopUpOption) {
+        const totalGb = before.dataTotalGb + option.dataGb;
+        await test.step(`Verify eSIM details show ${totalGb}GB data and ${option.dataGb}GB top-up applied`, async () => {
+            await expect(this.page.getByText(`You have ${totalGb}GB remaining out of ${totalGb}GB`)).toBeVisible();
+            await expect(this.page.getByText(`Your plan will be valid for ${option.validityDays} days after first use`)).toBeVisible();
+            await expect(this.page.getByText(`${option.dataGb}GB for ${option.validityDays} Days`)).toBeVisible();
         });
     }
 

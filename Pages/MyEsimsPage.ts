@@ -1,5 +1,6 @@
 import { test, expect, Page } from '@playwright/test';
 import { BasePage } from './BasePage';
+import { TopUpBalance, TopUpOption } from './index';
 
 export class MyEsimsPage extends BasePage {
     private readonly myEsimsPageLocators = {
@@ -16,7 +17,7 @@ export class MyEsimsPage extends BasePage {
     }
 
     private activeLimitedCard() {
-        return this.myEsimsPageLocators.esimPlanCards.filter({ hasText: 'Active' }).filter({ hasNotText: 'Unlimited' }).first();
+        return this.myEsimsPageLocators.esimPlanCards.filter({ hasText: 'Active' }).filter({ hasNotText: 'Unlimited' }).filter({ hasNotText: 'Travel Together Plan' }).first();
     }
 
     private activeUnlimitedCard() {
@@ -37,7 +38,12 @@ export class MyEsimsPage extends BasePage {
 
     async clickViewDetailsOnFirstNotInstalledEsim() {
         await test.step('Click See details on first Not Installed eSIM', async () => {
-            await this.cardWithBadge('Not installed').getByRole('button', { name: 'See details' }).click();
+            await this.myEsimsPageLocators.esimPlanCards
+                .filter({ hasText: 'Not installed' })
+                .filter({ has: this.page.getByRole('button', { name: 'See details' }) })
+                .first()
+                .getByRole('button', { name: 'See details' })
+                .click();
         });
     }
 
@@ -81,6 +87,21 @@ export class MyEsimsPage extends BasePage {
         return await test.step('Get the region/country name of the first Active limited eSIM', async () => {
             const cardText = await this.activeLimitedCard().innerText();
             return cardText.split('\n')[0].trim();
+        });
+    }
+
+    async verifyActiveLimitedEsimDataAfterTopUp(before: TopUpBalance, option: TopUpOption) {
+        const totalGb = before.dataTotalGb + option.dataGb;
+        await test.step(`Verify active limited eSIM card shows ${totalGb}GB after top-up`, async () => {
+            const card = this.activeLimitedCard();
+            await expect(card.getByText(`${totalGb}GB · ${option.validityDays} days`)).toBeVisible();
+            await expect(card.getByText(`${totalGb} GB remaining`)).toBeVisible();
+        });
+    }
+
+    async clickSeeDetailsOnFirstActiveLimitedEsim() {
+        await test.step('Click See details on first Active limited eSIM', async () => {
+            await this.activeLimitedCard().getByRole('button', { name: 'See details' }).click();
         });
     }
 

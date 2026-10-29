@@ -1,0 +1,56 @@
+{
+  "pageName": "LoginPage",
+  "updatedAt": "2026-10-22T08:11:03.806Z",
+  "locators": {
+    "txtPassword": {
+      "key": "txtPassword",
+      "strategy": "testId",
+      "testId": "field-password",
+      "tagName": "input",
+      "capturedAt": "2026-10-22T08:11:03.746Z"
+    },
+    "btnContinue": {
+      "key": "btnContinue",
+      "strategy": "testId",
+      "testId": "button-submit",
+      "tagName": "button",
+      "capturedAt": "2026-10-22T08:11:03.805Z"
+    },
+    "invalidLoginErrorMessage": {
+      "key": "invalidLoginErrorMessage",
+      "strategy": "testId",
+      "testId": "app-message-title",
+      "tagName": "div",
+      "capturedAt": "2026-10-21T06:45:07.820Z"
+    },
+    "emailErrorMessage": {
+      "key": "emailErrorMessage",
+      "strategy": "text",
+      "text": "Email or phone number is required",
+      "tagName": "span",
+      "capturedAt": "2026-10-21T06:45:30.033Z"
+    },
+    "passwordErrorMessage": {
+      "key": "passwordErrorMessage",
+      "strategy": "text",
+      "text": "Password is required",
+      "tagName": "span",
+      "capturedAt": "2026-10-21T06:45:40.788Z"
+    },
+    "#login_btn": {
+      "key": "#login_btn",
+      "strategy": "role",
+      "role": "button",
+      "accessibleName": "Login",
+      "tagName": "button",
+      "capturedAt": "2026-10-22T08:10:53.923Z"
+    },
+    "txtEmail": {
+      "key": "txtEmail",
+      "strategy": "testId",
+      "testId": "field-identifier",
+      "tagName": "input",
+      "capturedAt": "2026-10-22T08:11:03.685Z"
+    }
+  }
+}

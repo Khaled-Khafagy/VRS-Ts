@@ -1,0 +1,88 @@
+{
+  "pageName": "OrderSuccessfulPage",
+  "updatedAt": "2026-10-21T11:37:12.832Z",
+  "locators": {
+    "hdgContactSupport": {
+      "key": "hdgContactSupport",
+      "strategy": "role",
+      "role": "heading",
+      "accessibleName": "Need help? Contact support with your order number 6ad8a4055d943631468cfbbe",
+      "tagName": "h3",
+      "capturedAt": "2026-10-21T11:37:12.832Z"
+    },
+    "hdgThankYouForYourOrder": {
+      "key": "hdgThankYouForYourOrder",
+      "strategy": "role",
+      "role": "heading",
+      "accessibleName": "Thank you for your order!",
+      "tagName": "h2",
+      "capturedAt": "2026-10-21T11:37:12.696Z"
+    },
+    "txtContactSupport": {
+      "key": "txtContactSupport",
+      "strategy": "role",
+      "role": "heading",
+      "accessibleName": "Need help? Contact support with your order number 6ad867185d943631468cfba1",
+      "tagName": "h3",
+      "capturedAt": "2026-10-21T07:17:17.204Z"
+    },
+    "txtSetYourPassword": {
+      "key": "txtSetYourPassword",
+      "strategy": "testId",
+      "testId": "complete-registration-cta",
+      "tagName": "button",
+      "capturedAt": "2026-10-21T07:17:17.252Z"
+    },
+    "txtTravelTogetherPlanConfirmationMsg": {
+      "key": "txtTravelTogetherPlanConfirmationMsg",
+      "strategy": "role",
+      "role": "heading",
+      "accessibleName": "Your Travel together Plan confirmation and eSIM have been sent to testv225+elaossyw@gmail.com.",
+      "tagName": "h3",
+      "capturedAt": "2026-10-21T07:34:33.800Z"
+    },
+    "txtContactSupportWithOrderNum": {
+      "key": "txtContactSupportWithOrderNum",
+      "strategy": "role",
+      "role": "heading",
+      "accessibleName": "Need help? Contact support with your order number 6ad86b265d943631468cfba2.",
+      "tagName": "h3",
+      "capturedAt": "2026-10-21T07:34:33.892Z"
+    },
+    "hdgCompleteRegistration": {
+      "key": "hdgCompleteRegistration",
+      "strategy": "testId",
+      "testId": "complete-registration-title",
+      "tagName": "h2",
+      "capturedAt": "2026-10-21T07:34:33.934Z"
+    },
+    "btnCompleteRegistration": {
+      "key": "btnCompleteRegistration",
+      "strategy": "testId",
+      "testId": "complete-registration-cta",
+      "tagName": "button",
+      "capturedAt": "2026-10-21T07:34:33.998Z"
+    },
+    "lnkSetupTravelTogetherPlan": {
+      "key": "lnkSetupTravelTogetherPlan",
+      "strategy": "testId",
+      "testId": "order-confirmation-next-steps-step-1-cta-0",
+      "tagName": "a",
+      "capturedAt": "2026-10-21T07:30:46.128Z"
+    },
+    "txtEsimSentMessage": {
+      "key": "txtEsimSentMessage",
+      "strategy": "text",
+      "text": "Your eSIM is sent by the following address: testv225+buxyqtis@gmail.com",
+      "tagName": "h3",
+      "capturedAt": "2026-10-21T07:17:17.130Z"
+    },
+    "hdgEsimSentMessage": {
+      "key": "hdgEsimSentMessage",
+      "strategy": "text",
+      "text": "Your eSIM is sent by the following address: testv225+ysw176r1@gmail.com",
+      "tagName": "h3",
+      "capturedAt": "2026-10-21T11:37:12.786Z"
+    }
+  }
+}

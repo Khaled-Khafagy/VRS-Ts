@@ -55,4 +55,69 @@ export abstract class BasePage {
       }
     });
   }
-}      
+
+  /**
+   * Domains that belong to the corporate Cloudflare Access gate in front of the whole preprod
+   * environment (see tests/auth.setup.ts), not to the Vodafone ID / travel eSIM account itself.
+   * Confirmed from a real saved playwright/.auth/user.json: Cloudflare Access's own cookies
+   * (CF_AppSession/CF_Authorization/CF_Device) sit behind a Microsoft Entra/Azure AD corporate
+   * login, which leaves its own cookie trail across these domains. Losing any of it forces an
+   * interactive Microsoft login that the suite can't complete on its own.
+   */
+  private static readonly CORPORATE_SSO_GATE_DOMAINS = [
+    'cloudflareaccess.com',
+    'microsoftonline.com',
+    'microsoftazuread-sso.com',
+    'login.live.com',
+  ];
+
+  private static isCorporateSsoGateCookie(cookie: { name: string; domain: string }): boolean {
+    // CF_AppSession / CF_Authorization / CF_Device — present even on the app's own domain
+    // (vrs.preprod...), alongside the app's own session cookies, so this can't be a domain-only check.
+    if (/^cf[_-]/i.test(cookie.name)) return true;
+    const domain = cookie.domain.replace(/^\./, '').toLowerCase();
+    return BasePage.CORPORATE_SSO_GATE_DOMAINS.some(gate => domain === gate || domain.endsWith(`.${gate}`));
+  }
+
+  /**
+   * Clears the Vodafone ID / travel eSIM account's own session — cookies on every origin EXCEPT the
+   * corporate Cloudflare/Microsoft SSO gate (see `CORPORATE_SSO_GATE_DOMAINS` above), plus
+   * localStorage, sessionStorage and IndexedDB on the current origin.
+   *
+   * Works around a known bug: after signing up, a stale account session lets a later "login" succeed
+   * silently without the credentials form ever being shown. Any test that needs to exercise a real
+   * login after a sign-up (entering email/password, not just riding the leftover session) must call
+   * this — and ideally sign out first — in between, or it'll silently skip exercising login at all.
+   * A blanket `context.clearCookies()` would also wipe the corporate SSO gate itself, forcing an
+   * interactive Microsoft login the suite can't complete unattended — so this preserves that gate.
+   */
+  async clearBrowserStorageAndCookies(): Promise<void> {
+    await test.step('Clear the account session (keeping the corporate SSO gate) and site storage', async () => {
+      const context = this.page.context();
+      const allCookies = await context.cookies();
+      const gateCookies = allCookies.filter(c => BasePage.isCorporateSsoGateCookie(c));
+      await context.clearCookies();
+      if (gateCookies.length) {
+        await context.addCookies(gateCookies);
+      }
+      await this.page.evaluate(async () => {
+        try { localStorage.clear(); } catch { /* storage may be inaccessible, e.g. sandboxed frame */ }
+        try { sessionStorage.clear(); } catch { /* same as above */ }
+        try {
+          const idb = (window as unknown as { indexedDB?: IDBFactory }).indexedDB;
+          const databases = await idb?.databases?.();
+          if (databases && idb) {
+            await Promise.all(databases.map(db => db.name
+              ? new Promise<void>(resolve => {
+                  const req = idb.deleteDatabase(db.name as string);
+                  req.onsuccess = () => resolve();
+                  req.onerror = () => resolve();
+                  req.onblocked = () => resolve();
+                })
+              : Promise.resolve()));
+          }
+        } catch { /* IndexedDB not supported/accessible — best-effort only */ }
+      });
+    });
+  }
+}

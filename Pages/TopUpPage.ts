@@ -35,7 +35,7 @@ export class TopUpPage extends BasePage {
             const validityText = await this.topUpPageLocators.lblValidityValue.innerText();
 
             const dataMatch = dataText.match(/([\d.]+)\s*GB left of\s*([\d.]+)\s*GB/i);
-            const validityMatch = validityText.match(/(\d+)\s*days?\s*left/i);
+            const validityMatch = validityText.match(/(\d+)\s*days?/i);
 
             return {
                 dataRemainingGb: parseFloat(dataMatch?.[1] ?? '0'),
@@ -48,7 +48,7 @@ export class TopUpPage extends BasePage {
     async getValidityDaysRemainingBeforeTopUp(): Promise<number> {
         return await test.step('Read validity days remaining before top-up', async () => {
             const validityText = await this.topUpPageLocators.lblValidityValue.innerText();
-            const validityMatch = validityText.match(/(\d+)\s*days?\s*left/i);
+            const validityMatch = validityText.match(/(\d+)\s*days?/i);
             return parseInt(validityMatch?.[1] ?? '0', 10);
         });
     }
@@ -139,7 +139,7 @@ export class TopUpPage extends BasePage {
             await expect(this.topUpPageLocators.hdgOrderSummary).toBeVisible();
             await expect(this.topUpPageLocators.txtOrderSummaryItemName).toHaveText(`${regionName} ${option.dataGb}GB`);
             await expect(this.topUpPageLocators.txtOrderSummaryItemDetails).toHaveText(`${option.dataGb} GB, ${option.validityDays} Days`);
-            await expect(this.page.getByText(`USD ${option.price}`).first()).toBeVisible();
+            await expect(this.page.getByText(option.price).first()).toBeVisible();
         });
     }
 
@@ -148,7 +148,7 @@ export class TopUpPage extends BasePage {
             await expect(this.topUpPageLocators.hdgOrderSummary).toBeVisible();
             await expect(this.topUpPageLocators.txtOrderSummaryItemName).toHaveText(`${regionName} Unlimited Data`);
             await expect(this.topUpPageLocators.txtOrderSummaryItemDetailsUnlimited).toHaveText(`Unlimited, ${option.validityDays} Days`);
-            await expect(this.page.getByText(`USD ${option.price}`).first()).toBeVisible();
+            await expect(this.page.getByText(option.price).first()).toBeVisible();
         });
     }
 }

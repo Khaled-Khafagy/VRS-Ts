@@ -18,6 +18,7 @@ import { SSOPage } from '../Pages/SSOPage';
 import { TranslationCheckPage } from '../Pages/TranslationCheckPage';
 import { TopUpPage } from '../Pages/TopUpPage';
 import { TravelTogetherPlanPage } from '../Pages/TravelTogetherPlanPage';
+import { MyOrdersPage } from '../Pages/MyOrdersPage';
 import { installStepScreenshots, registerPageForStepScreenshots, unregisterPageForStepScreenshots } from '../utils/stepScreenshots';
 // Import other pages as you create them
 
@@ -43,6 +44,7 @@ type MyFixtures = {
     translationCheckPage: TranslationCheckPage;
     topUpPage: TopUpPage;
     travelTogetherPlanPage: TravelTogetherPlanPage;
+    myOrdersPage: MyOrdersPage;
     randomDestination: DestinationOption;
     twoRandomRegions: [DestinationOption, DestinationOption];
     // Add other pages here
@@ -170,6 +172,11 @@ export const test = customPage.extend<MyFixtures>({
     travelTogetherPlanPage: async ({ page }, use) => {
         const travelTogetherPlanPage = new TravelTogetherPlanPage(page);
         await use(travelTogetherPlanPage);
+    },
+
+    myOrdersPage: async ({ page }, use) => {
+        const myOrdersPage = new MyOrdersPage(page);
+        await use(myOrdersPage);
     },
 
     randomDestination: async ({}, use) => {

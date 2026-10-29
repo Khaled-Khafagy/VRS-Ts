@@ -1,0 +1,78 @@
+{
+  "pageName": "EmailVerificationPage",
+  "updatedAt": "2026-10-21T08:07:30.707Z",
+  "locators": {
+    "otpInput0": {
+      "key": "otpInput0",
+      "strategy": "role",
+      "role": "textbox",
+      "accessibleName": "Iteration",
+      "tagName": "input",
+      "capturedAt": "2026-10-21T08:07:30.365Z"
+    },
+    "otpInput1": {
+      "key": "otpInput1",
+      "strategy": "role",
+      "role": "textbox",
+      "accessibleName": "Iteration",
+      "tagName": "input",
+      "capturedAt": "2026-10-21T08:07:30.382Z"
+    },
+    "otpInput2": {
+      "key": "otpInput2",
+      "strategy": "role",
+      "role": "textbox",
+      "accessibleName": "Iteration",
+      "tagName": "input",
+      "capturedAt": "2026-10-21T08:07:30.402Z"
+    },
+    "otpInput3": {
+      "key": "otpInput3",
+      "strategy": "role",
+      "role": "textbox",
+      "accessibleName": "Iteration",
+      "tagName": "input",
+      "capturedAt": "2026-10-21T08:07:30.419Z"
+    },
+    "otpInput4": {
+      "key": "otpInput4",
+      "strategy": "role",
+      "role": "textbox",
+      "accessibleName": "Iteration",
+      "tagName": "input",
+      "capturedAt": "2026-10-21T08:07:30.436Z"
+    },
+    "otpInput5": {
+      "key": "otpInput5",
+      "strategy": "role",
+      "role": "textbox",
+      "accessibleName": "Iteration",
+      "tagName": "input",
+      "capturedAt": "2026-10-21T08:07:30.446Z"
+    },
+    "btnVerify": {
+      "key": "btnVerify",
+      "strategy": "role",
+      "role": "button",
+      "accessibleName": "Verify",
+      "tagName": "button",
+      "capturedAt": "2026-10-21T08:07:30.707Z"
+    },
+    "hdgOtpExisting": {
+      "key": "hdgOtpExisting",
+      "strategy": "role",
+      "role": "heading",
+      "accessibleName": "Welcome back, you already have an account.",
+      "tagName": "h2",
+      "capturedAt": "2026-10-21T07:28:50.897Z"
+    },
+    "btnLoginExistingAccountInEmailVerification": {
+      "key": "btnLoginExistingAccountInEmailVerification",
+      "strategy": "role",
+      "role": "button",
+      "accessibleName": "Login",
+      "tagName": "button",
+      "capturedAt": "2026-10-21T07:28:50.971Z"
+    }
+  }
+}

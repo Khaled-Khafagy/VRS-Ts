@@ -45,6 +45,15 @@ export class PaymentPage extends BasePage {
         // Pay button for logged-in (saved card) flow
         btnPayLoggedIn:         this.page.frameLocator('iframe[title="checkout-payment-iframe"]')
                                     .getByRole('button', { name: 'Pay' }),
+
+        // ── Section 5: Payment declined error modal ───────────────────────────
+        // Rendered inside the payment iframe — heading is not a semantic h* element so getByText is used
+        hdgPaymentNotCompleted: this.page.frameLocator('iframe[title="checkout-payment-iframe"]')
+                                    .getByText('Payment not completed'),
+        msgCardNotAccepted:     this.page.frameLocator('iframe[title="checkout-payment-iframe"]')
+                                    .getByText('Sorry, that card is not accepted. Please use a different card.'),
+        btnClosePaymentError:   this.page.frameLocator('iframe[title="checkout-payment-iframe"]')
+                                    .getByRole('button', { name: 'Close' }),
     };
 
     constructor(page: Page) {
@@ -83,6 +92,19 @@ export class PaymentPage extends BasePage {
         });
     }
 
+
+    async verifyCardDeclinedError(): Promise<void> {
+        await test.step('Verify card declined error modal is shown', async () => {
+            await expect(this.paymentPageLocators.hdgPaymentNotCompleted).toBeVisible();
+            await expect(this.paymentPageLocators.msgCardNotAccepted).toBeVisible();
+        });
+    }
+
+    async closePaymentErrorModal(): Promise<void> {
+        await test.step('Close payment error modal', async () => {
+            await this.paymentPageLocators.btnClosePaymentError.click();
+        });
+    }
 
     async performPaymentWithCardForLoggedInUsers(): Promise<void> {
         await test.step('Perform payment with saved card (logged-in)', async () => {

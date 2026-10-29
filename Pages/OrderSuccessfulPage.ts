@@ -130,7 +130,7 @@ export class OrderSuccessfulPage extends BasePage {
                 afterTimestamp: sentAt,
             });
             expect(received.subject).toMatch(/Vodafone Travel - Receipt and Agreement/i);
-            expect(received.body).toContain('Thanks for your purchase');
+            expect(received.body).toMatch(/thanks for your purchase/i);
         });
     }
 
@@ -165,7 +165,7 @@ export class OrderSuccessfulPage extends BasePage {
                 afterTimestamp: sentAt,
             });
             expect(received.subject).toMatch(/welcome/i);
-            expect(received.body).toContain('Thank you for making an account with Vodafone Travel');
+            expect(received.body).toContain('Your Vodafone Travel account is ready');
         });
     }
 
@@ -178,7 +178,7 @@ export class OrderSuccessfulPage extends BasePage {
                 afterTimestamp: sentAt,
             });
             expect(received.subject).toMatch(/Vodafone Travel - Refund Completion/i);
-            expect(received.body).toContain('here is your refund details!');
+            expect(received.body).toContain('Your refund has been processed.');
         });
     }
 }

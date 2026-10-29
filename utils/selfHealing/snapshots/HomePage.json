@@ -1,0 +1,233 @@
+{
+  "pageName": "HomePage",
+  "updatedAt": "2026-10-22T08:13:17.703Z",
+  "locators": {
+    "tabCountries": {
+      "key": "tabCountries",
+      "strategy": "role",
+      "role": "tab",
+      "accessibleName": "Countries",
+      "tagName": "button",
+      "capturedAt": "2026-10-21T13:07:21.875Z"
+    },
+    "imgUserProfileLoggedIn": {
+      "key": "imgUserProfileLoggedIn",
+      "strategy": "css",
+      "cssPath": "div.avatar_overlay__bto13x9",
+      "tagName": "div",
+      "capturedAt": "2026-10-22T08:13:17.689Z"
+    },
+    "statDestinations": {
+      "key": "statDestinations",
+      "strategy": "text",
+      "text": "Destinations",
+      "tagName": "p",
+      "capturedAt": "2026-10-21T13:06:37.896Z"
+    },
+    "statSupport": {
+      "key": "statSupport",
+      "strategy": "text",
+      "text": "support",
+      "tagName": "p",
+      "capturedAt": "2026-10-21T13:06:37.949Z"
+    },
+    "lnkOurDestinations": {
+      "key": "lnkOurDestinations",
+      "strategy": "role",
+      "role": "link",
+      "accessibleName": "Our Destinations",
+      "tagName": "a",
+      "capturedAt": "2026-10-21T13:06:41.026Z"
+    },
+    "tabRegions": {
+      "key": "tabRegions",
+      "strategy": "role",
+      "role": "tab",
+      "accessibleName": "Regions",
+      "tagName": "button",
+      "capturedAt": "2026-10-21T13:07:04.050Z"
+    },
+    "btnExploreItaly": {
+      "key": "btnExploreItaly",
+      "strategy": "role",
+      "role": "link",
+      "accessibleName": "Explore",
+      "tagName": "a",
+      "capturedAt": "2026-10-21T13:07:23.970Z"
+    },
+    "btnExploreUK": {
+      "key": "btnExploreUK",
+      "strategy": "role",
+      "role": "link",
+      "accessibleName": "Explore",
+      "tagName": "a",
+      "capturedAt": "2026-10-21T13:07:23.994Z"
+    },
+    "btnExploreSouthAfrica": {
+      "key": "btnExploreSouthAfrica",
+      "strategy": "role",
+      "role": "link",
+      "accessibleName": "Explore",
+      "tagName": "a",
+      "capturedAt": "2026-10-21T13:07:24.013Z"
+    },
+    "btnExploreFrance": {
+      "key": "btnExploreFrance",
+      "strategy": "role",
+      "role": "link",
+      "accessibleName": "Explore",
+      "tagName": "a",
+      "capturedAt": "2026-10-21T13:07:24.031Z"
+    },
+    "btnExploreSpain": {
+      "key": "btnExploreSpain",
+      "strategy": "role",
+      "role": "link",
+      "accessibleName": "Explore",
+      "tagName": "a",
+      "capturedAt": "2026-10-21T13:07:24.051Z"
+    },
+    "btnExploreUSA": {
+      "key": "btnExploreUSA",
+      "strategy": "role",
+      "role": "link",
+      "accessibleName": "Explore",
+      "tagName": "a",
+      "capturedAt": "2026-10-21T13:07:24.063Z"
+    },
+    "btnExploreEgypt": {
+      "key": "btnExploreEgypt",
+      "strategy": "role",
+      "role": "link",
+      "accessibleName": "Explore",
+      "tagName": "a",
+      "capturedAt": "2026-10-21T13:07:24.090Z"
+    },
+    "btnExploreGermany": {
+      "key": "btnExploreGermany",
+      "strategy": "role",
+      "role": "link",
+      "accessibleName": "Explore",
+      "tagName": "a",
+      "capturedAt": "2026-10-21T13:07:24.111Z"
+    },
+    "btnExploreGreece": {
+      "key": "btnExploreGreece",
+      "strategy": "role",
+      "role": "link",
+      "accessibleName": "Explore",
+      "tagName": "a",
+      "capturedAt": "2026-10-21T13:07:24.126Z"
+    },
+    "hdgPopularDestinations": {
+      "key": "hdgPopularDestinations",
+      "strategy": "role",
+      "role": "heading",
+      "accessibleName": "Popular Destinations",
+      "tagName": "h2",
+      "capturedAt": "2026-10-21T13:08:07.883Z"
+    },
+    "inputFindDestination": {
+      "key": "inputFindDestination",
+      "strategy": "role",
+      "role": "textbox",
+      "accessibleName": "Where are you going",
+      "tagName": "input",
+      "capturedAt": "2026-10-21T13:08:36.097Z"
+    },
+    "btnFindAPlan": {
+      "key": "btnFindAPlan",
+      "strategy": "role",
+      "role": "button",
+      "accessibleName": "Find a plan",
+      "tagName": "button",
+      "capturedAt": "2026-10-21T13:08:27.981Z"
+    },
+    "btnCarouselPrevious": {
+      "key": "btnCarouselPrevious",
+      "strategy": "role",
+      "role": "button",
+      "accessibleName": "Previous slide",
+      "tagName": "button",
+      "capturedAt": "2026-10-21T13:09:02.631Z"
+    },
+    "carouselDots": {
+      "key": "carouselDots",
+      "strategy": "css",
+      "cssPath": "li.pips_pipWrapper__1e8slmaf",
+      "tagName": "li",
+      "capturedAt": "2026-10-21T13:08:44.702Z"
+    },
+    "btnCarouselNext": {
+      "key": "btnCarouselNext",
+      "strategy": "role",
+      "role": "button",
+      "accessibleName": "Next slide",
+      "tagName": "button",
+      "capturedAt": "2026-10-21T13:09:11.527Z"
+    },
+    "statActivation": {
+      "key": "statActivation",
+      "strategy": "text",
+      "text": "activation",
+      "tagName": "p",
+      "capturedAt": "2026-10-21T13:06:37.980Z"
+    },
+    "lnkUefa": {
+      "key": "lnkUefa",
+      "strategy": "role",
+      "role": "link",
+      "accessibleName": "UEFA Champions League",
+      "tagName": "a",
+      "capturedAt": "2026-10-21T13:06:41.078Z"
+    },
+    "lnkTravelTogether": {
+      "key": "lnkTravelTogether",
+      "strategy": "role",
+      "role": "link",
+      "accessibleName": "Travel Together",
+      "tagName": "a",
+      "capturedAt": "2026-10-21T13:06:41.166Z"
+    },
+    "lnkAmericanFootball": {
+      "key": "lnkAmericanFootball",
+      "strategy": "role",
+      "role": "link",
+      "accessibleName": "American Football",
+      "tagName": "a",
+      "capturedAt": "2026-10-21T13:06:41.249Z"
+    },
+    "lnkUnlimitedData": {
+      "key": "lnkUnlimitedData",
+      "strategy": "role",
+      "role": "link",
+      "accessibleName": "Unlimited Data",
+      "tagName": "a",
+      "capturedAt": "2026-10-21T13:06:41.273Z"
+    },
+    "lnkBlog": {
+      "key": "lnkBlog",
+      "strategy": "role",
+      "role": "link",
+      "accessibleName": "Blog",
+      "tagName": "a",
+      "capturedAt": "2026-10-21T13:06:41.324Z"
+    },
+    "lnkHelp": {
+      "key": "lnkHelp",
+      "strategy": "role",
+      "role": "link",
+      "accessibleName": "Help",
+      "tagName": "a",
+      "capturedAt": "2026-10-21T13:06:41.355Z"
+    },
+    "carouselSection": {
+      "key": "carouselSection",
+      "strategy": "role",
+      "role": "region",
+      "accessibleName": "Image carousel",
+      "tagName": "section",
+      "capturedAt": "2026-10-21T13:08:40.142Z"
+    }
+  }
+}

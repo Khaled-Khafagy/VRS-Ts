@@ -1,0 +1,88 @@
+{
+  "pageName": "CartPage",
+  "updatedAt": "2026-10-21T11:36:52.322Z",
+  "locators": {
+    "btnContinueToCheckout": {
+      "key": "btnContinueToCheckout",
+      "strategy": "role",
+      "role": "button",
+      "accessibleName": "Continue to checkout",
+      "tagName": "button",
+      "capturedAt": "2026-10-21T11:36:52.321Z"
+    },
+    "hdgItemsInCart": {
+      "key": "hdgItemsInCart",
+      "strategy": "role",
+      "role": "heading",
+      "accessibleName": "Items in cart (1)",
+      "tagName": "h2",
+      "capturedAt": "2026-10-21T11:18:04.141Z"
+    },
+    "txtTravelTogetherPlanItem": {
+      "key": "txtTravelTogetherPlanItem",
+      "strategy": "text",
+      "text": "Travel Together Plan, 100 GB, 15 Days",
+      "tagName": "p",
+      "capturedAt": "2026-10-21T08:07:17.449Z"
+    },
+    "btnWhatsIncluded": {
+      "key": "btnWhatsIncluded",
+      "strategy": "role",
+      "role": "button",
+      "accessibleName": "What's Included",
+      "tagName": "button",
+      "capturedAt": "2026-10-21T07:27:19.782Z"
+    },
+    "txtFeatureShare5Devices": {
+      "key": "txtFeatureShare5Devices",
+      "strategy": "text",
+      "text": "- Share across up to 5 devices per Travel Together plan",
+      "tagName": "p",
+      "capturedAt": "2026-10-21T07:27:20.274Z"
+    },
+    "txtPromoCodeInput": {
+      "key": "txtPromoCodeInput",
+      "strategy": "role",
+      "role": "textbox",
+      "accessibleName": "Enter promo code",
+      "tagName": "input",
+      "capturedAt": "2026-10-21T11:36:43.412Z"
+    },
+    "btnApplyPromoCode": {
+      "key": "btnApplyPromoCode",
+      "strategy": "role",
+      "role": "button",
+      "accessibleName": "Apply code",
+      "tagName": "button",
+      "capturedAt": "2026-10-21T11:36:43.552Z"
+    },
+    "txtTotalValue": {
+      "key": "txtTotalValue",
+      "strategy": "text",
+      "text": "$87.72",
+      "tagName": "p",
+      "capturedAt": "2026-10-21T11:36:52.150Z"
+    },
+    "txtSubtotalValue": {
+      "key": "txtSubtotalValue",
+      "strategy": "text",
+      "text": "$90.5",
+      "tagName": "p",
+      "capturedAt": "2026-10-21T11:36:52.085Z"
+    },
+    "txtPromoCodeError": {
+      "key": "txtPromoCodeError",
+      "strategy": "text",
+      "text": "Invalid promo code",
+      "tagName": "p",
+      "capturedAt": "2026-10-21T11:27:23.183Z"
+    },
+    "txtDiscountValue": {
+      "key": "txtDiscountValue",
+      "strategy": "text",
+      "text": "-$2.78",
+      "tagName": "p",
+      "capturedAt": "2026-10-21T11:36:52.109Z"
+    }
+  }
+}

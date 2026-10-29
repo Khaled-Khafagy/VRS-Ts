@@ -7,8 +7,9 @@ export class OurDestinationsPage extends BasePage {
     // Header Navigation
     lnkHomepage: this.page.getByRole('link', { name: 'Homepage' }),
     lnkOurDestinations: this.page.getByRole('link', { name: 'Our Destinations' }),
-    lnkUefaChampionsLeague: this.page.getByRole('link', { name: 'UEFA Champions League' }),
-    lnkAboutEsim: this.page.getByRole('link', { name: 'About eSIM' }),
+    lnkTravelTogether: this.page.getByRole('link', { name: 'Travel Together' }),
+    lnkAmericanFootball: this.page.getByRole('link', { name: 'American Football' }),
+    lnkUnlimitedData: this.page.getByRole('link', { name: 'Unlimited Data' }),
     lnkHelp: this.page.getByTestId('TopNavigation:desktop').getByRole('link', { name: 'Help' }),
     lnkBlog: this.page.getByRole('link', { name: 'Blog' }),
     imgShoppingCart: this.page.locator('img[alt="Shopping Cart"]'),
@@ -78,8 +79,9 @@ export class OurDestinationsPage extends BasePage {
     await test.step('Verify all header navigation links are visible', async () => {
       await expect(this.ourDestinationsLocators.lnkHomepage).toBeVisible();
       await expect(this.ourDestinationsLocators.lnkOurDestinations).toBeVisible();
-      await expect(this.ourDestinationsLocators.lnkUefaChampionsLeague).toBeVisible();
-      await expect(this.ourDestinationsLocators.lnkAboutEsim).toBeVisible();
+      await expect(this.ourDestinationsLocators.lnkTravelTogether).toBeVisible();
+      await expect(this.ourDestinationsLocators.lnkAmericanFootball).toBeVisible();
+      await expect(this.ourDestinationsLocators.lnkUnlimitedData).toBeVisible();
       await expect(this.ourDestinationsLocators.lnkHelp).toBeVisible();
       await expect(this.ourDestinationsLocators.lnkBlog).toBeVisible();
     });

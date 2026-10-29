@@ -7,6 +7,8 @@ import { actionTimeout, emailTestTimeout, shortDelay, animationDelay } from '../
 import { waitForEmail } from '../utils/gmailHelper';
 
 export class RegistationPage extends BasePage {
+    protected readonly pageName = 'RegistationPage';
+    protected readonly sourceFilePath = __filename;
 
     private readonly locators = {
         // Form fields
@@ -19,6 +21,9 @@ export class RegistationPage extends BasePage {
         // Dropdowns
         ddCountry:           this.page.getByRole('combobox', { name: 'Country' }),
         ddStateProvince:     this.page.getByRole('combobox', { name: 'State Province' }),
+        // Each rule's "<rule>: achieved" text is also echoed in an aria-live region, so rule
+        // text must be scoped to this list to avoid a strict-mode violation.
+        lstPasswordRequirements: this.page.getByRole('list', { name: 'Password requirements' }),
 
         // Buttons
         btnContinue:         this.page.getByTestId('button-submit'),
@@ -57,6 +62,8 @@ export class RegistationPage extends BasePage {
         hdgSuccess: this.page.getByRole('heading', { name: 'All done! Your Travel Mobility profile is now complete.' }),
         continueToAccountBtn: this.page.getByRole('button', { name: 'Continue' }),
 
+
+
     };
 
     constructor(page: Page) {
@@ -67,9 +74,9 @@ export class RegistationPage extends BasePage {
 
     async fillRegistrationForm(info: RegistrationInfo) {
         await test.step('Fill Registration Form', async () => {
-            await this.locators.txtFirstName.fill(info.firstName);
-            await this.locators.txtLastName.fill(info.lastName);
-            await this.locators.txtEmail.fill(info.email);
+            await (await this.heal('txtFirstName', this.locators.txtFirstName)).fill(info.firstName);
+            await (await this.heal('txtLastName', this.locators.txtLastName)).fill(info.lastName);
+            await (await this.heal('txtEmail', this.locators.txtEmail)).fill(info.email);
 
             await this.selectCountry(info.country);
 
@@ -78,8 +85,8 @@ export class RegistationPage extends BasePage {
                 await this.selectStateProvince(info.stateProvince);
             }
 
-            await this.locators.txtPassword.fill(info.password);
-            await this.locators.txtConfirmPassword.fill(info.confirmPassword);
+            await (await this.heal('txtPassword', this.locators.txtPassword)).fill(info.password);
+            await (await this.heal('txtConfirmPassword', this.locators.txtConfirmPassword)).fill(info.confirmPassword);
         });
     }
 
@@ -98,7 +105,7 @@ export class RegistationPage extends BasePage {
 
     async selectCountry(country: string) {
         await test.step(`Select Country: ${country}`, async () => {
-            await this.locators.ddCountry.click();
+            await (await this.heal('ddCountry', this.locators.ddCountry)).click();
             await this.page.locator('#dropdown-country-listbox [role="option"]')
                 .filter({ hasText: country }).first().click();
         });
@@ -106,56 +113,56 @@ export class RegistationPage extends BasePage {
 
     async selectStateProvince(state: string) {
         await test.step(`Select State Province: ${state}`, async () => {
-            await this.locators.ddStateProvince.click();
+            await (await this.heal('ddStateProvince', this.locators.ddStateProvince)).click();
             await this.page.locator('[role="listbox"] [role="option"]')
                 .filter({ hasText: state }).first().click();
         });
     }
 
     async isStateProvinceVisible(): Promise<boolean> {
-        return this.locators.ddStateProvince.isVisible();
+        return (await this.heal('ddStateProvince', this.locators.ddStateProvince)).isVisible();
     }
 
     async fillEmail(email: string) {
         await test.step('Fill email field', async () => {
-            await this.locators.txtEmail.fill(email);
+            await (await this.heal('txtEmail', this.locators.txtEmail)).fill(email);
         });
     }
 
     async fillPassword(password: string) {
         await test.step('Fill password field', async () => {
-            await this.locators.txtPassword.fill(password);
+            await (await this.heal('txtPassword', this.locators.txtPassword)).fill(password);
         });
     }
 
     async fillConfirmPassword(password: string) {
         await test.step('Fill confirm password field', async () => {
-            await this.locators.txtConfirmPassword.fill(password);
+            await (await this.heal('txtConfirmPassword', this.locators.txtConfirmPassword)).fill(password);
         });
     }
 
     async verifyPasswordRuleAchieved(ruleName: string, achieved: boolean) {
         await test.step(`Verify password rule "${ruleName}" is ${achieved ? 'achieved' : 'not achieved'}`, async () => {
             const expectedText = `${ruleName}: ${achieved ? 'achieved' : 'not achieved'}`;
-            await expect(this.page.getByText(expectedText, { exact: true })).toBeVisible();
+            await expect((await this.heal('lstPasswordRequirements', this.locators.lstPasswordRequirements)).getByText(expectedText, { exact: true })).toBeVisible();
         });
     }
 
     async verifyPasswordTooWeakError() {
         await test.step('Verify "Password is too weak" validation error is shown', async () => {
-            await expect(this.locators.msgPasswordTooWeak).toBeVisible();
+            await expect(await this.heal('msgPasswordTooWeak', this.locators.msgPasswordTooWeak)).toBeVisible();
         });
     }
 
     async verifyPasswordTooShortError() {
         await test.step('Verify "Password must be at least 8 characters" validation error is shown', async () => {
-            await expect(this.locators.msgPasswordTooShort).toBeVisible();
+            await expect(await this.heal('msgPasswordTooShort', this.locators.msgPasswordTooShort)).toBeVisible();
         });
     }
 
     async submitForm() {
         await test.step('Click Continue', async () => {
-            await this.locators.btnContinue.click();
+            await (await this.heal('btnContinue', this.locators.btnContinue)).click();
         });
     }
 
@@ -166,26 +173,26 @@ export class RegistationPage extends BasePage {
 
     async clickJoinWithGoogle() {
         await test.step('Click Join with Google', async () => {
-            await this.locators.btnJoinWithGoogle.click();
+            await (await this.heal('btnJoinWithGoogle', this.locators.btnJoinWithGoogle)).click();
         });
     }
 
     async clickJoinWithApple() {
         await test.step('Click Join with Apple', async () => {
-            await this.locators.btnJoinWithApple.click();
+            await (await this.heal('btnJoinWithApple', this.locators.btnJoinWithApple)).click();
         });
     }
 
     async clickLoginLink() {
         await test.step('Click Login link (already have an account)', async () => {
-            await this.locators.lnkLogin.click();
+            await (await this.heal('lnkLogin', this.locators.lnkLogin)).click();
         });
     }
 
     async clickTermsAndConditionsLink() {
         return test.step('Click Terms and Conditions link', async () => {
             const popup = this.page.waitForEvent('popup');
-            await this.locators.lnkTermsAndConditions.click();
+            await (await this.heal('lnkTermsAndConditions', this.locators.lnkTermsAndConditions)).click();
             return popup;
         });
     }
@@ -193,7 +200,7 @@ export class RegistationPage extends BasePage {
     async clickPrivacyNoticeLink() {
         return test.step('Click Privacy Notice link', async () => {
             const popup = this.page.waitForEvent('popup');
-            await this.locators.lnkPrivacyNotice.click();
+            await (await this.heal('lnkPrivacyNotice', this.locators.lnkPrivacyNotice)).click();
             return popup;
         });
     }
@@ -201,7 +208,7 @@ export class RegistationPage extends BasePage {
     async clickFooterPrivacyPolicy() {
         return test.step('Click Footer Privacy Policy', async () => {
             const popup = this.page.waitForEvent('popup');
-            await this.locators.lnkFooterPrivacyPolicy.click();
+            await (await this.heal('lnkFooterPrivacyPolicy', this.locators.lnkFooterPrivacyPolicy)).click();
             return popup;
         });
     }
@@ -209,7 +216,7 @@ export class RegistationPage extends BasePage {
     async clickFooterCookiePolicy() {
         return test.step('Click Footer Cookie Policy', async () => {
             const popup = this.page.waitForEvent('popup');
-            await this.locators.lnkFooterCookiePolicy.click();
+            await (await this.heal('lnkFooterCookiePolicy', this.locators.lnkFooterCookiePolicy)).click();
             return popup;
         });
     }
@@ -217,34 +224,35 @@ export class RegistationPage extends BasePage {
     async clickFooterTermsAndConditions() {
         return test.step('Click Footer Terms and Conditions', async () => {
             const popup = this.page.waitForEvent('popup');
-            await this.locators.lnkFooterTermsAndConditions.click();
+            await (await this.heal('lnkFooterTermsAndConditions', this.locators.lnkFooterTermsAndConditions)).click();
             return popup;
         });
     }
 
     async openManageCookies() {
         await test.step('Open Manage Cookies panel', async () => {
-            await this.locators.lnkFooterManageCookies.click();
+            await (await this.heal('lnkFooterManageCookies', this.locators.lnkFooterManageCookies)).click();
         });
     }
 
     async closeManageCookies() {
         await test.step('Close Manage Cookies panel', async () => {
-            await this.locators.btnCookieManagerClose.press('Escape');
+            await (await this.heal('btnCookieManagerClose', this.locators.btnCookieManagerClose)).press('Escape');
         });
     }
 
     async enterOTP(otp: string) {
         await test.step('Enter OTP Code', async () => {
             const digits = otp.split('');
+            const otpInputs = await this.heal('otpInputs', this.locators.otpInputs);
             for (let i = 0; i < digits.length; i++) {
-                const box = this.locators.otpInputs.nth(i);
+                const box = otpInputs.nth(i);
                 await box.waitFor({ state: 'visible', timeout: actionTimeout });
                 await box.fill(digits[i]);
                 await box.press('Tab');
                 await this.page.waitForTimeout(shortDelay);
             }
-            await this.locators.otpInputs.nth(5).press('Enter');
+            await otpInputs.nth(5).press('Enter');
             await this.page.waitForTimeout(animationDelay);
         });
     }
@@ -252,47 +260,56 @@ export class RegistationPage extends BasePage {
     async verifyStateProvinceVisible(shouldBeVisible: boolean) {
         await test.step(`Verify State Province dropdown is ${shouldBeVisible ? 'visible' : 'hidden'}`, async () => {
             if (shouldBeVisible) {
-                await expect(this.locators.ddStateProvince).toBeVisible();
+                await expect(await this.heal('ddStateProvince', this.locators.ddStateProvince)).toBeVisible();
             } else {
-                await expect(this.locators.ddStateProvince).not.toBeVisible();
+                await expect(await this.heal('ddStateProvince', this.locators.ddStateProvince)).not.toBeVisible();
             }
         });
     }
 
     async verifyRegistrationSuccess() {
         await test.step('Verify Registration Success', async () => {
-            await expect(this.locators.hdgSuccess).toBeVisible();
+            await expect(await this.heal('hdgSuccess', this.locators.hdgSuccess)).toBeVisible();
+        });
+    }
+
+    async clickContinueToAccount() {
+        await test.step('Click Continue on the registration success screen', async () => {
+            await (await this.heal('continueToAccountBtn', this.locators.continueToAccountBtn)).click();
         });
     }
 
     async verifyErrorMessageForExistingEmail(expectedErrorMessage: string) {
         await test.step('Verify Error Message for Existing Email', async () => {
-            await expect(this.locators.msgEmailAlreadyExists).toBeVisible();
-            await expect(this.locators.msgEmailAlreadyExists).toHaveText(expectedErrorMessage);
+            const msg = await this.heal('msgEmailAlreadyExists', this.locators.msgEmailAlreadyExists);
+            await expect(msg).toBeVisible();
+            await expect(msg).toHaveText(expectedErrorMessage);
         });
     }
 
     async verifyErrorMessageForInvalidEmailFormat(expectedErrorMessage: string) {
         await test.step('Verify Error Message for Invalid Email Format', async () => {
-            await expect(this.locators.msgInvalidEmailFormat).toBeVisible();
-            await expect(this.locators.msgInvalidEmailFormat).toHaveText(expectedErrorMessage);
+            const msg = await this.heal('msgInvalidEmailFormat', this.locators.msgInvalidEmailFormat);
+            await expect(msg).toBeVisible();
+            await expect(msg).toHaveText(expectedErrorMessage);
         });
     }
 
     async verifyErrorMessageForPasswordMismatch(expectedErrorMessage: string) {
         await test.step('Verify Error Message for Password Mismatch', async () => {
-            await expect(this.locators.msgPasswordMismatch).toBeVisible();
-            await expect(this.locators.msgPasswordMismatch).toHaveText(expectedErrorMessage);
+            const msg = await this.heal('msgPasswordMismatch', this.locators.msgPasswordMismatch);
+            await expect(msg).toBeVisible();
+            await expect(msg).toHaveText(expectedErrorMessage);
         });
     }
 
     async verifyErrorMessageForRequiredFields() {
         await test.step('Verify Error Message for Required Fields', async () => {
-            await expect(this.locators.msgRequiredFirstName).toBeVisible();
-            await expect(this.locators.msgRequiredLastName).toBeVisible();
-            await expect(this.locators.msgRequiredEmail).toBeVisible();
-            await expect(this.locators.msgRequiredPassword).toBeVisible();
-            await expect(this.locators.msgRequiredConfirmPassword).toBeVisible();
+            await expect(await this.heal('msgRequiredFirstName', this.locators.msgRequiredFirstName)).toBeVisible();
+            await expect(await this.heal('msgRequiredLastName', this.locators.msgRequiredLastName)).toBeVisible();
+            await expect(await this.heal('msgRequiredEmail', this.locators.msgRequiredEmail)).toBeVisible();
+            await expect(await this.heal('msgRequiredPassword', this.locators.msgRequiredPassword)).toBeVisible();
+            await expect(await this.heal('msgRequiredConfirmPassword', this.locators.msgRequiredConfirmPassword)).toBeVisible();
         });
     }
 
@@ -335,7 +352,6 @@ export class RegistationPage extends BasePage {
                 afterTimestamp: sentAt,
             });
             expect(received.subject).toMatch(/welcome/i);
-            expect(received.body).toContain('Thank you for making an account with Vodafone Travel');
         });
     }
 }

@@ -1,0 +1,94 @@
+{
+  "pageName": "CheckoutPage",
+  "updatedAt": "2026-10-22T08:11:25.386Z",
+  "locators": {
+    "txtFirstName": {
+      "key": "txtFirstName",
+      "strategy": "role",
+      "role": "textbox",
+      "accessibleName": "John",
+      "tagName": "input",
+      "capturedAt": "2026-10-21T08:07:18.360Z"
+    },
+    "txtLastName": {
+      "key": "txtLastName",
+      "strategy": "role",
+      "role": "textbox",
+      "accessibleName": "Wick",
+      "tagName": "input",
+      "capturedAt": "2026-10-21T08:07:18.431Z"
+    },
+    "txtEmail": {
+      "key": "txtEmail",
+      "strategy": "role",
+      "role": "textbox",
+      "accessibleName": "john.wich@gmail.com",
+      "tagName": "input",
+      "capturedAt": "2026-10-21T08:07:18.483Z"
+    },
+    "selBillingCountry": {
+      "key": "selBillingCountry",
+      "strategy": "role",
+      "role": "combobox",
+      "accessibleName": "South Africa",
+      "tagName": "input",
+      "capturedAt": "2026-10-21T11:36:53.025Z"
+    },
+    "txtBillingCity": {
+      "key": "txtBillingCity",
+      "strategy": "role",
+      "role": "textbox",
+      "accessibleName": "Johannesburg",
+      "tagName": "input",
+      "capturedAt": "2026-10-21T11:36:55.029Z"
+    },
+    "txtBillingAddressLine1": {
+      "key": "txtBillingAddressLine1",
+      "strategy": "role",
+      "role": "textbox",
+      "accessibleName": "29 The Paddocks",
+      "tagName": "input",
+      "capturedAt": "2026-10-21T11:36:57.618Z"
+    },
+    "txtBillingAddressLine2": {
+      "key": "txtBillingAddressLine2",
+      "strategy": "role",
+      "role": "textbox",
+      "accessibleName": "23 Canary Road",
+      "tagName": "input",
+      "capturedAt": "2026-10-21T11:36:58.865Z"
+    },
+    "txtBillingZipCode": {
+      "key": "txtBillingZipCode",
+      "strategy": "role",
+      "role": "textbox",
+      "accessibleName": "02340",
+      "tagName": "input",
+      "capturedAt": "2026-10-21T11:36:59.536Z"
+    },
+    "btnContinueToPayment": {
+      "key": "btnContinueToPayment",
+      "strategy": "role",
+      "role": "button",
+      "accessibleName": "Continue to payment",
+      "tagName": "button",
+      "capturedAt": "2026-10-22T08:11:25.385Z"
+    },
+    "lnkLogin": {
+      "key": "lnkLogin",
+      "strategy": "role",
+      "role": "link",
+      "accessibleName": "Log in",
+      "tagName": "a",
+      "capturedAt": "2026-10-21T07:19:55.618Z"
+    },
+    "btnSaveBillingDetails": {
+      "key": "btnSaveBillingDetails",
+      "strategy": "role",
+      "role": "button",
+      "accessibleName": "Save billing details",
+      "tagName": "button",
+      "capturedAt": "2026-10-21T11:37:00.148Z"
+    }
+  }
+}

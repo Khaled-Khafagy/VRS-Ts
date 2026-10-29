@@ -219,8 +219,26 @@ private readonly Locators = {
             const card = this.Locators.cardPlanByCountry(countryHeadingName);
             await card.scrollIntoViewIfNeeded();
             await this.Locators.btnPlanCardAddToCart(countryHeadingName).click();
-            await this.Locators.btnGoToCheckout.waitFor({ state: 'visible' });
-            await this.Locators.btnGoToCheckout.click();
+            try {
+                await this.Locators.btnGoToCheckout.waitFor({ state: 'visible', timeout: 10000 });
+            } catch {
+                // The mini-cart popover occasionally fails to render on the first click (seen on
+                // mobile viewports). The card's "Add to cart" button becomes a quantity stepper once
+                // the item is added, so nudge it via that stepper instead of re-querying "Add to cart".
+                // {force: true} — on mobile, the TOBi chatbot widget and a sticky-header portal
+                // intermittently overlap this button and intercept the click.
+                await card.getByRole('button', { name: 'Increase plan quantity' }).click({ force: true });
+                await this.Locators.btnGoToCheckout.waitFor({ state: 'visible' });
+            }
+            // No {force: true} here: force skips actionability checks, which also skips BasePage's
+            // cookie-banner locatorHandler, so the click landed on the OneTrust overlay and the
+            // popover button never fired. If the chatbot/sticky-header still intercepts the real
+            // click, fall back to dispatching the click directly on the button element.
+            try {
+                await this.Locators.btnGoToCheckout.click({ timeout: 10000 });
+            } catch {
+                await this.Locators.btnGoToCheckout.dispatchEvent('click');
+            }
         });
     }
 

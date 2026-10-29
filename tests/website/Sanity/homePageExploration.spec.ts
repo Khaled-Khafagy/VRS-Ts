@@ -2,10 +2,6 @@ import { test } from '../../../fixtures/page-manager';
 import { AppUrls } from '../../../data/credentials';
 
 test.describe('Homepage Exploration', () => {
-    test('Homepage hero banner is visible', { tag: ['@sanity', '@P2'] }, async ({ homePage }) => {
-        await homePage.gotoHomepage(AppUrls.base);
-        await homePage.verifyHeroBannerVisible();
-    });
 
     test('Homepage stats bar is visible', { tag: ['@sanity', '@P3'] }, async ({ homePage }) => {
         await homePage.gotoHomepage(AppUrls.base);

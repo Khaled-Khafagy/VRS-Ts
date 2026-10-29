@@ -2,7 +2,9 @@ import {expect, Page,test} from '@playwright/test';
 import { BasePage } from './BasePage';
 import { waitForEmail } from '../utils/gmailHelper';
 import { emailTestTimeout } from '../playwright.config';
-export class EmailVerificationPage extends BasePage { 
+export class EmailVerificationPage extends BasePage {
+    protected readonly pageName = 'EmailVerificationPage';
+    protected readonly sourceFilePath = __filename;
 
     private readonly emailVerificationPageLocators = {
         hdgOtpNonExisting:                          this.page.getByRole('heading', { name: 'Email Verification' }),
@@ -28,7 +30,7 @@ async handleOTPVerificationNonExistingUser(email: string, sentAt: number){
     await test.step('Handle OTP Verification during Checkout', async () => {
     // otpInput0 instead of the 'Email Verification' heading text — the heading gets translated on
     // non-English locales, but the OTP fields are id-based and stay the same everywhere.
-    await expect(this.emailVerificationPageLocators.otpInput0).toBeVisible();
+    await expect(await this.heal('otpInput0', this.emailVerificationPageLocators.otpInput0)).toBeVisible();
     const otp = await this.getOTPFromEmail(email, sentAt);
     await this.enterOTP(otp);
     await this.continueToPayment();
@@ -38,19 +40,19 @@ async handleOTPVerificationNonExistingUser(email: string, sentAt: number){
 
 async handleOTPVerificationExistingUser(){
     await test.step('Handle OTP Verification for Existing User during Checkout', async () => {
-    await expect(this.emailVerificationPageLocators.hdgOtpExisting).toBeVisible();
-    await this.emailVerificationPageLocators.btnLoginExistingAccountInEmailVerification.click();
+    await expect(await this.heal('hdgOtpExisting', this.emailVerificationPageLocators.hdgOtpExisting)).toBeVisible();
+    await (await this.heal('btnLoginExistingAccountInEmailVerification', this.emailVerificationPageLocators.btnLoginExistingAccountInEmailVerification)).click();
 
 });}
 
 private async enterOTP(otp: string) {
     const inputs = [
-        this.emailVerificationPageLocators.otpInput0,
-        this.emailVerificationPageLocators.otpInput1,
-        this.emailVerificationPageLocators.otpInput2,
-        this.emailVerificationPageLocators.otpInput3,
-        this.emailVerificationPageLocators.otpInput4,
-        this.emailVerificationPageLocators.otpInput5,
+        await this.heal('otpInput0', this.emailVerificationPageLocators.otpInput0),
+        await this.heal('otpInput1', this.emailVerificationPageLocators.otpInput1),
+        await this.heal('otpInput2', this.emailVerificationPageLocators.otpInput2),
+        await this.heal('otpInput3', this.emailVerificationPageLocators.otpInput3),
+        await this.heal('otpInput4', this.emailVerificationPageLocators.otpInput4),
+        await this.heal('otpInput5', this.emailVerificationPageLocators.otpInput5),
     ];
     const digits = otp.split('');
     for (let i = 0; i < inputs.length; i++) {
@@ -89,14 +91,6 @@ async verifyOTPEmailReceived(email: string, sentAt: number) {
 }
 
 private async continueToPayment() {
-    await this.emailVerificationPageLocators.btnVerify.click();
+    await (await this.heal('btnVerify', this.emailVerificationPageLocators.btnVerify)).click();
 }
-
-
-
-
-
-
-
-
 }

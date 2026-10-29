@@ -38,6 +38,13 @@ export const PaymentDetails: CreditCardDetails = {
     name: process.env.PAYMENT_NAME ?? '',
 };
 
+export const DeclinedCardDetails: CreditCardDetails = {
+    number: process.env.DECLINED_PAYMENT_CARD_NUMBER ?? '',
+    expiry: process.env.DECLINED_PAYMENT_EXPIRY ?? '',
+    cvc: process.env.DECLINED_PAYMENT_CVC ?? '',
+    name: process.env.DECLINED_PAYMENT_NAME ?? '',
+};
+
 export const BillingDetails: BillingAddressInfo = {
     country: process.env.BILLING_COUNTRY ?? '',
     state: process.env.BILLING_STATE ?? '',
@@ -80,6 +87,18 @@ export const RegistrationTestData = {
 };
 
 export const TravelTogetherPlanPromoCode = 'VF-EMPLOYEEDSC2025';
+
+export const PromoCodes = {
+    valid:              process.env.PROMO_CODE_VALID ?? '',
+    socials:            process.env.PROMO_CODE_SOCIALS ?? '',
+    newCustomerVoucher: process.env.PROMO_CODE_NEW_CUSTOMER ?? '',
+    invalid:            process.env.PROMO_CODE_INVALID ?? '',
+};
+
+export const PromoDiscounts = {
+    newCustomerPercent: parseInt(process.env.NEW_CUSTOMER_DISCOUNT_PERCENT ?? '15'),
+    socialsPercent:     parseInt(process.env.SOCIALS_DISCOUNT_PERCENT ?? '15'),
+};
 
 export const RefundReasons = {
     noLongerNeeded: 'E-SIM is no longer needed: My travel plans have changed',

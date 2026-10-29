@@ -1,0 +1,98 @@
+{
+  "pageName": "RegionPlansPage",
+  "updatedAt": "2026-10-21T11:36:40.414Z",
+  "locators": {
+    "btnFirstAddToCart": {
+      "key": "btnFirstAddToCart",
+      "strategy": "role",
+      "role": "button",
+      "accessibleName": "Add to cart",
+      "tagName": "button",
+      "capturedAt": "2026-10-21T11:36:32.282Z"
+    },
+    "btnGoToCheckout": {
+      "key": "btnGoToCheckout",
+      "strategy": "role",
+      "role": "button",
+      "accessibleName": "Go to checkout",
+      "tagName": "button",
+      "capturedAt": "2026-10-21T11:36:40.413Z"
+    },
+    "hdgTravelTogetherPlanAvailable": {
+      "key": "hdgTravelTogetherPlanAvailable",
+      "strategy": "role",
+      "role": "heading",
+      "accessibleName": "Share the trip. Share the data.",
+      "tagName": "h4",
+      "capturedAt": "2026-10-21T07:30:18.802Z"
+    },
+    "txtTravelTogetherPlanBannerSubtitle": {
+      "key": "txtTravelTogetherPlanBannerSubtitle",
+      "strategy": "text",
+      "text": "The Vodafone Travel Together Plan keeps everyone connected on one shared data pool.",
+      "tagName": "p",
+      "capturedAt": "2026-10-21T07:30:18.940Z"
+    },
+    "lnkFindOutMore": {
+      "key": "lnkFindOutMore",
+      "strategy": "role",
+      "role": "link",
+      "accessibleName": "Find out more",
+      "tagName": "a",
+      "capturedAt": "2026-10-21T07:30:19.005Z"
+    },
+    "txtConnectUpTo5Devices": {
+      "key": "txtConnectUpTo5Devices",
+      "strategy": "text",
+      "text": "Connect up to 5 devices without buying individual plans",
+      "tagName": "p",
+      "capturedAt": "2026-10-21T07:30:19.077Z"
+    },
+    "badgeTravelTogetherPlanFirstCard": {
+      "key": "badgeTravelTogetherPlanFirstCard",
+      "strategy": "text",
+      "text": "Travel Together Plan",
+      "tagName": "p",
+      "capturedAt": "2026-10-21T07:27:14.751Z"
+    },
+    "txtTravelTogetherPlanFirstCardConnect5": {
+      "key": "txtTravelTogetherPlanFirstCardConnect5",
+      "strategy": "text",
+      "text": "Connect up to 5 devices",
+      "tagName": "p",
+      "capturedAt": "2026-10-21T07:27:14.822Z"
+    },
+    "btnTravelTogetherPlanFirstCardAddToCart": {
+      "key": "btnTravelTogetherPlanFirstCardAddToCart",
+      "strategy": "role",
+      "role": "button",
+      "accessibleName": "Add to cart",
+      "tagName": "button",
+      "capturedAt": "2026-10-21T08:07:15.659Z"
+    },
+    "cardTravelTogetherPlanFirst": {
+      "key": "cardTravelTogetherPlanFirst",
+      "strategy": "role",
+      "role": "article",
+      "accessibleName": "Europe Travel Together 100 GB",
+      "tagName": "div",
+      "capturedAt": "2026-10-21T08:07:15.578Z"
+    },
+    "btnSecondAddToCart": {
+      "key": "btnSecondAddToCart",
+      "strategy": "role",
+      "role": "button",
+      "accessibleName": "Add to cart",
+      "tagName": "button",
+      "capturedAt": "2026-10-21T11:36:36.144Z"
+    },
+    "btnThirdAddToCart": {
+      "key": "btnThirdAddToCart",
+      "strategy": "role",
+      "role": "button",
+      "accessibleName": "Add to cart",
+      "tagName": "button",
+      "capturedAt": "2026-10-21T11:36:40.088Z"
+    }
+  }
+}

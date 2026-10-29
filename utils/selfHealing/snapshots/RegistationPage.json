@@ -1,0 +1,150 @@
+{
+  "pageName": "RegistationPage",
+  "updatedAt": "2026-10-21T11:36:18.434Z",
+  "locators": {
+    "txtLastName": {
+      "key": "txtLastName",
+      "strategy": "testId",
+      "testId": "field-lastName",
+      "tagName": "input",
+      "capturedAt": "2026-10-21T11:36:01.930Z"
+    },
+    "txtEmail": {
+      "key": "txtEmail",
+      "strategy": "testId",
+      "testId": "field-identifier",
+      "tagName": "input",
+      "capturedAt": "2026-10-21T11:36:01.988Z"
+    },
+    "ddCountry": {
+      "key": "ddCountry",
+      "strategy": "role",
+      "role": "combobox",
+      "accessibleName": "Country",
+      "tagName": "div",
+      "capturedAt": "2026-10-21T11:36:02.050Z"
+    },
+    "txtPassword": {
+      "key": "txtPassword",
+      "strategy": "testId",
+      "testId": "field-password",
+      "tagName": "input",
+      "capturedAt": "2026-10-21T11:36:03.159Z"
+    },
+    "txtConfirmPassword": {
+      "key": "txtConfirmPassword",
+      "strategy": "testId",
+      "testId": "field-confirmPassword",
+      "tagName": "input",
+      "capturedAt": "2026-10-21T11:36:03.206Z"
+    },
+    "btnContinue": {
+      "key": "btnContinue",
+      "strategy": "testId",
+      "testId": "button-submit",
+      "tagName": "button",
+      "capturedAt": "2026-10-21T11:36:03.937Z"
+    },
+    "otpInputs": {
+      "key": "otpInputs",
+      "strategy": "role",
+      "role": "textbox",
+      "accessibleName": "Digit 1 of 6",
+      "tagName": "input",
+      "capturedAt": "2026-10-21T11:36:11.413Z"
+    },
+    "hdgSuccess": {
+      "key": "hdgSuccess",
+      "strategy": "role",
+      "role": "heading",
+      "accessibleName": "All done! Your Travel Mobility profile is now complete.",
+      "tagName": "h2",
+      "capturedAt": "2026-10-21T11:36:18.013Z"
+    },
+    "msgInvalidEmailFormat": {
+      "key": "msgInvalidEmailFormat",
+      "strategy": "text",
+      "text": "Format is invalid. Please, enter a valid one.",
+      "tagName": "span",
+      "capturedAt": "2026-10-21T06:49:11.213Z"
+    },
+    "msgPasswordMismatch": {
+      "key": "msgPasswordMismatch",
+      "strategy": "text",
+      "text": "Password does not match",
+      "tagName": "span",
+      "capturedAt": "2026-10-21T06:49:23.275Z"
+    },
+    "msgRequiredFirstName": {
+      "key": "msgRequiredFirstName",
+      "strategy": "text",
+      "text": "First name is required",
+      "tagName": "span",
+      "capturedAt": "2026-10-21T06:49:33.890Z"
+    },
+    "msgRequiredLastName": {
+      "key": "msgRequiredLastName",
+      "strategy": "text",
+      "text": "Family name is required",
+      "tagName": "span",
+      "capturedAt": "2026-10-21T06:49:33.936Z"
+    },
+    "msgRequiredEmail": {
+      "key": "msgRequiredEmail",
+      "strategy": "text",
+      "text": "Email is required",
+      "tagName": "span",
+      "capturedAt": "2026-10-21T06:49:33.950Z"
+    },
+    "msgRequiredPassword": {
+      "key": "msgRequiredPassword",
+      "strategy": "text",
+      "text": "Password is required",
+      "tagName": "span",
+      "capturedAt": "2026-10-21T06:49:33.973Z"
+    },
+    "msgRequiredConfirmPassword": {
+      "key": "msgRequiredConfirmPassword",
+      "strategy": "text",
+      "text": "Confirmed password is required",
+      "tagName": "span",
+      "capturedAt": "2026-10-21T06:49:33.997Z"
+    },
+    "msgPasswordTooShort": {
+      "key": "msgPasswordTooShort",
+      "strategy": "text",
+      "text": "Password must be at least 8 characters",
+      "tagName": "span",
+      "capturedAt": "2026-10-21T06:50:14.828Z"
+    },
+    "msgPasswordTooWeak": {
+      "key": "msgPasswordTooWeak",
+      "strategy": "text",
+      "text": "Password is too weak. Please check the criteria below.",
+      "tagName": "span",
+      "capturedAt": "2026-10-21T06:49:59.485Z"
+    },
+    "lstPasswordRequirements": {
+      "key": "lstPasswordRequirements",
+      "strategy": "role",
+      "role": "list",
+      "accessibleName": "Password requirements",
+      "tagName": "ul",
+      "capturedAt": "2026-10-21T06:50:18.206Z"
+    },
+    "ddStateProvince": {
+      "key": "ddStateProvince",
+      "strategy": "role",
+      "role": "combobox",
+      "capturedAt": "2026-10-21T06:50:59.913Z"
+    },
+    "continueToAccountBtn": {
+      "key": "continueToAccountBtn",
+      "strategy": "role",
+      "role": "button",
+      "accessibleName": "Continue",
+      "tagName": "button",
+      "capturedAt": "2026-10-21T11:36:18.433Z"
+    }
+  }
+}

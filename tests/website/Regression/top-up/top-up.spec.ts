@@ -2,7 +2,7 @@ import { test } from '../../../../fixtures/page-manager';
 import { ValidLoginDetails, AppUrls } from '../../../../data/credentials';
 
 test.describe('Top-up', () => {
-    test('Top-up a limited eSIM with a limited top-up bundle', { tag: ['@regression', '@P1'] }, async ({ loginPage, homePage, myAccountPage, myEsimsPage, topUpPage, checkoutPage, paymentPage }) => {
+    test('Top-up a limited eSIM with a limited top-up bundle', { tag: ['@regression', '@P1'] }, async ({ loginPage, homePage, myAccountPage, myOrdersPage, myEsimsPage, topUpPage, checkoutPage, paymentPage, esimDetailsPage }) => {
         await loginPage.navigateAndLogin(AppUrls.login, ValidLoginDetails);
         await homePage.navigateToMyAccountTab();
         await myAccountPage.clickEsimsTab();
@@ -21,6 +21,18 @@ test.describe('Top-up', () => {
         await checkoutPage.proceedToPaymentAsLoggedInUser();
         await paymentPage.verifyPaymentGatewayLoaded();
         await paymentPage.performPaymentWithCardForLoggedInUsers();
+
+        await homePage.navigateToMyAccountTab();
+        await myAccountPage.waitForOrderToReflect();
+        await myAccountPage.clickOrdersTab();
+        await myOrdersPage.verifyTopUpOrderCompleted(regionName, selectedTopUpOption);
+
+        await homePage.navigateToMyAccountTab();
+        await myAccountPage.clickEsimsTab();
+        await myEsimsPage.verifyMyEsimsPageLoaded();
+        await myEsimsPage.verifyActiveLimitedEsimDataAfterTopUp(balanceBeforeTopUp, selectedTopUpOption);
+        await myEsimsPage.clickSeeDetailsOnFirstActiveLimitedEsim();
+        await esimDetailsPage.verifyTopUpReflectedInDetails(balanceBeforeTopUp, selectedTopUpOption);
     });
 
     test('Top-up an unlimited eSIM with an unlimited top-up bundle', { tag: ['@regression', '@P1'] }, async ({ loginPage, homePage, myAccountPage, myEsimsPage, topUpPage, checkoutPage, paymentPage }) => {
