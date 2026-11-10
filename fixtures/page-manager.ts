@@ -15,10 +15,10 @@ import { RegistationPage } from '../Pages/RegistationPage';
 import { MyEsimsPage } from '../Pages/MyEsimsPage';
 import { EsimDetailsPage } from '../Pages/EsimDetailsPage';
 import { SSOPage } from '../Pages/SSOPage';
-import { TranslationCheckPage } from '../Pages/TranslationCheckPage';
 import { TopUpPage } from '../Pages/TopUpPage';
 import { TravelTogetherPlanPage } from '../Pages/TravelTogetherPlanPage';
 import { MyOrdersPage } from '../Pages/MyOrdersPage';
+import { PartnersPage } from '../Pages/PartnersPage';
 import { installStepScreenshots, registerPageForStepScreenshots, unregisterPageForStepScreenshots } from '../utils/stepScreenshots';
 // Import other pages as you create them
 
@@ -41,10 +41,10 @@ type MyFixtures = {
     myEsimsPage: MyEsimsPage;
     esimDetailsPage: EsimDetailsPage;
     ssoPage: SSOPage;
-    translationCheckPage: TranslationCheckPage;
     topUpPage: TopUpPage;
     travelTogetherPlanPage: TravelTogetherPlanPage;
     myOrdersPage: MyOrdersPage;
+    partnersPage: PartnersPage;
     randomDestination: DestinationOption;
     twoRandomRegions: [DestinationOption, DestinationOption];
     // Add other pages here
@@ -159,11 +159,6 @@ export const test = customPage.extend<MyFixtures>({
         await use(ssoPage);
     },
 
-    translationCheckPage: async ({ page }, use) => {
-        const translationCheckPage = new TranslationCheckPage(page);
-        await use(translationCheckPage);
-    },
-
     topUpPage: async ({ page }, use) => {
         const topUpPage = new TopUpPage(page);
         await use(topUpPage);
@@ -177,6 +172,11 @@ export const test = customPage.extend<MyFixtures>({
     myOrdersPage: async ({ page }, use) => {
         const myOrdersPage = new MyOrdersPage(page);
         await use(myOrdersPage);
+    },
+
+    partnersPage: async ({ page }, use) => {
+        const partnersPage = new PartnersPage(page);
+        await use(partnersPage);
     },
 
     randomDestination: async ({}, use) => {

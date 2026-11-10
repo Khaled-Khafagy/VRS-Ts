@@ -1,3 +1,4 @@
+import { PartnerRequestInfo } from '../Pages/index';
 import { faker } from '@faker-js/faker';
 
 export interface DestinationOption {
@@ -101,5 +102,17 @@ export const generateGuestUserData = () => {
     firstName: `Khaled${suffix}`,
     lastName: `Khafagy${suffix}`,
     email: generateAliasEmail(),
+  };
+};
+export const generatePartnerRequestData = (): PartnerRequestInfo => {
+  const suffix = faker.string.alpha({ length: 4 }).toLowerCase();
+  return {
+    firstName: `Khaled${suffix}`,
+    lastName: `Khafagy${suffix}`,
+    companyName: `QA Automation ${suffix}`,
+    email: generateAliasEmail(),
+    companySize: '11 - 50 employees',
+    partnershipType: 'Affiliate',
+    message: `Automated partnership enquiry (TE-1509) - please ignore. Ref: ${suffix}`,
   };
 };

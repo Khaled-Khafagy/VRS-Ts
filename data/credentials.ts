@@ -70,6 +70,7 @@ export const AppUrls = {
     login: process.env.LOGIN_URL ?? '',
     ourDestinations: process.env.OUR_DESTINATIONS_URL ?? '',
     travelTogether: process.env.TRAVEL_TOGETHER_URL ?? '',
+    partners: process.env.PARTNERS_URL ?? `${(process.env.BASE_URL ?? '').replace(/\/+$/, '')}/ssg/vrs/partners-page`,
 };
 
 export const RegistrationTestData = {
@@ -102,6 +103,27 @@ export const PromoDiscounts = {
 
 export const RefundReasons = {
     noLongerNeeded: 'E-SIM is no longer needed: My travel plans have changed',
+};
+
+export const PartnersPageData = {
+    // Partners present on BOTH the TE-1509 acceptance criteria and the Figma design.
+    // AC also lists AWIN, Figma shows Trip.com and TAP Airlines — see open questions in the spec header.
+    confirmedPartners: ['Mastercard Cash Passport', 'UEFA Champions league', 'Ferryhopper'],
+    stats: ['Destinations covered', 'Target markets', 'Multilingual support launched'],
+    whyPartnerWithUsBlocks: [
+        'Global reach that moves with your customers',
+        'A brand built on trust',
+        'Seamless integration, effortless experiences',
+        'Ready for what’s next',
+    ],
+    // Company size DDL options per Figma ("Drop down" frame)
+    companySizeOptions: ['1 - 10 employees', '11 - 50 employees', '51 - 200 employees', '201 - 1000 employees', '1000+ employees'],
+    faqQuestions: [
+        'Who can partner with Vodafone Travel eSIM?',
+        'What types of partnership opportunities does Vodafone Travel offer?',
+        'What are the benefits of partnering with Vodafone Travel?',
+        'How do I apply to become a Vodafone Travel partner?',
+    ],
 };
 
 export const RegistrationErrorMessages = {

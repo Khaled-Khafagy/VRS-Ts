@@ -61,3 +61,13 @@
     country: string;
     stateProvince?: string;
     }
+
+    export interface PartnerRequestInfo {
+    firstName: string;
+    lastName: string;
+    companyName: string;
+    email: string;
+    companySize: string;
+    partnershipType: string;
+    message: string;
+    }
