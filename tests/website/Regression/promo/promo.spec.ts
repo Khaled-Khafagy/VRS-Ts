@@ -17,7 +17,7 @@ test.describe('Promos and Vouchers', () => {
         await registrationPage.submitRegistrationForm();
         const otp = await registrationPage.getOTPFromEmail(email, registeredAt);
         await registrationPage.enterOTP(otp);
-        await registrationPage.verifyRegistrationSuccess();
+await registrationPage.verifyRegistrationSuccess();
         await registrationPage.clickContinueToAccount();
 
         // Known bug: registering leaves an SSO session behind, and a later "login" silently succeeds

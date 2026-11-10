@@ -1,6 +1,6 @@
 {
   "pageName": "RegionPlansPage",
-  "updatedAt": "2026-10-21T11:36:40.414Z",
+  "updatedAt": "2026-10-30T09:32:39.653Z",
   "locators": {
     "btnFirstAddToCart": {
       "key": "btnFirstAddToCart",
@@ -8,7 +8,7 @@
       "role": "button",
       "accessibleName": "Add to cart",
       "tagName": "button",
-      "capturedAt": "2026-10-21T11:36:32.282Z"
+      "capturedAt": "2026-10-30T09:32:38.748Z"
     },
     "btnGoToCheckout": {
       "key": "btnGoToCheckout",
@@ -16,7 +16,7 @@
       "role": "button",
       "accessibleName": "Go to checkout",
       "tagName": "button",
-      "capturedAt": "2026-10-21T11:36:40.413Z"
+      "capturedAt": "2026-10-30T09:32:39.646Z"
     },
     "hdgTravelTogetherPlanAvailable": {
       "key": "hdgTravelTogetherPlanAvailable",

@@ -1,6 +1,6 @@
 {
   "pageName": "CheckoutPage",
-  "updatedAt": "2026-10-30T09:26:59.766Z",
+  "updatedAt": "2026-10-30T09:32:53.406Z",
   "locators": {
     "txtFirstName": {
       "key": "txtFirstName",
@@ -8,7 +8,7 @@
       "role": "textbox",
       "accessibleName": "John",
       "tagName": "input",
-      "capturedAt": "2026-10-30T09:26:57.279Z"
+      "capturedAt": "2026-10-30T09:32:43.164Z"
     },
     "txtLastName": {
       "key": "txtLastName",
@@ -16,7 +16,7 @@
       "role": "textbox",
       "accessibleName": "Wick",
       "tagName": "input",
-      "capturedAt": "2026-10-30T09:26:57.457Z"
+      "capturedAt": "2026-10-30T09:32:43.371Z"
     },
     "txtEmail": {
       "key": "txtEmail",
@@ -24,7 +24,7 @@
       "role": "textbox",
       "accessibleName": "john.wich@gmail.com",
       "tagName": "input",
-      "capturedAt": "2026-10-30T09:26:57.631Z"
+      "capturedAt": "2026-10-30T09:32:43.562Z"
     },
     "selBillingCountry": {
       "key": "selBillingCountry",
@@ -32,7 +32,7 @@
       "role": "combobox",
       "accessibleName": "South Africa",
       "tagName": "input",
-      "capturedAt": "2026-10-30T09:26:58.096Z"
+      "capturedAt": "2026-10-30T09:32:44.241Z"
     },
     "txtBillingCity": {
       "key": "txtBillingCity",
@@ -40,7 +40,7 @@
       "role": "textbox",
       "accessibleName": "Johannesburg",
       "tagName": "input",
-      "capturedAt": "2026-10-30T09:26:59.763Z"
+      "capturedAt": "2026-10-30T09:32:45.788Z"
     },
     "txtBillingAddressLine1": {
       "key": "txtBillingAddressLine1",
@@ -48,7 +48,7 @@
       "role": "textbox",
       "accessibleName": "29 The Paddocks",
       "tagName": "input",
-      "capturedAt": "2026-10-30T09:25:29.606Z"
+      "capturedAt": "2026-10-30T09:32:48.405Z"
     },
     "txtBillingAddressLine2": {
       "key": "txtBillingAddressLine2",
@@ -56,7 +56,7 @@
       "role": "textbox",
       "accessibleName": "23 Canary Road",
       "tagName": "input",
-      "capturedAt": "2026-10-30T09:25:30.886Z"
+      "capturedAt": "2026-10-30T09:32:49.722Z"
     },
     "txtBillingZipCode": {
       "key": "txtBillingZipCode",
@@ -64,7 +64,7 @@
       "role": "textbox",
       "accessibleName": "02340",
       "tagName": "input",
-      "capturedAt": "2026-10-30T09:25:31.600Z"
+      "capturedAt": "2026-10-30T09:32:50.443Z"
     },
     "btnContinueToPayment": {
       "key": "btnContinueToPayment",
@@ -72,7 +72,7 @@
       "role": "button",
       "accessibleName": "Continue to payment",
       "tagName": "button",
-      "capturedAt": "2026-10-22T08:11:25.385Z"
+      "capturedAt": "2026-10-30T09:32:53.397Z"
     },
     "lnkLogin": {
       "key": "lnkLogin",
@@ -86,9 +86,7 @@
       "key": "btnSaveBillingDetails",
       "strategy": "role",
       "role": "button",
-      "accessibleName": "Save billing details",
-      "tagName": "button",
-      "capturedAt": "2026-10-30T09:25:36.207Z"
+      "capturedAt": "2026-10-30T09:27:09.052Z"
     }
   }
 }

@@ -1,6 +1,6 @@
 {
   "pageName": "OrderSuccessfulPage",
-  "updatedAt": "2026-10-21T11:37:12.832Z",
+  "updatedAt": "2026-10-30T09:33:42.769Z",
   "locators": {
     "hdgContactSupport": {
       "key": "hdgContactSupport",
@@ -14,24 +14,22 @@
       "key": "hdgThankYouForYourOrder",
       "strategy": "role",
       "role": "heading",
-      "accessibleName": "Thank you for your order!",
-      "tagName": "h2",
-      "capturedAt": "2026-10-21T11:37:12.696Z"
+      "capturedAt": "2026-10-30T09:33:40.958Z"
     },
     "txtContactSupport": {
       "key": "txtContactSupport",
       "strategy": "role",
       "role": "heading",
-      "accessibleName": "Need help? Contact support with your order number 6ad867185d943631468cfba1",
+      "accessibleName": "Need help? Contact support with your order number 6ae4645ce52b3804cce8a2f7",
       "tagName": "h3",
-      "capturedAt": "2026-10-21T07:17:17.204Z"
+      "capturedAt": "2026-10-30T09:33:42.690Z"
     },
     "txtSetYourPassword": {
       "key": "txtSetYourPassword",
       "strategy": "testId",
       "testId": "complete-registration-cta",
       "tagName": "button",
-      "capturedAt": "2026-10-21T07:17:17.252Z"
+      "capturedAt": "2026-10-30T09:33:42.764Z"
     },
     "txtTravelTogetherPlanConfirmationMsg": {
       "key": "txtTravelTogetherPlanConfirmationMsg",
@@ -73,9 +71,9 @@
     "txtEsimSentMessage": {
       "key": "txtEsimSentMessage",
       "strategy": "text",
-      "text": "Your eSIM is sent by the following address: testv225+buxyqtis@gmail.com",
+      "text": "Your eSIM is sent by the following address: testv225+ydtxdsgi@gmail.com",
       "tagName": "h3",
-      "capturedAt": "2026-10-21T07:17:17.130Z"
+      "capturedAt": "2026-10-30T09:33:42.616Z"
     },
     "hdgEsimSentMessage": {
       "key": "hdgEsimSentMessage",

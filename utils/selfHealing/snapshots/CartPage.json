@@ -1,6 +1,6 @@
 {
   "pageName": "CartPage",
-  "updatedAt": "2026-10-21T11:36:52.322Z",
+  "updatedAt": "2026-10-30T09:32:41.232Z",
   "locators": {
     "btnContinueToCheckout": {
       "key": "btnContinueToCheckout",
@@ -8,7 +8,7 @@
       "role": "button",
       "accessibleName": "Continue to checkout",
       "tagName": "button",
-      "capturedAt": "2026-10-21T11:36:52.321Z"
+      "capturedAt": "2026-10-30T09:32:41.226Z"
     },
     "hdgItemsInCart": {
       "key": "hdgItemsInCart",
